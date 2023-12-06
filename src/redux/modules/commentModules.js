@@ -1,12 +1,12 @@
 import createSlice from '@reduxjs/toolkit';
 
-const 유저의데이터형식 = { uid: '', avatar: '', nickname: '' };
+const 댓글데이터형식 = { comment: '', uid: '', locationid: '', avatar: '', nickname: '', timestamp: '' };
 
 const initialState = {
   isLoading: true,
   massage: null,
   error: null,
-  currentUser: null
+  comment: []
 };
 
 // 1. 네트워크 통신에 관련된 로직은 pending시 로딩은 true로  error및 massage는 null로 바꿔주어야한다 (네트워크 통신시 시간이 걸림)
