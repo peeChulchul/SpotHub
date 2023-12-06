@@ -17,3 +17,5 @@ const initialState = {
 // 6. 유저의 정보가 업데이트 되었을시 해당하는 유저의 데이터를 db에서 찾아 업데이트된 부분을 최신화 시켜주어야한다.
 
 const authModules = createSlice({ name: 'authModules', initialState, reducers: {} });
+
+export default authModules.reducers;
