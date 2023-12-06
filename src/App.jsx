@@ -1,8 +1,8 @@
-import Pin from 'components/Pin';
-// import Router from 'shared/Router';
+
+import Marker from './sections/marker/Marker';
 
 function App() {
-  return <Pin />;
+  return <Marker />
 }
 
 export default App;

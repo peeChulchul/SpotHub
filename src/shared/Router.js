@@ -1,6 +1,7 @@
 import PageHome from 'pages/home/PageHome';
-import { Provider } from 'react-redux';
+// import { Provider } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Marker from 'sections/marker/Marker';
 import { ThemeProvider } from 'styled-components';
 import { theme } from 'styles/theme';
 
@@ -16,7 +17,7 @@ function Router() {
             {/* 마커 등록페이지 쿼리스트링 유저아이디 */}
             {/*  */}
 
-            {/* <Route element={<Home />} path="/"></Route> */}
+            <Route element={<Marker />} path="/marker"></Route>
 
             {/* <Route element={<Home />} path="/"></Route> */}
           </Route>
