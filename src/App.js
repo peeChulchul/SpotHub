@@ -1,4 +1,5 @@
-import Login from 'component/Login';
+import Login from 'sections/marker/auth/Login';
+import Sigup from 'sections/marker/auth/Sigup';
 import Router from 'shared/Router';
 import { GlobalStyles } from 'styles/GlobalStyles';
 
@@ -7,6 +8,9 @@ function App() {
     <>
       <GlobalStyles />
       <Router />
+      <Login />
+      <Sigup />
+
     </>
   );
 }
