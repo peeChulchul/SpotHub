@@ -1,4 +1,4 @@
-import createSlice from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const 유저의데이터형식 = { uid: '', avatar: '', nickname: '' };
 
@@ -18,4 +18,4 @@ const initialState = {
 
 const authModules = createSlice({ name: 'authModules', initialState, reducers: {} });
 
-export default authModules.reducers;
+export default authModules.reducer;

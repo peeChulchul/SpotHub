@@ -1,4 +1,4 @@
-import createSlice from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const 댓글데이터형식 = { comment: '', uid: '', locationid: '', avatar: '', nickname: '', timestamp: '' };
 
@@ -9,4 +9,6 @@ const initialState = {
   comment: []
 };
 
-const authModules = createSlice({ name: 'authModules', initialState, reducers: {} });
+const commentModules = createSlice({ name: 'commentModules', initialState, reducers: {} });
+
+export default commentModules.reducer;

@@ -1,4 +1,4 @@
-import createSlice from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 const 마커의데이터형식 = { location: '', uploadImageURL: '', adress: '', uid: '', locationId: '', report: [] };
 
@@ -16,3 +16,5 @@ const initialState = {
 // 5. 마커 수정시  실시간 감지중이라면 자동으로 갱신 , 그렇지않다면 marker배열에 데이터수정 (추가, 삭제가 아닌 수정시에는 실시간 감지를 못할가능성이 높음{불변성으로 인해})
 
 const markerModules = createSlice({ name: 'markerModules', initialState, reducers: {} });
+
+export default markerModules.reducer;
