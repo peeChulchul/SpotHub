@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 export default function Pin() {
+  const addPinButton = () => {};
+  const cancelButton = () => {};
+  const [formInput, setFormInput] = useState({
+    location: '',
+    option: '',
+    comment: '',
+  });
+    
+  const { location, option, comment, image } = formInput;
+  const changeFormInput = (e) => {
+    e.preventDefault();
+    setFormInput(e.target.value);
+  };
+
   return (
     <Container>
       <Form>
@@ -9,11 +23,11 @@ export default function Pin() {
           {/* <LocationImg src={} alt="선택된 이미지" /> */}
           {/* 아무데나 눌러도 업로드 가능하게 띄우려면? */}
           <ImgLabel htmlFor="imgInput">이미지 선택</ImgLabel>
-          <ImgInput type="file" accept="image" id="imgInput" />
+          <ImgInput value={image} type="file" accept="image" id="imgInput" />
         </ImgContainer>
         <User>사용자 닉네임</User>
-        <LocationName placeholder="장소명을 입력해주세요."></LocationName>
-        <SelectBox>
+        <LocationName value={location} onChange={changeFormInput} placeholder="장소명을 입력해주세요."></LocationName>
+        <SelectBox value={option} onChange={changeFormInput}>
           <option name="" id="">
             선택하기
           </option>
@@ -30,11 +44,14 @@ export default function Pin() {
             폐건전지
           </option>
         </SelectBox>
-        <TextArea placeholder="장소에 대한 의견을 남겨주세요!"></TextArea>
+        <TextArea value={comment} onChange={changeFormInput} placeholder="장소에 대한 의견을 남겨주세요!"></TextArea>
         <Buttons>
-          <Button>등록</Button>
-          <Button>취소</Button>
+          <Button onClick={addPinButton}>등록</Button>
+          <Button onClick={cancelButton}>취소</Button>
         </Buttons>
+        {location} 
+        {option}
+        {comment}
       </Form>
     </Container>
   );
@@ -92,38 +109,42 @@ const ImgInput = styled.input`
 
 const User = styled.h3`
   /* position: absolute; */
-  margin: 10px auto 0 5px;
+  margin: 10px auto 0 15px;
   font-size: 12px;
   color: #111;
 `;
 
 const LocationName = styled.input`
-  width: 95%;
+  width: 90%;
   height: 25px;
-  font-size: 14px;
-  padding: 10px;
-  border: 1px solid #111;
+  font-size: 12px;
+  padding: 5px;
+  border: none;
+  border-bottom: 1px solid grey;
   outline: none;
 `;
 
 // 여유있으면 커스텀 모달 만들어보기
 const SelectBox = styled.select`
-  width: 100%;
+  width: 94%;
   height: 40px;
   border: none;
-  padding: 10px;
-  border: 1px solid #111;
+  padding: 5px;
+  border: none;
+  border-bottom: 1px solid grey;
+  outline: none;
   color: grey;
-  font-size: 14px;
+  font-size: 12px;
 `;
 
-const TextArea = styled.textarea`
-  width: 95%;
+const TextArea = styled.input`
+  width: 90%;
   height: 70px;
-  font-size: 14px;
+  font-size: 12px;
   resize: none;
-  padding: 10px;
-  border: 1px solid #111;
+  padding: 5px;
+  border: none;
+  border-bottom: 1px solid grey;
   outline: none;
   color: #aba9a9;
 `;
