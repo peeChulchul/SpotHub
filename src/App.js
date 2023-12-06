@@ -1,13 +1,14 @@
 import Login from 'component/Login';
 import Router from 'shared/Router';
+import { GlobalStyles } from 'styles/GlobalStyles';
 
 function App() {
   return (
     <>
-  <Router />;
-  <Login />;
-  </>
-  )
+      <GlobalStyles />
+      <Router />
+    </>
+  );
 }
 
 export default App;
