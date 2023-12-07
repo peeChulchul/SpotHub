@@ -108,6 +108,7 @@ export default function Marker() {
         const newMarker = {
           // uid: '', 현재 사용자정보 import 해오기/ 전역
           // location: '', 현재 활성화된 마커 location 정보 import 해오기
+
           id: shortid.generate(),
           image,
           marker,
