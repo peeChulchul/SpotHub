@@ -1,5 +1,5 @@
-import Login from 'sections/marker/auth/Login';
-import Signup from 'sections/marker/auth/Signup';
+import Login from 'sections/auth/Login';
+import Signup from 'sections/auth/Signup';
 import Router from 'shared/Router';
 import { GlobalStyles } from 'styles/GlobalStyles';
 

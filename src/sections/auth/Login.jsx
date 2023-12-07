@@ -10,7 +10,6 @@ function Login() {
   const [password, setPassword] = useState('')
 
 
-
   const login = async (event) => {
     event.preventDefault()
     try {
