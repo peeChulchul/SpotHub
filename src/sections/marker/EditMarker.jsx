@@ -3,8 +3,8 @@ import { FIRESTORE } from 'myFirebase';
 import React from 'react'
 
 export default function EditMarker() {
-    const markerRef = doc(FIRESTORE, "markers", marker.id);
-    // await updateDoc(todoRef, { ...todo, isDone: !todo.isDone });
+    // const markerRef = doc(FIRESTORE, "markers", marker.id);
+    // await updateDoc(markerRef, { ..., isDone: !todo.isDone });
 
   return (
     <div>

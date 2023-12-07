@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useQueryHook, useUpdateQuery } from 'hooks/useQueryHook';
 import { addDoc, collection } from 'firebase/firestore';
+import uuid from 'react-uuid';
+import shortid from 'shortid';
 // import DefaultImg from './default.jpg';
 // TODO: 모든 값 입력시 버튼 활성화 -> img 추가시 image부분 상태 변경
 // TODO: 이미지 프리뷰
@@ -42,6 +44,40 @@ export default function Marker() {
   const locationId = '11.111.111'; // 나중에 임포트
   const locationImagePath = `location/${locationId}`; // 나중에 currentUser정보도?
 
+  //이미지 프리뷰
+  const imgPreview = () => {
+    // const selectedOne = file[0];
+    //이미지 프리뷰
+    // const reader = new FileReader();
+    // reader.onloadstart = () => {
+    //   console.log('파일 읽기 시작');
+    // };
+    // reader.onloadend = () => {
+    //   console.log('파일 읽기 완료');
+    //   const result = reader.result; // 파일의 내용이 여기에 들어있음
+    //   console.log('result', result);
+    //   setFormInput((prev) => ({
+    //     ...prev,
+    //     image: result
+    //   }));
+    // };
+    // reader.readAsDataURL(file);
+  };
+
+//업로드할 이미지 파일 선택
+  const handleFileSelect = (event) => {
+    const file = event.target.files;
+    // 파일이 선택되었는지 확인
+    if (file && file.length > 0) {
+      console.log('file', file);
+      setFormInput((prev) => ({ ...prev, [image]: file }));
+    }
+  };
+
+  useEffect(() => {
+    console.log('FormInput State Updated:', formInput);
+  }, [formInput]);
+
   //파일 업로드하기
   const FileUpload = async () => {
     if (!image) {
@@ -77,6 +113,7 @@ export default function Marker() {
         const newMarker = {
           // uid: '', 현재 사용자정보 import 해오기/ 전역
           // location: '', 현재 활성화된 마커 location 정보 import 해오기
+          id: shortid.generate(),
           image,
           marker,
           option,
@@ -154,35 +191,6 @@ export default function Marker() {
   //     }
   //   }
   // };
-
-  //이미지 프리뷰
-  const imgPreview = () => {
-    // const selectedOne = file[0];
-    //이미지 프리뷰
-    // const reader = new FileReader();
-    // reader.onloadstart = () => {
-    //   console.log('파일 읽기 시작');
-    // };
-    // reader.onloadend = () => {
-    //   console.log('파일 읽기 완료');
-    //   const result = reader.result; // 파일의 내용이 여기에 들어있음
-    //   console.log('result', result);
-    //   setFormInput((prev) => ({
-    //     ...prev,
-    //     image: result
-    //   }));
-    // };
-    // reader.readAsDataURL(file);
-  };
-
-  // 업로드 이미지 선택  얘도 changeFormState  변경..?
-  const handleFileSelect = (event) => {
-    const file = event.target.files;
-    // 파일이 선택되었는지 확인
-    if (file && file.length > 0) {
-      console.log('file', file);
-    }
-  };
 
   return (
     <Container>
