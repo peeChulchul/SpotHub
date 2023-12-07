@@ -7,7 +7,6 @@ import { theme } from 'styles/theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { store } from '../redux/config';
 import Index from 'pages/test';
-import Signup from 'sections/auth/Signup';
 import Login from 'sections/auth/Login';
 import EditMarker from 'sections/marker/EditMarker';
 import { useEffect, useState } from 'react';
@@ -38,14 +37,7 @@ function Router() {
               <Route element={<PageHome />} path="/"></Route>
               <Route element={<Marker />} path="/marker"></Route>
               <Route element={<EditMarker />} path="/editMarker"></Route>
-              <Route
-                element={
-                  <>
-                    <Signup /> <Login />
-                  </>
-                }
-                path="/Auth"
-              ></Route>
+              <Route element={<Login />} path="/Auth"></Route>
               <Route path="/test" element={<Index />}></Route>
             </Routes>
           </BrowserRouter>

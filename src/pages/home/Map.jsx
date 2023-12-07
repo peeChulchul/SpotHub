@@ -119,11 +119,10 @@ function Map() {
       <KakaoMap // 지도를 표시할 Container
         onClick={onClickMap}
         id="map"
-        center={{
+        center={
           // 지도의 중심좌표
-          lat: 37.478400413698,
-          lng: 127.13538446564
-        }}
+          userLocation.center
+        }
         style={{
           // 지도의 크기
           width: '100%',
