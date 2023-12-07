@@ -1,18 +1,16 @@
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { AUTH, FIRESTORE, STORAGE } from 'myFirebase';
+import { FIRESTORE, STORAGE } from 'myFirebase';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useQueryHook } from 'hooks/useQueryHook';
+import { useQueryHook, useUpdateQuery } from 'hooks/useQueryHook';
 import { addDoc, collection } from 'firebase/firestore';
-import DefaultImg from './default.jpg';
-
+// import DefaultImg from './default.jpg';
 // TODO: 모든 값 입력시 버튼 활성화 -> img 추가시 image부분 상태 변경
 // TODO: 이미지 프리뷰
 // toastify로 알럿 변경
 
 export default function Marker() {
-  // const { isLoading, isError, data: user } = useQueryHook({ document: 'user' });
-
+  const { isLoading, isError, data: markers } = useQueryHook({ document: 'markers' });
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [formInput, setFormInput] = useState({
     marker: '',
@@ -21,6 +19,10 @@ export default function Marker() {
     image: ''
   });
   const { marker, option, comment, image } = formInput;
+
+  //수정모드, 수정된 데이터
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editData, setEditData] = useState(null);
 
   //등록 버튼 비활성화
   useEffect(() => {
@@ -37,10 +39,8 @@ export default function Marker() {
     setFormInput((prev) => ({ ...prev, [name]: value }));
   };
 
-  //  위치정보 가져오기  나중에 user -> location / 두개 쓰는 경우 비구조화 할당한 애들 이름 같으면 안됨.
-  const [location, setLocation] = useState('');
-  const locationId = location;
-  const locationImagePath = `locationImg/${locationId}`; // 나중에 currentUser정보도?
+  const locationId = '11.111.111'; // 나중에 임포트
+  const locationImagePath = `location/${locationId}`; // 나중에 currentUser정보도?
 
   //파일 업로드하기
   const FileUpload = async () => {
@@ -73,13 +73,15 @@ export default function Marker() {
         return;
       } else {
         FileUpload();
+
         const newMarker = {
+          // uid: '', 현재 사용자정보 import 해오기/ 전역
+          // location: '', 현재 활성화된 마커 location 정보 import 해오기
           image,
           marker,
           option,
-          comment
-          // uid: AUTH 로 유저정보 가져오기
-          // location
+          comment,
+          timeStamp: new Date() //포멧팅?
         };
         const collectionRef = collection(FIRESTORE, 'markers');
         await addDoc(collectionRef, newMarker);
@@ -110,6 +112,48 @@ export default function Marker() {
       //모달 닫는 부분 코드
     }
   };
+
+  // 수정하기 버튼 핸들러
+  // const hadleEditButton = () => {
+  //   setIsEditMode(true);
+  //   setEditData(data); //상세보기 데이터 가져오기
+  //   setFormInput({
+  //     marker: data.marker,
+  //     option: data.option,
+  //     comment: data.comment,
+  //     image: data.image
+  //   });
+  // };
+
+  //수정완료 버튼 이벤트 핸들러
+
+  // const handleCompleteEditButton = () => {
+  //   const useConfirm = window.confirm('수정하시겠습니까?');
+  //   if (!useConfirm) {
+  //     return;
+  //   } else {
+  //     const updateData = {
+  //       // uid 와 location은 수정하지 않으므로 생략
+  //       image,
+  //       marker,
+  //       option,
+  //       comment,
+  //       timeStamp: new Date() //포멧팅?
+  //     };
+  //     try {
+  //       //파이어스토어 내용 수정 로직
+  //       useUpdateQuery({
+  //         document: 'marker',
+  //         fieldId: '????',
+  //         data: updateData
+  //       });
+  //       // 성공알림.
+  //     } catch (err) {
+  //       console.log('수정 실패 ==> ', err);
+  //       // error 메세지 alert
+  //     }
+  //   }
+  // };
 
   //이미지 프리뷰
   const imgPreview = () => {
@@ -172,7 +216,7 @@ export default function Marker() {
         />
         <Buttons>
           <AddButton disabled={isButtonDisabled} onClick={handleAddMarkerButton}>
-            등록
+            {isEditMode ? '수정완료' : '등록하기'}
           </AddButton>
           <CancelButton onClick={handleCancelButton}>닫기</CancelButton>
         </Buttons>

@@ -7,6 +7,7 @@ import { theme } from 'styles/theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { store } from '../redux/config';
 import Index from 'pages/test';
+import EditMarker from 'sections/marker/EditMarker';
 function Router() {
   const queryClient = new QueryClient();
   return (
@@ -21,9 +22,8 @@ function Router() {
                 {/* 마커 디테일페이지 쿼리스트링 마커아이디 */}
                 {/* 마커 등록페이지 쿼리스트링 유저아이디 */}
                 {/*  */}
-
-            <Route element={<Marker />} path="/marker"></Route>
-
+                <Route element={<Marker />} path="/marker"></Route>
+                <Route element={<EditMarker />} path="/editMarker"></Route>
                 {/* <Route element={<Home />} path="/"></Route> */}
               </Route>
               <Route path="/test" element={<Index />}></Route>
