@@ -17,10 +17,10 @@ export function useQueryHook({ document }) {
 }
 
 // 최초로 데이터를 생성할때 사용 O
-export function useSetQuery({ document, fieldId, data }) {
+export function useSetQuery({ document }) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => setFirestore({ document, fieldId, data }),
+    mutationFn: ({ fieldId, data }) => setFirestore({ document, fieldId, data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [document] });
     },
@@ -31,10 +31,10 @@ export function useSetQuery({ document, fieldId, data }) {
 }
 //   문서를 업데이트할때 사용 O
 
-export function useUpdateQuery({ document, fieldId, data }) {
+export function useUpdateQuery({ document }) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => updateFirestore({ document, fieldId, data }),
+    mutationFn: ({ fieldId, data }) => updateFirestore({ document, fieldId, data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [document] });
     },
@@ -44,10 +44,10 @@ export function useUpdateQuery({ document, fieldId, data }) {
   });
 }
 //   문서를 삭제할때
-export function useDeleteQuery({ document, fieldId }) {
+export function useDeleteQuery({ document }) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => dleeteFirestore({ document, fieldId }),
+    mutationFn: ({ fieldId }) => dleeteFirestore({ document, fieldId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [document] });
     },
@@ -59,10 +59,10 @@ export function useDeleteQuery({ document, fieldId }) {
 
 // 특정조건으로 문서를 읽어와야할때
 
-export function useSelectQuert({ document, fieldId, condition }) {
+export function useSelectQuert({ document, condition }) {
   const { isLoading, isError, data } = useQuery({
     queryKey: [document, condition],
-    queryFn: async () => await getFirestoreSelect({ document, fieldId, condition })
+    queryFn: async ({ fieldId }) => await getFirestoreSelect({ document, fieldId, condition })
   });
   return { isLoading, isError, data };
 }
