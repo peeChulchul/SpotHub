@@ -45,33 +45,34 @@ export default function Marker() {
   const locationImagePath = `location/${locationId}`; // 나중에 currentUser정보도?
 
   //이미지 프리뷰
-  const imgPreview = () => {
-    // const selectedOne = file[0];
-    //이미지 프리뷰
-    // const reader = new FileReader();
-    // reader.onloadstart = () => {
-    //   console.log('파일 읽기 시작');
-    // };
-    // reader.onloadend = () => {
-    //   console.log('파일 읽기 완료');
-    //   const result = reader.result; // 파일의 내용이 여기에 들어있음
-    //   console.log('result', result);
-    //   setFormInput((prev) => ({
-    //     ...prev,
-    //     image: result
-    //   }));
-    // };
-    // reader.readAsDataURL(file);
-  };
+  // const imgPreview = () => {
+  //   
+  // };
 
 //업로드할 이미지 파일 선택
   const handleFileSelect = (event) => {
     const file = event.target.files;
     // 파일이 선택되었는지 확인
     if (file && file.length > 0) {
-      console.log('file', file);
-      setFormInput((prev) => ({ ...prev, [image]: file }));
+      console.log('업로드한 이미지 파일이 선택되었음.')
     }
+    const selectedOne = file[0];
+    // 이미지 프리뷰
+    const reader = new FileReader();
+    reader.onloadstart = () => {
+      console.log('파일 읽기 시작');
+    };
+    reader.onloadend = () => {
+      console.log('파일 읽기 완료');
+      const result = reader.result; // 파일의 내용이 여기에 들어있음
+      console.log('result', result);
+      setFormInput((prev) => ({
+        ...prev,
+        image: result
+      }));
+    };
+    reader.readAsDataURL(selectedOne);
+
   };
 
   useEffect(() => {
