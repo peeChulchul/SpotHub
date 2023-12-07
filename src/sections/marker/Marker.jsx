@@ -5,13 +5,14 @@ import styled from 'styled-components';
 import { useQueryHook, useUpdateQuery } from 'hooks/useQueryHook';
 import { addDoc, collection } from 'firebase/firestore';
 import shortid from 'shortid';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 // import DefaultImg from './default.jpg';
-// TODO: 이미지 프리뷰
 // toastify로 알럿 변경
 
 export default function Marker() {
+  const context = useOutletContext();
 
+  console.log(context);
   const navigate = useNavigate();
   //임시 현재유저정보
   const user = AUTH.currentUser;
@@ -192,7 +193,7 @@ export default function Marker() {
   // };
 
   return (
-    <Container>
+    <>
       <Form>
         <ImgLabel htmlFor="imgInput">
           <figure>
@@ -228,21 +229,22 @@ export default function Marker() {
           <CancelButton onClick={handleCancelButton}>닫기</CancelButton>
         </Buttons>
       </Form>
-    </Container>
+    </>
   );
 }
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100%;
-  background: rgba(137, 137, 137, 0.5);
-  backdrop-filter: blur(5px);
-  /* margin: 0; */
-`;
+// const Container = styled.div`
+//   position: fixed;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+//   height: 100vh;
+//   width: 100%;
+//   background: rgba(137, 137, 137, 0.5);
+//   backdrop-filter: blur(5px);
+//   /* margin: 0; */
+// `;
 
 const Form = styled.div`
   display: flex;
