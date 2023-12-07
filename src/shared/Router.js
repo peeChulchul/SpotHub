@@ -12,19 +12,14 @@ import EditMarker from 'sections/marker/EditMarker';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from '@firebase/auth';
 import { AUTH } from 'myFirebase';
-import { useKakaoLoader, Map as KakaoMap, MapMarker } from 'react-kakao-maps-sdk';
+import Map from 'pages/home/Map';
+import { Modal } from 'pages/common/Modal';
 
 function Router() {
   const queryClient = new QueryClient();
   const [islogin, setIsLogin] = useState(false);
-  const [latLng, setLatLng] = useState({
-    lat: 0,
-    lng: 0
-  });
-  function onClickMap(_t, mouseEvent) {
-    console.log(mouseEvent.latLng);
-  }
 
+  console.log(AUTH.currentUser);
   useEffect(() => {
     const unsubscribeAUth = onAuthStateChanged(AUTH, async (user) => {
       if (user) {
@@ -42,10 +37,32 @@ function Router() {
         <ThemeProvider theme={theme}>
           <BrowserRouter>
             <Routes>
-              <Route element={<PageHome />} path="/"></Route>
-              <Route element={<Marker />} path="/marker"></Route>
-              <Route element={<EditMarker />} path="/editMarker"></Route>
-              <Route element={<Login />} path="/Auth"></Route>
+              <Route element={<Map />} path="/">
+                <Route
+                  element={
+                    <Modal>
+                      <Marker />
+                    </Modal>
+                  }
+                  path="/marker"
+                ></Route>
+                <Route
+                  element={
+                    <Modal>
+                      <EditMarker />
+                    </Modal>
+                  }
+                  path="/editMarker"
+                ></Route>
+                <Route
+                  element={
+                    <Modal>
+                      <Login />
+                    </Modal>
+                  }
+                  path="/Auth"
+                ></Route>
+              </Route>
               <Route path="/test" element={<Index />}></Route>
             </Routes>
           </BrowserRouter>
