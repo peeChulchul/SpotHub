@@ -12,10 +12,18 @@ import EditMarker from 'sections/marker/EditMarker';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from '@firebase/auth';
 import { AUTH } from 'myFirebase';
+import { useKakaoLoader, Map as KakaoMap, MapMarker } from 'react-kakao-maps-sdk';
 
 function Router() {
   const queryClient = new QueryClient();
   const [islogin, setIsLogin] = useState(false);
+  const [latLng, setLatLng] = useState({
+    lat: 0,
+    lng: 0
+  });
+  function onClickMap(_t, mouseEvent) {
+    console.log(mouseEvent.latLng);
+  }
 
   useEffect(() => {
     const unsubscribeAUth = onAuthStateChanged(AUTH, async (user) => {
