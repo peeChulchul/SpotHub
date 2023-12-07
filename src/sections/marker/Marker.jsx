@@ -27,7 +27,7 @@ export default function Marker() {
   });
   const { locationName, option, comment, image } = formInput;
   const [selectedImg, setSelectedImg] = useState(null);
-  const [selectefFile, SetselectefFile] = useState(null)
+  const [selectedFile, SetselectedFile] = useState(null)
 
   //수정모드, 수정된 데이터
   const [isEditMode, setIsEditMode] = useState(false);
@@ -58,7 +58,7 @@ export default function Marker() {
     if (file) {
       console.log('업로드할 이미지 파일이 선택되었음.');
     }
-    SetselectefFile(file)
+    SetselectedFile(file)
     // 이미지 프리뷰
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -74,25 +74,23 @@ export default function Marker() {
 
   // 파일 storage로 업로드
   const fileUpload = async () => {
-    if (!selectefFile) {
+    if (!selectedFile) {
       console.log("선택파일없음")
+      console.log(selectedFile)
       return;
     } else {
       try {
-        const imageRef = ref(STORAGE, `${locationImagePath}/${selectefFile.name}`);
-        const uploadResult = await uploadBytes(imageRef, selectefFile);
-        console.log(uploadResult)
+        const imageRef = ref(STORAGE, `${locationImagePath}/${selectedFile.name}`);
+        const uploadSnapshot = await uploadBytes(imageRef, selectedFile);
+        console.log(uploadSnapshot)
         
         //저장된 이미지 URL 받아오기
 
         
         // const newImageRef =  ref(STORAGE, uploadResult.location.path)
-        const downloadURL = await getDownloadURL(imageRef);
+        const downloadURL = await getDownloadURL(uploadSnapshot.ref);
         console.log('Storage 저장 완료! downloadURL: ', downloadURL);
-        setFormInput((prev) => ({
-          ...prev,
-          image: downloadURL
-        }));
+        return downloadURL;
       } catch (err) {
         console.log('파일 업로드실패', err);
       }
@@ -103,20 +101,20 @@ export default function Marker() {
   
   const handleAddMarkerButton = async (e) => {
     e.preventDefault();
-    if (!selectefFile) {
+    if (!selectedFile) {
       const userConfirm = window.confirm('선택된 이미지가 없습니다. 이대로 등록할까요?');
       if (!userConfirm) {
         return;
       }
     }
     try {
-      await fileUpload();
+      const downloadImage = await fileUpload();
       const newMarker = {
         uid,
         // LAT,
         // LNG,
         id: shortid.generate(),
-        image: selectedImg,
+        image: downloadImage,
         locationName,
         option,
         comment,
