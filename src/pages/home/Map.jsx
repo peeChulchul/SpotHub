@@ -6,14 +6,20 @@ import clothes from '../../assets/clothes.png';
 import toilet from '../../assets/toilet.png';
 import marker from '../../assets/marker.png';
 import trash from '../../assets/trash.png';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useKakaoLoader, Map as KakaoMap, MapMarker } from 'react-kakao-maps-sdk';
+import { useDispatch } from 'react-redux';
+import { modalOpen, modalClose } from '../../redux/modules/modalModules';
+import Login from 'sections/auth/Login';
+import { Modal } from 'pages/common/Modal';
+// import { modalopen, modalclose } from 'redux/modules/modalModules';
 
 function Map() {
   const [loading, error] = useKakaoLoader({
     appkey: process.env.REACT_APP_KAKAO_MAP_API_KEY // 발급 받은 APPKEY
     // ...options // 추가 옵션
   });
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const markers = [
@@ -64,91 +70,6 @@ function Map() {
   ];
 
   // const navigate = useNavigate();
-  // const new_script = (src) => {
-  //   return new Promise((resolve, reject) => {
-  //     const script = document.createElement('script');
-  //     script.src = src;
-  //     script.addEventListener('load', () => {
-  //       resolve();
-  //     });
-  //     script.addEventListener('error', (e) => {
-  //       reject(e);
-  //     });
-  //     document.head.appendChild(script);
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   const my_script = new_script(
-  //     `https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.REACT_APP_KAKAO_MAP_API_KEY}`
-  //   );
-  //   my_script.then(() => {
-  //     console.log('script loaded!!!');
-  //     const kakao = window['kakao'];
-  //     kakao.maps.load(() => {
-  //       const mapContainer = document.getElementById('map');
-  //       const options = {
-  //         center: new kakao.maps.LatLng(37.477200413358, 127.13438245554), //좌표설정
-  //         level: 3
-  //       };
-  //       const map = new kakao.maps.Map(mapContainer, options); //맵생성
-
-  //       function createMarkerImage(src, size, options) {
-  //         let markerImage = new kakao.maps.MarkerImage(src, size, options);
-  //         return markerImage;
-  //       }
-  //       function createMarker(position, image) {
-  //         const marker = new kakao.maps.Marker({
-  //           position: position,
-  //           image: image
-  //         });
-
-  //         return marker;
-  //       }
-  //       kakao.maps.event.addListener(map, 'click', function (event) {
-  //         console.log(event.latLng);
-  //       });
-
-  //       function createMarkers(array, src, size, point) {
-  //         const imageSize = new kakao.maps.Size(size[0], size[1]);
-  //         const imageOptions = {
-  //           spriteOrigin: new kakao.maps.Point(point[0], point[1])
-  //         };
-  //         const markerImage = createMarkerImage(src, imageSize, imageOptions);
-  //         array.forEach((markerData, index) => {
-  //           const marker = createMarker(markerData.position, markerImage);
-  //           kakao.maps.event.addListener(marker, 'click', function (event) {
-  //             alert(`마커 클릭: ${markerData.location}`);
-  //             // navigate(`/:${markerData.location}`);
-  //           });
-  //           markers.push(marker);
-  //         });
-  //       }
-
-  //       createMarkers(trashPositions, trash, [30, 30], [0, 0]);
-  //       createMarkers(clothesPositions, clothes, [40, 40], [0, 0]);
-  //       createMarkers(toiletPositions, toilet, [40, 40], [0, 0]);
-
-  //       function setMarkers(map) {
-  //         for (let i = 0; i < markers.length; i++) {
-  //           markers[i].setMap(map);
-  //         }
-  //       }
-
-  //       setMarkers(map);
-  //     });
-  //   });
-
-  //   return () => {
-  //     const kakao = window['kakao'];
-
-  //     // 새로추가된 이벤트를 컴포넌트 언마운트시 제거할수있도록 removeListener를 통해 제거해야함
-  //     markers.forEach((marker) => {
-  //       kakao.maps.event.removeListener(marker, 'click');
-  //       marker.setMap(null);
-  //     });
-  //   };
-  // }, []);
 
   const [userLocation, setUserLocation] = useState({
     center: {
@@ -228,9 +149,41 @@ function Map() {
           ></MapMarker>
         ))}
       </KakaoMap>
+      {/* <LoginBtn to="/">Login</LoginBtn> */}
+      <MarkerBtn to="/marker">마커찍기</MarkerBtn>
+      <LoginBtn
+        onClick={() => {
+          dispatch(modalOpen(<p>테스트</p>));
+        }}
+      >
+        로그인
+      </LoginBtn>
+      <Modal />
     </WrappingMap>
   );
 }
+
+const LoginBtn = styled.button`
+  z-index: 100;
+  width: 70px;
+  height: 50px;
+  background-color: beige;
+  position: fixed;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+`;
+
+const MarkerBtn = styled(Link)`
+  z-index: 100;
+  width: 70px;
+  height: 50px;
+  background-color: beige;
+  position: fixed;
+  bottom: 50%;
+  right: 0;
+  cursor: pointer;
+`;
 
 const WrappingMap = styled.div`
   width: 100%;
