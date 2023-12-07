@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-const 마커의데이터형식 = { location: '', uploadImageURL: '', adress: '', uid: '', locationId: '', report: [] };
+const 마커의데이터형식 = { location: '', uploadimage: '', adress: '', uid: '', locationId: '', report: [] };
 
 const initialState = {
   isLoading: true,
