@@ -6,6 +6,8 @@ import { theme } from 'styles/theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { store } from '../redux/config';
 import Index from 'pages/test';
+import Signup from 'sections/marker/auth/Signup';
+import Login from 'sections/marker/auth/Login';
 function Router() {
   const queryClient = new QueryClient();
   return (
@@ -22,9 +24,15 @@ function Router() {
                 {/*  */}
 
                 {/* <Route element={<Home />} path="/"></Route> */}
-
-                {/* <Route element={<Home />} path="/"></Route> */}
               </Route>
+              <Route
+                element={
+                  <>
+                    <Signup /> <Login />
+                  </>
+                }
+                path="/Auth"
+              ></Route>
               <Route path="/test" element={<Index />}></Route>
             </Routes>
           </BrowserRouter>

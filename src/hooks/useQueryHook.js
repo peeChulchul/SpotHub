@@ -17,10 +17,10 @@ export function useQueryHook({ document }) {
 }
 
 // 최초로 데이터를 생성할때 사용 O
-export function useSetQuery({ document, fieldId, data }) {
+export function useSetQuery({ document }) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => setFirestore({ document, fieldId, data }),
+    mutationFn: ({ fieldId, data }) => setFirestore({ document, fieldId, data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [document] });
     },
