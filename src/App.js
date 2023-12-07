@@ -8,9 +8,6 @@ function App() {
     <>
       <GlobalStyles />
       <Router />
-      <Login />
-      <Signup />
-
     </>
   );
 }
