@@ -28,7 +28,7 @@ export default function Marker() {
   });
   const { locationName, option, comment, image } = formInput;
   const [selectedImg, setSelectedImg] = useState(null);
-  const [selectedFile, SetselectedFile] = useState(null)
+  const [selectedFile, SetselectedFile] = useState(null);
 
   //수정모드, 수정된 데이터
   const [isEditMode, setIsEditMode] = useState(false);
@@ -59,7 +59,7 @@ export default function Marker() {
     if (file) {
       console.log('업로드할 이미지 파일이 선택되었음.');
     }
-    SetselectedFile(file)
+    SetselectedFile(file);
     // 이미지 프리뷰
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -67,7 +67,6 @@ export default function Marker() {
       const readerResult = reader.result; // 파일 내용 여기 들어있음 이상한 문자
       // console.log('readerResult', readerResult);
       setSelectedImg(readerResult);
-  
     };
     const result = reader.readAsDataURL(file);
     console.log('result', result);
@@ -76,18 +75,17 @@ export default function Marker() {
   // 파일 storage로 업로드
   const fileUpload = async () => {
     if (!selectedFile) {
-      console.log("선택파일없음")
-      console.log(selectedFile)
+      console.log('선택파일없음');
+      console.log(selectedFile);
       return;
     } else {
       try {
         const imageRef = ref(STORAGE, `${locationImagePath}/${selectedFile.name}`);
         const uploadSnapshot = await uploadBytes(imageRef, selectedFile);
-        console.log(uploadSnapshot)
-        
+        console.log(uploadSnapshot);
+
         //저장된 이미지 URL 받아오기
 
-        
         // const newImageRef =  ref(STORAGE, uploadResult.location.path)
         const downloadURL = await getDownloadURL(uploadSnapshot.ref);
         console.log('Storage 저장 완료! downloadURL: ', downloadURL);
@@ -99,7 +97,7 @@ export default function Marker() {
   };
 
   //마커 등록하기
-  
+
   const handleAddMarkerButton = async (e) => {
     e.preventDefault();
     if (!selectedFile) {
