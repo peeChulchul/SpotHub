@@ -6,8 +6,8 @@ import { theme } from 'styles/theme';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { store } from '../redux/config';
 import Index from 'pages/test';
-import Signup from 'sections/marker/auth/Signup';
-import Login from 'sections/marker/auth/Login';
+import Signup from 'sections/auth/Signup';
+import Login from 'sections/auth/Login';
 function Router() {
   const queryClient = new QueryClient();
   return (
