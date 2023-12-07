@@ -109,8 +109,8 @@ function Login() {
                 type="email"
                 value={email}
                 name="email"
-                placeholder="아이디 (3~20글자)"
-                minLength={3}
+                placeholder="이메일 (6~30글자)"
+                minLength={6}
                 maxLength={30}
                 onChange={onChange}
                 required
@@ -139,7 +139,6 @@ function Login() {
               <Button onClick={() => toggleonHandler()}>로그인으로 이동</Button>
               {/* <Button>로그아웃</Button> */}
               {/* <Button>회원가입</Button> */}
-              {/* <Button onClick={GoogleLogin}>google계정로그인</Button> */}
             {/* </detailWrapper> */}
           </>
         </Form>
