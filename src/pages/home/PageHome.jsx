@@ -5,6 +5,7 @@ import styled from 'styled-components';
 
 export default function PageHome() {
   return (
+    
     <Container>
       <Map />
     </Container>
