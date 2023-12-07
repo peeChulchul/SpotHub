@@ -10,9 +10,7 @@ const modalModules = createSlice({
   name: 'modalModules',
   reducers: {
     modalOpen: (state, actions) => {
-      console.log(actions.payload);
       state.isOpen = true;
-      state.children = JSON.stringify(actions.payload);
     },
     modalClose: (state, actions) => {
       state.isOpen = false;
