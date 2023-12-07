@@ -1,18 +1,81 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
+import { AUTH } from 'myFirebase' 
+// import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { signInWithEmailAndPassword } from 'firebase/auth'
+
 
 function Login() {
-  // const [email, setEmail]
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+
+
+  const login = async (event) => {
+    event.preventDefault()
+    try {
+      const userCredential = await signInWithEmailAndPassword(AUTH, email, password)
+      console.log('user with LogIn', userCredential.user)
+      console.log(userCredential.user.email)
+      setEmail('')
+      setPassword('')
+    } catch (error) {
+      const errorCode = error.code
+      const errorMessage = error.message
+      console.log('error with LogIn', errorCode, errorMessage)
+      alert('등록되지 않은 회원이거나 유효하지 않은 이메일입니다.')
+    }
+  };
+
+  // const GoogleLogin = async (e) => {
+  //   e.preventDefault();
+
+  //   const Provider = new GoogleAuthProvider();
+  //   try {
+  //     const result = await signInWithPopup(getAuth, Provider)
+  //     console.log(result.user)
+  //     console.log(result)
+
+  //   } catch (error) {
+  //     const errorCode = error.code
+  //     const errorMessage = error.message
+  //     console.log('error with googleLogIn', errorCode, errorMessage)
+  //   }
+  // };
+
+  const onChange = (e) => {
+    const {
+      target: {name, value}
+    } = e
+    if (name === 'email') {
+      setEmail(value)
+    }
+    if (name === 'password') {
+      setPassword(value)
+    }
+  };
+
 
 
   return (
     <Container>
         <Form>
             <Title>Login</Title>
-            <Input type="text" />
-            <Input type="password" />
-            <Button>로그인</Button>
-            <Button>회원가입</Button>
+            <Input
+            name="email"
+            type="email"
+            value={email}
+            onChange={onChange} />
+            <Input 
+            name="password"
+            type="password"
+            required 
+            value={password}
+            onChange={onChange} />
+            <Button onClick={login}>로그인</Button>
+            <Button>로그아웃</Button>
+            {/* <Button>회원가입</Button> */}
+            {/* <Button onClick={GoogleLogin}>google계정로그인</Button> */}
         </Form>
     </Container>
   )

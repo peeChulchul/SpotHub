@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authModules from './modules/authModules';
+import authModules from './modules/authmodules';
 import markerModules from './modules/markerModules';
 import commentModules from './modules/commentModules';
 
