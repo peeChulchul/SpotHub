@@ -11,7 +11,7 @@ export default function Pin() {
   });
     
   const { location, option, comment, image } = formInput;
-  const changeFormInput = (e) => {
+  const changeFormState = (e) => {
     e.preventDefault();
     setFormInput(e.target.value);
   };
@@ -26,8 +26,8 @@ export default function Pin() {
           <ImgInput value={image} type="file" accept="image" id="imgInput" />
         </ImgContainer>
         <User>사용자 닉네임</User>
-        <LocationName value={location} onChange={changeFormInput} placeholder="장소명을 입력해주세요."></LocationName>
-        <SelectBox value={option} onChange={changeFormInput}>
+        <LocationName value={location} onChange={changeFormState} placeholder="장소명을 입력해주세요."></LocationName>
+        <SelectBox value={option} onChange={changeFormState}>
           <option name="" id="">
             선택하기
           </option>
@@ -44,7 +44,7 @@ export default function Pin() {
             폐건전지
           </option>
         </SelectBox>
-        <TextArea value={comment} onChange={changeFormInput} placeholder="장소에 대한 의견을 남겨주세요!"></TextArea>
+        <TextArea value={comment} onChange={changeFormState} placeholder="장소에 대한 의견을 남겨주세요!"></TextArea>
         <Buttons>
           <Button onClick={addPinButton}>등록</Button>
           <Button onClick={cancelButton}>취소</Button>
