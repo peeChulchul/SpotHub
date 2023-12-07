@@ -78,14 +78,15 @@ export default function Marker() {
       console.log("선택파일없음")
       return;
     } else {
-      
       try {
         const imageRef = ref(STORAGE, `${locationImagePath}/${selectefFile.name}`);
         const uploadResult = await uploadBytes(imageRef, selectefFile);
-
         console.log(uploadResult)
         
         //저장된 이미지 URL 받아오기
+
+        
+        // const newImageRef =  ref(STORAGE, uploadResult.location.path)
         const downloadURL = await getDownloadURL(imageRef);
         console.log('Storage 저장 완료! downloadURL: ', downloadURL);
         setFormInput((prev) => ({
