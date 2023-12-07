@@ -6,7 +6,7 @@ import clothes from '../../assets/clothes.png';
 import toilet from '../../assets/toilet.png';
 import marker from '../../assets/marker.png';
 import trash from '../../assets/trash.png';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, Outlet } from 'react-router-dom';
 import { useKakaoLoader, Map as KakaoMap, MapMarker } from 'react-kakao-maps-sdk';
 import { useDispatch } from 'react-redux';
 import { modalOpen, modalClose } from '../../redux/modules/modalModules';
@@ -15,6 +15,9 @@ import { Modal } from 'pages/common/Modal';
 // import { modalopen, modalclose } from 'redux/modules/modalModules';
 
 function Map() {
+  const [lat, setLat] = useState(0);
+  const [lng, setLng] = useState(0);
+
   const [loading, error] = useKakaoLoader({
     appkey: process.env.REACT_APP_KAKAO_MAP_API_KEY // 발급 받은 APPKEY
     // ...options // 추가 옵션
@@ -111,7 +114,10 @@ function Map() {
   }, []);
 
   function onClickMap(_t, mouseEvent) {
-    console.log(mouseEvent.latLng);
+    setLat(mouseEvent.latLng.La);
+    setLng(mouseEvent.latLng.Ma);
+    console.log(lng);
+    console.log(lat);
   }
 
   return (
@@ -149,7 +155,9 @@ function Map() {
         ))}
       </KakaoMap>
       {/* <LoginBtn to="/">Login</LoginBtn> */}
-      <MarkerBtn to="/marker">마커찍기</MarkerBtn>
+      <MarkerBtn to="/marker">
+        <MarkerIcon src={marker} />
+      </MarkerBtn>
       <LoginBtn
         onClick={() => {
           dispatch(modalOpen(<p>테스트</p>));
@@ -158,18 +166,32 @@ function Map() {
         로그인
       </LoginBtn>
       <Modal />
+      <Outlet context={{ lat, lng }} />
     </WrappingMap>
   );
 }
+
+const MarkerIcon = styled.img`
+  z-index: 100;
+  width: 70px;
+  height: 50px;
+  position: fixed;
+  bottom: 50%;
+  right: 0;
+  right: 3%;
+  border-radius: 50px;
+  cursor: pointer;
+`;
 
 const LoginBtn = styled.button`
   z-index: 100;
   width: 70px;
   height: 50px;
-  background-color: beige;
+  background-color: #ff6000;
   position: fixed;
-  top: 0;
-  right: 0;
+  border-radius: 20px;
+  top: 5%;
+  right: 3%;
   cursor: pointer;
 `;
 
@@ -177,10 +199,11 @@ const MarkerBtn = styled(Link)`
   z-index: 100;
   width: 70px;
   height: 50px;
-  background-color: beige;
+  background-color: #ff6000;
   position: fixed;
   bottom: 50%;
-  right: 0;
+  right: 3%;
+  border-radius: 50px;
   cursor: pointer;
 `;
 

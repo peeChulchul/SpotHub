@@ -8,7 +8,6 @@ export default function PageHome() {
   return (
     
     <Container>
-      <Header />
       <Map />
       <Outlet />
     </Container>
