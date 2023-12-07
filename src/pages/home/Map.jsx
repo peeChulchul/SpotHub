@@ -154,13 +154,18 @@ function Map() {
           ></MapMarker>
         ))}
       </KakaoMap>
-      {/* <LoginBtn to="/">Login</LoginBtn> */}
-      <MarkerBtn to="/marker">
+      <MarkerBtn
+        onClick={() => {
+          navigate('/marker');
+          dispatch(modalOpen());
+        }}
+      >
         <MarkerIcon src={marker} />
       </MarkerBtn>
       <LoginBtn
         onClick={() => {
-          dispatch(modalOpen(<p>테스트</p>));
+          navigate('/Auth');
+          dispatch(modalOpen());
         }}
       >
         로그인
@@ -195,7 +200,7 @@ const LoginBtn = styled.button`
   cursor: pointer;
 `;
 
-const MarkerBtn = styled(Link)`
+const MarkerBtn = styled.button`
   z-index: 100;
   width: 70px;
   height: 50px;
@@ -211,6 +216,7 @@ const WrappingMap = styled.div`
   width: 100%;
   height: 100vh;
   background-color: black;
+  position: relative;
 `;
 
 export default Map;
