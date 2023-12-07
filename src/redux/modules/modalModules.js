@@ -9,16 +9,17 @@ const modalModules = createSlice({
   initialState,
   name: 'modalModules',
   reducers: {
-    modalopen: (state, actions) => {
+    modalOpen: (state, actions) => {
+      console.log(actions.payload);
       state.isOpen = true;
-      state.children = actions.payload;
+      state.children = JSON.stringify(actions.payload);
     },
-    modalclose: (state, actions) => {
+    modalClose: (state, actions) => {
       state.isOpen = false;
       state.children = null;
     }
   }
 });
 
-export const { modalopen, modalclose } = modalModules.actions;
+export const { modalOpen, modalClose } = modalModules.actions;
 export default modalModules.reducer;

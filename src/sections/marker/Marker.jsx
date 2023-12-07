@@ -6,12 +6,14 @@ import { useQueryHook, useUpdateQuery } from 'hooks/useQueryHook';
 import { addDoc, collection } from 'firebase/firestore';
 import uuid from 'react-uuid';
 import shortid from 'shortid';
+import { useNavigate } from 'react-router-dom';
 // import DefaultImg from './default.jpg';
 // TODO: 모든 값 입력시 버튼 활성화 -> img 추가시 image부분 상태 변경
 // TODO: 이미지 프리뷰
 // toastify로 알럿 변경
 
 export default function Marker() {
+  const navigate = useNavigate();
   const { isLoading, isError, data: markers } = useQueryHook({ document: 'markers' });
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [formInput, setFormInput] = useState({
@@ -49,13 +51,6 @@ export default function Marker() {
     // const selectedOne = file[0];
     //이미지 프리뷰
     // const reader = new FileReader();
-    // reader.onloadstart = () => {
-    //   console.log('파일 읽기 시작');
-    // };
-    // reader.onloadend = () => {
-    //   console.log('파일 읽기 완료');
-    //   const result = reader.result; // 파일의 내용이 여기에 들어있음
-    //   console.log('result', result);
     //   setFormInput((prev) => ({
     //     ...prev,
     //     image: result
@@ -64,7 +59,7 @@ export default function Marker() {
     // reader.readAsDataURL(file);
   };
 
-//업로드할 이미지 파일 선택
+  //업로드할 이미지 파일 선택
   const handleFileSelect = (event) => {
     const file = event.target.files;
     // 파일이 선택되었는지 확인
@@ -74,9 +69,9 @@ export default function Marker() {
     }
   };
 
-  useEffect(() => {
-    console.log('FormInput State Updated:', formInput);
-  }, [formInput]);
+  // useEffect(() => {
+  //   console.log('FormInput State Updated:', formInput);
+  // }, [formInput]);
 
   //파일 업로드하기
   const FileUpload = async () => {
@@ -147,6 +142,7 @@ export default function Marker() {
       });
 
       //모달 닫는 부분 코드
+      navigate('/');
     }
   };
 
