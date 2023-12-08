@@ -6,14 +6,25 @@ import { useQueryHook, useUpdateQuery } from 'hooks/useQueryHook';
 import { addDoc, collection } from 'firebase/firestore';
 import shortid from 'shortid';
 import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 // import DefaultImg from './default.jpg';
-// toastify로 알럿 변경
+
+// TODO: 코드 정리
+// TODO: 필요하면 타임스탬프 포맷팅
+// TODO: toastify로 알럿 변경
 
 export default function Marker() {
-  const context = useOutletContext();
 
-  console.log(context);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  // 핀 찍은 위치
+  const { lat, lng } = useOutletContext();
+  console.log(`[위치정보] 위도:${lat}, 경도${lng}`)
+
+  //현재 유저 정보.
+  const currentUser = useSelector((state) => state.currentUserModules.currentUser);
+  console.log('currentUser', currentUser);
+
   //임시 현재유저정보
   const user = AUTH.currentUser;
   const uid = user ? user.uid : null;
@@ -109,9 +120,9 @@ export default function Marker() {
     try {
       const downloadImage = await fileUpload();
       const newMarker = {
-        uid,
-        // LAT,
-        // LNG,
+        uid: currentUser.uid,
+        lat,
+        lng,
         id: shortid.generate(),
         image: downloadImage,
         locationName,
@@ -200,7 +211,7 @@ export default function Marker() {
           </figure>
           <ImgInput name="image" type="file" accept="image/*" id="imgInput" onChange={handleFileSelect} />
         </ImgLabel>
-        <User>사용자 닉네임</User>
+        <User>{currentUser.nickname}</User>
         <LocationName
           name="locationName"
           placeholder="장소명을 입력해주세요."
@@ -282,8 +293,9 @@ const ImgInput = styled.input`
 
 const User = styled.h3`
   /* position: absolute; */
-  margin: 10px auto 0 15px;
+  margin: 10px auto 0 20px;
   font-size: 12px;
+  font-weight: 700;
   color: #111;
 `;
 
