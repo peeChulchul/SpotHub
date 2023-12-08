@@ -17,7 +17,8 @@ const currentUserModules = createSlice({
     },
     currentUserFullfild: (state, action) => {
       state.isLoading = false;
-      state.currentUser = { ...action.payload };
+
+      state.currentUser = action.payload === null ? null : { ...action.payload };
     },
     currentUserRejected: (state, action) => {
       console.log(action.payload);
