@@ -2,10 +2,10 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { AUTH, FIRESTORE, STORAGE } from 'myFirebase';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useQueryHook, useUpdateQuery } from 'hooks/useQueryHook';
+import { useDeleteQuery, useQueryHook, useUpdateQuery } from 'hooks/useQueryHook';
 import { addDoc, collection } from 'firebase/firestore';
 import shortid from 'shortid';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 // import DefaultImg from './default.jpg';
 
@@ -16,12 +16,18 @@ import { useDispatch, useSelector } from 'react-redux';
 export default function Marker() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { paramId } = useParams();
+
   // 핀 찍은 위치
   const { lat, lng } = useOutletContext();
   //현재 유저 정보.
   const { uid, avatar, nickname } = useSelector((state) => state.currentUserModules.currentUser);
   // console.log(uid, avatar, nickname)
-  const { isLoading, isError, data: markers } = useQueryHook({ document: 'markers' });
+  const { data: markers } = useQueryHook({ document: 'markers' });
+  const deleteQuery = useDeleteQuery({ document: 'markers' });
+  const updateQuery = useUpdateQuery({ document: 'markers' });
+  console.log(updateQuery);
+
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [formInput, setFormInput] = useState({
     locationName: '',
@@ -35,8 +41,10 @@ export default function Marker() {
 
   //수정모드, 수정된 데이터
   const [isOnMypage, setIsOnMypage] = useState(true); // 전역관리?
-  const [isModifyMode, setisModifyMode] = useState(false);
+  const [isModifyMode, setIsModifyMode] = useState(false);
   const [editData, setEditData] = useState(null);
+
+  const [markersData, setMarkersData] = useState(null);
 
   //등록 버튼 비활성화
   useEffect(() => {
@@ -163,46 +171,56 @@ export default function Marker() {
   // 수정하기 버튼 핸들러
   const hadleModifyButton = () => {
     // alert('수정하기 버튼이 클릭됨!');
-    setisModifyMode(!isModifyMode);
-    setEditData(markers); //상세보기 데이터 가져오기
-    console.log('editData', editData);
-    setFormInput({
-      locationName: editData.locationName,
-      option: editData.option,
-      comment: editData.comment,
-      image: editData.image
-    });
+    setIsModifyMode(true);
+    setMarkersData(markers); //상세보기 데이터 가져오기
+    // const selectOne = markersData.find((marker) => {
+    //   return marker.id === paramId;
+    // });
+    // setEditData(selectOne);
+    // setFormInput({
+    //   locationName: editData.locationName,
+    //   option: editData.option,
+    //   comment: editData.comment,
+    //   image: editData.image
+    // });
   };
 
   //수정완료 버튼 이벤트 핸들러
 
-  // const handleCompleteEditButton = () => {
-  //   const useConfirm = window.confirm('수정하시겠습니까?');
-  //   if (!useConfirm) {
-  //     return;
-  //   } else {
-  //     const updateData = {
-  //       // uid 와 location은 수정하지 않으므로 생략
-  //       image,
-  //       marker,
-  //       option,
-  //       comment,
-  //       timeStamp: new Date() //포멧팅?
-  //     };
-  //     try {
-  //       //파이어스토어 내용 수정 로직
-  //       useUpdateQuery({
-  //         document: 'marker',
-  //         fieldId: '????',
-  //         data: updateData
-  //       });
-  //       // 성공알림.
-  //     } catch (err) {
-  //       console.log('수정 실패 ==> ', err);
-  //       // error 메세지 alert
-  //     }
-  //   }
-  // };
+  const handleCompleteModify = () => {
+    //   const useConfirm = window.confirm('수정하시겠습니까?');
+    //   if (!useConfirm) {
+    //     return;
+    //   } else {
+    //     const updateData = {
+    //       // uid 와 location은 수정하지 않으므로 생략
+    //       image,
+    //       marker,
+    //       option,
+    //       comment,
+    //       timeStamp: new Date() //포멧팅?
+    //     };
+    //     try {
+    //       //파이어스토어 내용 수정 로직
+    //       useUpdateQuery({
+    //         document: 'marker',
+    //         fieldId: '????',
+    //         data: updateData
+    //       });
+    //       // 성공알림.
+    //     } catch (err) {
+    //       console.log('수정 실패 ==> ', err);
+    //       // error 메세지 alert
+    //     }
+    //   }
+  };
+
+  //삭제하기 이벤트핸들러
+  const hadleDeleteButton = () => {
+    //   const userConfirm = window.confirm('마커를 삭제하시겠습니까?')
+    //   if(!userConfirm) return;
+    //   deleteQuery.mutate(paramId); 수정수정해야함
+  };
 
   return (
     <>
@@ -236,11 +254,18 @@ export default function Marker() {
         />
         <Buttons>
           {isOnMypage ? (
-            <ModifyButton onClick={hadleModifyButton}>수정하기</ModifyButton>
+            <>
+              <ModifyAndDeleteButton onClick={isModifyMode ? handleCompleteModify : hadleModifyButton}>
+                {isModifyMode ? '수정완료' : '수정'}
+              </ModifyAndDeleteButton>
+              <ModifyAndDeleteButton onClick={isModifyMode ? handleCancelButton : hadleDeleteButton}>
+                {isModifyMode ? '취소' : '삭제'}
+              </ModifyAndDeleteButton>
+            </>
           ) : (
             <>
-              <AddButton disabled={isButtonDisabled} onClick={isModifyMode ? hadleModifyButton : handleAddMarkerButton}>
-                {isModifyMode ? '수정완료' : '등록하기'}
+              <AddButton disabled={isButtonDisabled} onClick={handleAddMarkerButton}>
+                등록하기
               </AddButton>
               <CancelButton onClick={handleCancelButton}>닫기</CancelButton>
             </>
@@ -366,10 +391,12 @@ const CancelButton = styled.button`
   }
 `;
 
-const ModifyButton = styled.p`
-  margin-top: 20px;
+const ModifyAndDeleteButton = styled.p`
+  padding: 10px 40px;
+  border: 1px solid #111;
+  border-radius: 5px;
+  background-color: transparent;
   &:hover {
-    cursor: pointer;
-    text-decoration: underline;
+    background-color: #ffe6c7;
   }
 `;
