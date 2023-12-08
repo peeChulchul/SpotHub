@@ -193,7 +193,7 @@ const Container = styled.div`
 
 const Form = styled.form`
   background-color: #ffe6c7;
-  outline-color: #806542;
+  outline-color: #ffffff;
   border-radius: 12px;
   padding: 12px;
   display: flex;
@@ -213,7 +213,7 @@ const Input = styled.input`
 `;
 
 const Title = styled.h1`
-  color: #5b515e;
+  color: #454545;
   font-size: 36px;
   margin-bottom: 24px;
   align-items: center;
@@ -222,7 +222,7 @@ const Title = styled.h1`
 `;
 
 const Button = styled.button`
-  background-color: #343435;
+  background-color: #454545;
   color: #ffffff;
   border: none;
   padding: 12px 0;
