@@ -163,14 +163,7 @@ function Map() {
       >
         <MarkerIcon src={marker} />
       </MarkerBtn>
-      <LoginBtn
-        onClick={() => {
-          navigate('/Auth');
-          dispatch(modalOpen());
-        }}
-      >
-        로그인
-      </LoginBtn>
+
       <Modal />
       <Outlet context={{ lat, lng }} />
       <UserMenu />
@@ -187,18 +180,6 @@ const MarkerIcon = styled.img`
   right: 0;
   right: 3%;
   border-radius: 50px;
-  cursor: pointer;
-`;
-
-const LoginBtn = styled.button`
-  z-index: 100;
-  width: 70px;
-  height: 50px;
-  background-color: #ff6000;
-  position: fixed;
-  border-radius: 20px;
-  top: 5%;
-  right: 3%;
   cursor: pointer;
 `;
 

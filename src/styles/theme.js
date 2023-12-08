@@ -1,6 +1,6 @@
 const spacing = {
   base: '4px',
-  large: '8px'
+  lg: '8px'
 };
 
 const color = {

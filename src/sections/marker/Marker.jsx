@@ -6,18 +6,22 @@ import { useQueryHook, useUpdateQuery } from 'hooks/useQueryHook';
 import { addDoc, collection } from 'firebase/firestore';
 import shortid from 'shortid';
 import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 // import DefaultImg from './default.jpg';
-// toastify로 알럿 변경
+
+// TODO: 코드 정리
+// TODO: 필요하면 타임스탬프 포맷팅
+// TODO: toastify로 알럿 변경
 
 export default function Marker() {
-  const context = useOutletContext();
 
-  console.log(context);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  //임시 현재유저정보
-  const user = AUTH.currentUser;
-  const uid = user ? user.uid : null;
-  // const locationId = '11.111.111';
+  // 핀 찍은 위치
+  const { lat, lng } = useOutletContext();
+  //현재 유저 정보.
+  const {uid, avatar, nickname} = useSelector((state) => state.currentUserModules.currentUser);
+  // console.log(uid, avatar, nickname)
   // const { isLoading, isError, data: markers } = useQueryHook({ document: 'markers' });
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [formInput, setFormInput] = useState({
@@ -110,8 +114,10 @@ export default function Marker() {
       const downloadImage = await fileUpload();
       const newMarker = {
         uid,
-        // LAT,
-        // LNG,
+        avatar,
+        nickname,
+        lat,
+        lng,
         id: shortid.generate(),
         image: downloadImage,
         locationName,
@@ -123,6 +129,13 @@ export default function Marker() {
       await addDoc(collectionRef, newMarker);
       console.log('등록에 성공하였습니다.');
       alert('등록되었습니다!');
+      setFormInput({
+        locationName: '',
+        option: '',
+        comment: '',
+        image: null
+      });
+      
     } catch (err) {
       console.log('마커 등록실패 err: ', err);
       alert('등록에 실패하였습니다. 다시 시도해주세요.');
@@ -138,7 +151,7 @@ export default function Marker() {
     } else {
       // 사용자가 입력한 정보 초기화
       setFormInput({
-        marker: '',
+        locationName: '',
         option: '',
         comment: '',
         image: null
@@ -195,12 +208,12 @@ export default function Marker() {
       <Form>
         <ImgLabel htmlFor="imgInput">
           <figure>
-            <LocationImg src={selectedImg} alt="Image Preview" />
-            <p>이미지 선택</p>
+            <LocationImg src={selectedImg}/>
+            <p>{ image || '이미지 선택'}</p>
           </figure>
           <ImgInput name="image" type="file" accept="image/*" id="imgInput" onChange={handleFileSelect} />
         </ImgLabel>
-        <User>사용자 닉네임</User>
+        <User>{nickname}</User>
         <LocationName
           name="locationName"
           placeholder="장소명을 입력해주세요."
@@ -282,8 +295,9 @@ const ImgInput = styled.input`
 
 const User = styled.h3`
   /* position: absolute; */
-  margin: 10px auto 0 15px;
+  margin: 10px auto 0 20px;
   font-size: 12px;
+  font-weight: 700;
   color: #111;
 `;
 
