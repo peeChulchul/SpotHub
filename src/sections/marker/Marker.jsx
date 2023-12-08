@@ -14,13 +14,12 @@ import { useDispatch, useSelector } from 'react-redux';
 // TODO: toastify로 알럿 변경
 
 export default function Marker() {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // 핀 찍은 위치
   const { lat, lng } = useOutletContext();
   //현재 유저 정보.
-  const {uid, avatar, nickname} = useSelector((state) => state.currentUserModules.currentUser);
+  const { uid, avatar, nickname } = useSelector((state) => state.currentUserModules.currentUser);
   // console.log(uid, avatar, nickname)
   // const { isLoading, isError, data: markers } = useQueryHook({ document: 'markers' });
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -114,15 +113,10 @@ export default function Marker() {
       const downloadImage = await fileUpload();
       const newMarker = {
         uid,
-<<<<<<< HEAD
-        lat: context.lat, //LAT
-        lng: context.lng, //LNG
-=======
         avatar,
         nickname,
         lat,
         lng,
->>>>>>> 38648d378cc0f7d3de2e6933a23e6b3a7af907e1
         id: shortid.generate(),
         image: downloadImage,
         locationName,
@@ -140,7 +134,6 @@ export default function Marker() {
         comment: '',
         image: null
       });
-      
     } catch (err) {
       console.log('마커 등록실패 err: ', err);
       alert('등록에 실패하였습니다. 다시 시도해주세요.');
@@ -213,8 +206,8 @@ export default function Marker() {
       <Form>
         <ImgLabel htmlFor="imgInput">
           <figure>
-            <LocationImg src={selectedImg}/>
-            <p>{ image || '이미지 선택'}</p>
+            <LocationImg src={selectedImg} />
+            <p>{image || '이미지 선택'}</p>
           </figure>
           <ImgInput name="image" type="file" accept="image/*" id="imgInput" onChange={handleFileSelect} />
         </ImgLabel>
