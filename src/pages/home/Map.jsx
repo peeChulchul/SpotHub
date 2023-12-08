@@ -82,6 +82,12 @@ function Map() {
     dispatch(modalOpen());
   }
   const [isLogin, setIsLogin] = useState(false);
+  const options = {
+    쓰레기통: trash,
+    화장실: toilet,
+    의류수거함: clothes,
+    폐건전지: null
+  };
 
   return (
     <WrappingMap>
@@ -99,15 +105,15 @@ function Map() {
         }}
         level={3} // 지도의 확대 레벨
       >
-        {markers?.map(({ position, img, locationName, locationid }, index) => (
+        {markers?.map(({ lat, lng, option, img, locationName, locationid }, index) => (
           <MapMarker
             key={index}
             position={{
-              lat: position.lat,
-              lng: position.lng
+              lat: lat,
+              lng: lng
             }}
             image={{
-              src: img,
+              src: options[option],
               size: { width: 30, height: 30 },
               options: {
                 spriteSize: { width: 30, height: 30 },
