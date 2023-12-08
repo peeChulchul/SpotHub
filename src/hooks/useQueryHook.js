@@ -59,10 +59,10 @@ export function useDeleteQuery({ document }) {
 
 // 특정조건으로 문서를 읽어와야할때
 
-export function useSelectQuery({ document, condition }) {
+export function useSelectQuery({ document, fieldId, condition }) {
   const { isLoading, isError, data } = useQuery({
     queryKey: [document, condition],
-    queryFn: async ({ fieldId }) => await getFirestoreSelect({ document, fieldId, condition })
+    queryFn: async () => await getFirestoreSelect({ document, fieldId, condition })
   });
   return { isLoading, isError, data };
 }

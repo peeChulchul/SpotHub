@@ -15,6 +15,7 @@ import { Modal } from 'pages/common/Modal';
 import { currentUserFullfild } from '../redux/modules/currentUserModules';
 import ModifyUser from 'sections/auth/ModifyUser';
 import DetailMarker from 'sections/marker/DetailMarker';
+import UserLocation from 'pages/common/UserLocation';
 
 function Router() {
   const { isLoading, massage, error, currentUser } = useSelector((modules) => modules.currentUserModules);
@@ -66,6 +67,14 @@ function Router() {
               element={
                 <Modal>
                   <ModifyUser />
+                </Modal>
+              }
+            />
+            <Route
+              path="/user/location/:uid"
+              element={
+                <Modal>
+                  <UserLocation />
                 </Modal>
               }
             />
