@@ -94,17 +94,11 @@ function Login() {
           <>
             <Title>Login</Title>
             <Input name="email" value={email} onChange={onChange} />
-            <Input name="password" value={password} onChange={onChange} />
+            <Input type="password" name="password" value={password} onChange={onChange} />
 
-<<<<<<< HEAD
             <Button onClick={login}>로그인</Button>
             <Button onClick={GoogleLogin}>🆕 Google 로그인</Button>
             <Button onClick={() => togglehandle()}>회원가입</Button>
-=======
-            <Button onSubmit={login}>로그인</Button>
-            <Button onSubmit={GoogleLogin}>🆕 Google 로그인</Button>
-            <Button onSubmit={() => togglehandle()}>회원가입</Button>
->>>>>>> 52a918601c2ce17546fce5fde6df6b6cb08b807d
           </>
         </Form>
       ) : (
@@ -141,19 +135,10 @@ function Login() {
               onChange={onChange}
               required
             />
-<<<<<<< HEAD
-            <Button onClick={signUp}>회원가입</Button>
-            <Button onClick={() => toggleonHandler()}>로그인으로 이동</Button>
-            {/* <Button>로그아웃</Button> */}
-            {/* <Button>회원가입</Button> */}
-            {/* <Button onClick={GoogleLogin}>google계정로그인</Button> */}
-            {/* </detailWrapper> */}
-=======
             <Button onSubmit={signUp}>회원가입</Button>
             <Button type="button" onSubmit={() => toggleonHandler()}>
               로그인으로 이동
             </Button>
->>>>>>> 52a918601c2ce17546fce5fde6df6b6cb08b807d
           </>
         </Form>
       )}

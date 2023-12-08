@@ -17,6 +17,8 @@ import { Modal } from 'pages/common/Modal';
 function Map() {
   const [lat, setLat] = useState(0);
   const [lng, setLng] = useState(0);
+  const [point, setPoint] = useState();
+  const [pointState, setPoinState] = useState(false);
 
   const [loading, error] = useKakaoLoader({
     appkey: process.env.REACT_APP_KAKAO_MAP_API_KEY // 발급 받은 APPKEY
@@ -114,10 +116,12 @@ function Map() {
   }, []);
 
   function onClickMap(_t, mouseEvent) {
-    setLat(mouseEvent.latLng.La);
-    setLng(mouseEvent.latLng.Ma);
-    console.log(lng);
-    console.log(lat);
+    setPoint({
+      lat: mouseEvent.latLng.getLat(),
+      lng: mouseEvent.latLng.getLng()
+    });
+    navigate('/marker');
+    dispatch(modalOpen());
   }
 
   return (
@@ -171,7 +175,7 @@ function Map() {
         로그인
       </LoginBtn>
       <Modal />
-      <Outlet context={{ lat, lng }} />
+      <Outlet context={{ lat: point?.lat, lng: point?.lng }} />
     </WrappingMap>
   );
 }
