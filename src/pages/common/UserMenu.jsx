@@ -29,7 +29,7 @@ const Box = styled.div`
 
 export default function UserMenu() {
   const { currentUser, isLoading, error } = useSelector((modules) => modules.currentUserModules);
-  console.log(currentUser);
+  // console.log(currentUser);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
