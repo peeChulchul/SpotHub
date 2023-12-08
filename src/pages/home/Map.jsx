@@ -15,6 +15,7 @@ import { Modal } from 'pages/common/Modal';
 import UserMenu from 'pages/common/UserMenu';
 import { useQueryHook } from 'hooks/useQueryHook';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // import { modalopen, modalclose } from 'redux/modules/modalModules';
 
 function Map() {
@@ -31,7 +32,6 @@ function Map() {
   const navigate = useNavigate();
   const useQueryHooked = useQueryHook({ document: 'markers' });
   const markers = useQueryHooked.data;
-  const nofify = () => toast('등록할 장소를 찍어주세요!');
   console.log(test3);
 
   // const navigate = useNavigate();
@@ -87,11 +87,10 @@ function Map() {
   }
 
   function mapOnOffButton() {
+    toast.success('등록할 장소를 찍어주세요!');
     setMarkerState(true);
-    nofify();
   }
 
-  const [isLogin, setIsLogin] = useState(false);
   const options = {
     쓰레기통: trash,
     화장실: toilet,
@@ -100,55 +99,57 @@ function Map() {
   };
 
   return (
-    <WrappingMap>
-      <KakaoMap // 지도를 표시할 Container
-        onClick={onClickMap}
-        id="map"
-        center={
-          // 지도의 중심좌표
-          userLocation.center
-        }
-        style={{
-          // 지도의 크기
-          width: '100%',
-          height: '100%'
-        }}
-        level={3} // 지도의 확대 레벨
-      >
-        {markers?.map(({ lat, lng, option, img, locationName, id }, index) => (
-          <MapMarker
-            key={index}
-            position={{
-              lat: lat,
-              lng: lng
-            }}
-            image={{
-              src: options[option],
-              size: { width: 30, height: 30 },
-              options: {
-                spriteSize: { width: 30, height: 30 },
-                spriteOrigin: { x: 0, y: 0 }
-              }
-            }}
-            onClick={() => {
-              navigate(`/marker/${id}`);
-              dispatch(modalOpen());
-            }}
-          ></MapMarker>
-        ))}
-      </KakaoMap>
-      <MarkerBtn
-        onClick={() => {
-          mapOnOffButton();
-        }}
-      >
-        <MarkerIcon src={marker} />
-      </MarkerBtn>
-      <ToastContainer />
-      <UserMenu />
-      <Modal />
-      <Outlet context={{ lat: point?.lat, lng: point?.lng }} />
-    </WrappingMap>
+    <>
+      <WrappingMap>
+        <KakaoMap // 지도를 표시할 Container
+          onClick={onClickMap}
+          id="map"
+          center={
+            // 지도의 중심좌표
+            userLocation.center
+          }
+          style={{
+            // 지도의 크기
+            width: '100%',
+            height: '100%'
+          }}
+          level={3} // 지도의 확대 레벨
+        >
+          {markers?.map(({ lat, lng, option, img, locationName, id }, index) => (
+            <MapMarker
+              key={index}
+              position={{
+                lat: lat,
+                lng: lng
+              }}
+              image={{
+                src: options[option],
+                size: { width: 30, height: 30 },
+                options: {
+                  spriteSize: { width: 30, height: 30 },
+                  spriteOrigin: { x: 0, y: 0 }
+                }
+              }}
+              onClick={() => {
+                navigate(`/marker/${id}`);
+                dispatch(modalOpen());
+              }}
+            ></MapMarker>
+          ))}
+        </KakaoMap>
+        <MarkerBtn
+          onClick={() => {
+            mapOnOffButton();
+          }}
+        >
+          <MarkerIcon src={marker} />
+        </MarkerBtn>
+        <UserMenu />
+        <Modal />
+        <Outlet context={{ lat: point?.lat, lng: point?.lng }} />
+      </WrappingMap>
+      <ToastContainer autoClose={3000} aposition={toast.POSITION.TOP_LEFT} />
+    </>
   );
 }
 
