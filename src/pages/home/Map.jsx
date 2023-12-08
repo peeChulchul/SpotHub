@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux';
 import { modalOpen, modalClose } from '../../redux/modules/modalModules';
 import Login from 'sections/auth/Login';
 import { Modal } from 'pages/common/Modal';
+import { useQueryHook } from 'hooks/useQueryHook';
 // import { modalopen, modalclose } from 'redux/modules/modalModules';
 
 function Map() {
@@ -26,53 +27,9 @@ function Map() {
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const markers = [
-    {
-      position: { lat: 37.478400413698, lng: 127.13538446564 },
-      locationName: '슈퍼쓰레기통',
-      locationid: '임시 아이디',
-      img: trash
-    },
-    {
-      position: { lat: 37.478000413698, lng: 127.13738648584 },
-      locationName: '양철쓰레기통',
-      locationid: '임시 아이디',
-      img: trash
-    },
-    {
-      position: { lat: 37.477800413698, lng: 127.13838849594 },
-      locationName: '구리쓰레기통',
-      locationid: '임시 아이디',
-      img: trash
-    },
-
-    {
-      position: { lat: 37.477619964555, lng: 127.13405884939 },
-      locationName: '슈퍼의류수거함',
-      locationid: '임시 아이디',
-      img: clothes
-    },
-    {
-      position: { lat: 37.477200413698, lng: 127.13438245614 },
-      locationName: '구리양철의류수거함쓰레기통',
-      locationid: '임시 아이디',
-      img: clothes
-    },
-
-    {
-      position: { lat: 37.477000413698, lng: 127.13388245624 },
-      locationName: '슈퍼화장실',
-      locationid: '임시 아이디',
-      img: toilet
-    },
-    {
-      position: { lat: 37.476800413698, lng: 127.13458245634 },
-      locationName: '양철화장실',
-      locationid: '임시 아이디',
-      img: toilet
-    }
-  ];
+  const useQueryHooked = useQueryHook({ document: 'markers' });
+  const markers = useQueryHooked.data;
+  console.log(markers);
 
   // const navigate = useNavigate();
 
@@ -123,6 +80,7 @@ function Map() {
     navigate('/marker');
     dispatch(modalOpen());
   }
+  const [isLogin, setIsLogin] = useState(false);
 
   return (
     <WrappingMap>
@@ -140,7 +98,7 @@ function Map() {
         }}
         level={3} // 지도의 확대 레벨
       >
-        {markers.map(({ position, img, locationName, locationid }, index) => (
+        {markers?.map(({ position, img, locationName, locationid }, index) => (
           <MapMarker
             key={index}
             position={{
@@ -158,6 +116,7 @@ function Map() {
           ></MapMarker>
         ))}
       </KakaoMap>
+      {}
       <MarkerBtn
         onClick={() => {
           navigate('/marker');
