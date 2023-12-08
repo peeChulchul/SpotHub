@@ -8,7 +8,7 @@ import marker from '../../assets/marker.png';
 import trash from '../../assets/trash.png';
 import { useNavigate, Link, Outlet } from 'react-router-dom';
 import { useKakaoLoader, Map as KakaoMap, MapMarker } from 'react-kakao-maps-sdk';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { modalOpen, modalClose } from '../../redux/modules/modalModules';
 import Login from 'sections/auth/Login';
 import { Modal } from 'pages/common/Modal';
@@ -21,7 +21,7 @@ function Map() {
   const [lng, setLng] = useState(0);
   const [point, setPoint] = useState();
   const [pointState, setPoinState] = useState(false);
-
+  const test3 = useSelector((store) => store.currentUserModules);
   const [loading, error] = useKakaoLoader({
     appkey: process.env.REACT_APP_KAKAO_MAP_API_KEY // 발급 받은 APPKEY
     // ...options // 추가 옵션
@@ -30,7 +30,7 @@ function Map() {
   const navigate = useNavigate();
   const useQueryHooked = useQueryHook({ document: 'markers' });
   const markers = useQueryHooked.data;
-  console.log(markers);
+  console.log(test3);
 
   // const navigate = useNavigate();
 
@@ -131,7 +131,7 @@ function Map() {
       >
         <MarkerIcon src={marker} />
       </MarkerBtn>
-
+      <UserMenu />
       <Modal />
       <Outlet context={{ lat: point?.lat, lng: point?.lng }} />
     </WrappingMap>
