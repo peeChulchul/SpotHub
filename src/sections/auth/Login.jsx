@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AUTH } from 'myFirebase';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  GoogleAuthProvider,
+  signInWithPopup
+} from 'firebase/auth';
 import { useSetQuery } from 'hooks/useQueryHook';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -47,14 +52,18 @@ function Login() {
   };
 
   const signUp = async (e) => {
-    e.preventDefault();
     try {
+      // Firebase Authentication을 사용하여 계정 생성
+      e.preventDefault();
       const userCredential = await createUserWithEmailAndPassword(AUTH, email, password);
-      const uid = userCredential.user.uid;
-      alert('회원가입이 완료되었습니다.');
-      setQuery({ fieldId: uid, data: { avatar: userCredential.user.photoURL, uid, nickName } });
-      dispatch(modalClose());
-      navigate('/');
+      updateProfile(userCredential.user, {
+        displayName: nickName
+      });
+      AUTH.signOut();
+      setEmail('');
+      setPassword('');
+      setNickName('');
+      toggleonHandler();
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.errorMessage;
@@ -103,13 +112,13 @@ function Login() {
   return (
     <Container>
       {isLogin ? (
-        <Form>
+        <Form onSubmit={login}>
           <>
             <Title>Login</Title>
             <Input name="email" value={email} onChange={onChange} />
             <Input type="password" name="password" value={password} onChange={onChange} />
 
-            <Button onSubmit={login}>로그인</Button>
+            <Button>로그인</Button>
             <Button type="button" onClick={GoogleLogin}>
               🆕 Google 로그인
             </Button>
