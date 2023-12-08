@@ -46,7 +46,7 @@ const Card = styled.div`
   padding: ${({ theme }) => `calc(${theme.spacing.lg} * 1)`};
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing.lg};
+  gap: ${({ theme }) => `calc(${theme.spacing.lg} * 1.5)`};
   display: ${({ $display }) => ($display ? '' : 'none')};
   .modifyUser {
     font-size: 0.8rem;
@@ -125,6 +125,15 @@ export default function UserMenu() {
             className="modifyUser"
           >
             프로필수정
+          </p>
+          <p
+            onClick={() => {
+              dispatch(modalOpen());
+              navigate(`/user/${currentUser.uid}`);
+            }}
+            className="modifyUser"
+          >
+            나의 장소
           </p>
         </div>
         <LogOutBtn onClick={onClicklogout}>로그아웃</LogOutBtn>

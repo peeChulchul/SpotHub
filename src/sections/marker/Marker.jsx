@@ -21,7 +21,7 @@ export default function Marker() {
   //현재 유저 정보.
   const { uid, avatar, nickname } = useSelector((state) => state.currentUserModules.currentUser);
   // console.log(uid, avatar, nickname)
-  // const { isLoading, isError, data: markers } = useQueryHook({ document: 'markers' });
+  const { isLoading, isError, data: markers } = useQueryHook({ document: 'markers' });
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [formInput, setFormInput] = useState({
     locationName: '',
@@ -162,15 +162,16 @@ export default function Marker() {
 
   // 수정하기 버튼 핸들러
   const hadleModifyButton = () => {
-    alert('수정하기 버튼이 클릭됨!');
-    // setisModifyMode(true);
-    // setEditData(data); //상세보기 데이터 가져오기
-    // setFormInput({
-    //   marker: data.marker,
-    //   option: data.option,
-    //   comment: data.comment,
-    //   image: data.image
-    // });
+    // alert('수정하기 버튼이 클릭됨!');
+    setisModifyMode(!isModifyMode);
+    setEditData(markers); //상세보기 데이터 가져오기
+    console.log('editData', editData);
+    setFormInput({
+      locationName: editData.locationName,
+      option: editData.option,
+      comment: editData.comment,
+      image: editData.image
+    });
   };
 
   //수정완료 버튼 이벤트 핸들러
