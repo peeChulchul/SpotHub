@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Marker from 'sections/marker/Marker';
 import { ThemeProvider } from 'styled-components';
 import { theme } from 'styles/theme';
-
+import { updateProfile } from 'firebase/auth';
 import Index from 'pages/test';
 import Login from 'sections/auth/Login';
 import EditMarker from 'sections/marker/EditMarker';
@@ -12,16 +12,14 @@ import { onAuthStateChanged } from '@firebase/auth';
 import { AUTH } from 'myFirebase';
 import Map from 'pages/home/Map';
 import { Modal } from 'pages/common/Modal';
-import { currentUserFullfild, currentUserPendeing } from '../redux/modules/currentUserModules';
+import { currentUserFullfild } from '../redux/modules/currentUserModules';
 
 function Router() {
   const { isLoading, massage, error, currentUser } = useSelector((modules) => modules.currentUserModules);
-  console.log(isLoading);
-  console.log(currentUser);
+
   const dispatch = useDispatch();
   useEffect(() => {
     const unsubscribeAUth = onAuthStateChanged(AUTH, async (user) => {
-      console.log(user);
       if (user) {
         dispatch(currentUserFullfild({ uid: user.uid, avatar: user.photoURL, nickname: user.displayName }));
       } else {
@@ -30,7 +28,7 @@ function Router() {
     });
 
     return unsubscribeAUth;
-  }, []);
+  }, [dispatch]);
 
   return (
     <ThemeProvider theme={theme}>

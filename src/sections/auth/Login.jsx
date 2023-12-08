@@ -52,19 +52,18 @@ function Login() {
   };
 
   const signUp = async (e) => {
-    e.preventDefault();
     try {
+      // Firebase Authentication을 사용하여 계정 생성
+      e.preventDefault();
       const userCredential = await createUserWithEmailAndPassword(AUTH, email, password);
-      const uid = userCredential.user.uid;
-      console.log('user', userCredential.user);
-      console.log(uid);
-      await updateProfile(userCredential.user, {
+      updateProfile(userCredential.user, {
         displayName: nickName
       });
-      alert('회원가입이 완료되었습니다.');
-      setQuery({ fieldId: uid, data: { avatar: userCredential.user.photoURL, uid, nickName } });
-      dispatch(modalClose());
-      navigate('/');
+      AUTH.signOut();
+      setEmail('');
+      setPassword('');
+      setNickName('');
+      toggleonHandler();
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.errorMessage;
@@ -113,13 +112,13 @@ function Login() {
   return (
     <Container>
       {isLogin ? (
-        <Form>
+        <Form onSubmit={login}>
           <>
             <Title>Login</Title>
             <Input name="email" value={email} onChange={onChange} />
             <Input name="password" value={password} onChange={onChange} />
 
-            <Button onSubmit={login}>로그인</Button>
+            <Button>로그인</Button>
             <Button type="button" onClick={GoogleLogin}>
               🆕 Google 로그인
             </Button>
