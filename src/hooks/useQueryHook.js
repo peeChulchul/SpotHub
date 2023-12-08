@@ -17,16 +17,14 @@ export function useQueryHook({ document }) {
 }
 
 // 최초로 데이터를 생성할때 사용 O
-export function useSetQuery({ document }) {
+export function useSetQuery({ document, condition }) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ fieldId, data }) => {
-      console.log(fieldId);
-      console.log(data);
       setFirestore({ document, fieldId, data });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [document] });
+      queryClient.invalidateQueries({ queryKey: condition ? [document, condition] : [document] });
     },
     onError: (error) => {
       console.log(`setQuery 실패 ${error}`);
@@ -35,12 +33,12 @@ export function useSetQuery({ document }) {
 }
 //   문서를 업데이트할때 사용 O
 
-export function useUpdateQuery({ document }) {
+export function useUpdateQuery({ document, condition }) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ fieldId, data }) => updateFirestore({ document, fieldId, data }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [document] });
+      queryClient.invalidateQueries({ queryKey: condition ? [document, condition] : [document] });
     },
     onError: (error) => {
       console.log(`updateQuery 실패 ${error}`);
@@ -48,12 +46,12 @@ export function useUpdateQuery({ document }) {
   });
 }
 //   문서를 삭제할때
-export function useDeleteQuery({ document }) {
+export function useDeleteQuery({ document, condition }) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ fieldId }) => dleeteFirestore({ document, fieldId }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [document] });
+      queryClient.invalidateQueries({ queryKey: condition ? [document, condition] : [document] });
     },
     onError: (error) => {
       console.log(`데이터 삭제 실패 ${error}`);

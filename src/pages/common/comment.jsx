@@ -21,9 +21,8 @@ const Avatar = styled.div`
   border: 1px solid black;
 `;
 
-export default function Comment() {
+export default function Comment({ comment }) {
   const createAt = new Date().toLocaleDateString();
-  console.log(createAt);
 
   return (
     <CommentBox>
@@ -34,11 +33,7 @@ export default function Comment() {
           <p>{createAt}</p>
         </div>
         <div>
-          <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Rerum id error ad earum vero, consectetur hic
-            quidem distinctio delectus harum velit consequatur molestiae laboriosam. Nesciunt odit autem ex iure
-            molestias!
-          </p>
+          <p>{comment.comment}</p>
         </div>
       </div>
     </CommentBox>
