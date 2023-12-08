@@ -117,7 +117,7 @@ function Login() {
         <Form onSubmit={login}>
           <>
             <Title>Login</Title>
-            <Input type="email" name="email" value={email} onChange={onChange} />
+            <Input name="email" value={email} onChange={onChange} />
             <Input type="password" name="password" value={password} onChange={onChange} />
 
             <Button>로그인</Button>
