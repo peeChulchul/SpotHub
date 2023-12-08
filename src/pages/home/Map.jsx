@@ -6,7 +6,8 @@ import clothes from '../../assets/clothes.png';
 import toilet from '../../assets/toilet.png';
 import marker from '../../assets/marker.png';
 import trash from '../../assets/trash.png';
-import { useNavigate, Link, Outlet } from 'react-router-dom';
+import battery from '../../assets/battery.png';
+import { useNavigate, Link, Outlet, useParams } from 'react-router-dom';
 import { useKakaoLoader, Map as KakaoMap, MapMarker } from 'react-kakao-maps-sdk';
 import { useDispatch, useSelector } from 'react-redux';
 import { modalOpen, modalClose } from '../../redux/modules/modalModules';
@@ -23,7 +24,8 @@ function Map() {
   const [lng, setLng] = useState(0);
   const [point, setPoint] = useState();
   const [markerState, setMarkerState] = useState(false);
-  const test3 = useSelector((store) => store.currentUserModules);
+  const { currentUser, isLoading } = useSelector((store) => store.currentUserModules);
+  const { uid } = useParams();
   const [loading, error] = useKakaoLoader({
     appkey: process.env.REACT_APP_KAKAO_MAP_API_KEY // 발급 받은 APPKEY
     // ...options // 추가 옵션
@@ -32,14 +34,14 @@ function Map() {
   const navigate = useNavigate();
   const useQueryHooked = useQueryHook({ document: 'markers' });
   const markers = useQueryHooked.data;
-  console.log(test3);
+  console.log(currentUser);
 
   // const navigate = useNavigate();
 
   const [userLocation, setUserLocation] = useState({
     center: {
-      lat: 33.450701,
-      lng: 126.570667
+      lat: 37.554837713553,
+      lng: 126.97181200824
     },
     errMsg: null,
     isLoading: true
@@ -91,11 +93,17 @@ function Map() {
     setMarkerState(true);
   }
 
+  function noUidState() {
+    toast.error('로그인이 필요합니다!');
+    navigate('/Auth');
+    dispatch(modalOpen());
+  }
+
   const options = {
     쓰레기통: trash,
     화장실: toilet,
     의류수거함: clothes,
-    폐건전지: null
+    폐건전지: battery
   };
 
   return (
@@ -140,7 +148,11 @@ function Map() {
         </KakaoMap>
         <MarkerBtn
           onClick={() => {
-            mapOnOffButton();
+            if (currentUser) {
+              mapOnOffButton();
+            } else {
+              noUidState();
+            }
           }}
         >
           <MarkerIcon src={marker} />
