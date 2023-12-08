@@ -16,6 +16,7 @@ import { modalClose } from '../../redux/modules/modalModules';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwdCheck, setPasswdCheck] = useState('');
   const [nickName, setNickName] = useState('');
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
@@ -25,16 +26,8 @@ function Login() {
     document: 'user'
   });
 
-  const togglehandle = () => {
-    setIsLogin(false);
-  };
-
-  const toggleonHandler = () => {
-    setIsLogin(true);
-  };
-
-  const login = async (event) => {
-    event.preventDefault();
+  const login = async (e) => {
+    e.preventDefault();
     try {
       const userCredential = await signInWithEmailAndPassword(AUTH, email, password);
       console.log('user with LogIn', userCredential.user);
@@ -64,6 +57,7 @@ function Login() {
       setPassword('');
       setNickName('');
       toggleonHandler();
+      alert('회원가입이 완료되었습니다.');
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.errorMessage;
@@ -94,6 +88,14 @@ function Login() {
     }
   };
 
+  const togglehandle = () => {
+    setIsLogin(false);
+  };
+
+  const toggleonHandler = () => {
+    setIsLogin(true);
+  };
+
   const onChange = (e) => {
     const {
       target: { name, value }
@@ -120,7 +122,7 @@ function Login() {
 
             <Button>로그인</Button>
             <Button type="button" onClick={GoogleLogin}>
-              🆕 Google 로그인
+              Google 로그인
             </Button>
             <Button type="button" onClick={() => togglehandle()}>
               회원가입
@@ -135,8 +137,8 @@ function Login() {
               type="email"
               value={email}
               name="email"
-              placeholder="아이디 (3~20글자)"
-              minLength={3}
+              placeholder="  이메일 (6~30글자)"
+              minLength={6}
               maxLength={30}
               onChange={onChange}
               required
@@ -145,18 +147,29 @@ function Login() {
               type="password"
               value={password}
               name="password"
-              placeholder="비밀번호 (6~10글자)"
+              placeholder="  비밀번호 (6~10글자)"
               minLength={6}
               maxLength={10}
               onChange={onChange}
               required
             />
             <Input
+              type="password"
+              value={passwdCheck}
+              name="passwdCheck"
+              placeholder="  비밀번호 확인(6~10글자)"
+              minLength={6}
+              maxLength={10}
+              onChange={(e) => setPasswdCheck(e.target.value)}
+              required
+            />
+            {passwdCheck !== '' && password !== passwdCheck && <P>비밀번호가 일치하지 않습니다.</P>}
+            <Input
               type="text"
               value={nickName}
               name="nickname"
-              placeholder="닉네임 (6~10글자)"
-              minLength={6}
+              placeholder="  닉네임 (2~10글자)"
+              minLength={2}
               maxLength={10}
               onChange={onChange}
               required
@@ -179,22 +192,22 @@ const Container = styled.div`
 `;
 
 const Form = styled.form`
-  background-color: #fcfafa;
+  background-color: #ffe6c7;
   outline-color: #806542;
-
   border-radius: 12px;
   padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  width: 500px;
+  width: 400px;
 `;
 
 const Input = styled.input`
   border: none;
   width: 100%;
   display: block;
-  margin-bottom: 16px;
+  margin-top: 7px;
+  margin-bottom: 3px;
   padding: 12px 0;
   outline: none;
 `;
@@ -216,4 +229,8 @@ const Button = styled.button`
   font-size: 18px;
 `;
 
+const P = styled.p`
+  font-size: 13px;
+  color: #ffa559;
+`;
 export default Login;
