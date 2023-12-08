@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { RiLoginCircleLine } from 'react-icons/ri';
@@ -8,7 +8,7 @@ import { AUTH } from 'myFirebase';
 
 const Box = styled.div`
   position: fixed;
-  z-index: 100;
+  z-index: 5;
   border-radius: 100%;
   top: 5%;
   right: 3%;
@@ -120,6 +120,7 @@ export default function UserMenu() {
           <p
             onClick={() => {
               dispatch(modalOpen());
+              setMenuOpen(false);
               navigate(`/user/${currentUser.uid}`);
             }}
             className="modifyUser"
@@ -129,7 +130,9 @@ export default function UserMenu() {
           <p
             onClick={() => {
               dispatch(modalOpen());
-              navigate(`/user/${currentUser.uid}`);
+              setMenuOpen(false);
+
+              navigate(`/user/location/${currentUser.uid}`);
             }}
             className="modifyUser"
           >
