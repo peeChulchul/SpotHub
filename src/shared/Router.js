@@ -16,15 +16,22 @@ import { currentUserFullfild } from '../redux/modules/currentUserModules';
 import ModifyUser from 'sections/auth/ModifyUser';
 import DetailMarker from 'sections/marker/DetailMarker';
 import UserLocation from 'pages/common/UserLocation';
+import { useSetQuery } from 'hooks/useQueryHook';
 
 function Router() {
   const { isLoading, massage, error, currentUser } = useSelector((modules) => modules.currentUserModules);
+
+  const { mutate: setQuery } = useSetQuery({ document: 'user' });
 
   const dispatch = useDispatch();
   useEffect(() => {
     const unsubscribeAUth = onAuthStateChanged(AUTH, async (user) => {
       if (user) {
         dispatch(currentUserFullfild({ uid: user.uid, avatar: user.photoURL, nickname: user.displayName }));
+        setQuery({
+          fieldId: user.uid,
+          data: { avatar: user.photoURL, uid: user.uid, nickName: user.displayName }
+        });
       } else {
         dispatch(currentUserFullfild(null));
       }

@@ -32,6 +32,7 @@ function Login() {
       const userCredential = await signInWithEmailAndPassword(AUTH, email, password);
       console.log('user with LogIn', userCredential.user);
       console.log(userCredential.user.email);
+
       setEmail('');
       setPassword('');
       dispatch(modalClose());
@@ -52,7 +53,8 @@ function Login() {
       updateProfile(userCredential.user, {
         displayName: nickName
       });
-      AUTH.signOut();
+
+      await AUTH.signOut();
       setEmail('');
       setPassword('');
       setNickName('');
