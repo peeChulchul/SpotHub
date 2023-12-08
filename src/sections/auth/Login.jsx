@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AUTH } from 'myFirebase';
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useSetQuery } from 'hooks/useQueryHook';
 
@@ -15,16 +15,8 @@ function Login() {
     document: 'user'
   });
 
-  const togglehandle = () => {
-    setIsLogin(false);
-  };
-
-  const toggleonHandler = () => {
-    setIsLogin(true);
-  };
-
-  const login = async (event) => {
-    event.preventDefault();
+  const login = async (e) => {
+    e.preventDefault();
     try {
       const userCredential = await signInWithEmailAndPassword(AUTH, email, password);
       console.log('user with LogIn', userCredential.user);
@@ -47,6 +39,7 @@ function Login() {
       console.log('user', userCredential.user);
       console.log(uid);
       alert('회원가입이 완료되었습니다.');
+      setIsLogin(true);
       setQuery({ fieldId: uid, data: { avatar: null, uid, nickName } });
     } catch (error) {
       const errorCode = error.code;
@@ -61,15 +54,22 @@ function Login() {
 
     const Provider = new GoogleAuthProvider();
     try {
-      const result = await signInWithPopup(AUTH, Provider)
-      console.log(result.user)
-      console.log(result)
-
+      const result = await signInWithPopup(AUTH, Provider);
+      console.log(result.user);
+      console.log(result);
     } catch (error) {
-      const errorCode = error.code
-      const errorMessage = error.message
-      console.log('error with googleLogIn', errorCode, errorMessage)
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log('error with googleLogIn', errorCode, errorMessage);
     }
+  };
+
+  const toggleHandle = () => {
+    setIsLogin(false);
+  };
+
+  const toggleOnHandle = () => {
+    setIsLogin(true);
   };
 
   const onChange = (e) => {
@@ -87,69 +87,70 @@ function Login() {
     }
   };
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <Container>
       {isLogin ? (
-        <Form>
+        <Form onSubmit={onSubmit}>
           <>
-              <Title>Login</Title>
-              <Input name="email" value={email} onChange={onChange} />
-              <Input name="password" value={password} onChange={onChange} />
+            <Title>Login</Title>
+            <Input type="email" name="email" value={email} onChange={onChange} />
+            <Input type="password" name="password" value={password} onChange={onChange} />
 
-              <Button onClick={login}>로그인</Button>
-              <Button onClick={GoogleLogin}>🆕 Google 로그인</Button>
-              <Button onClick={() => togglehandle()}>회원가입</Button>
+            <Button type="submit" onClick={login}>로그인</Button>
+            <Button type="submit" onClick={GoogleLogin}>🆕 Google 로그인</Button>
+            <Button type="submit" onClick={() => toggleHandle()}>회원가입</Button>
           </>
         </Form>
       ) : (
         <Form>
           <>
-              <Title>Signup</Title>
-              <Input
-                type="email"
-                value={email}
-                name="email"
-                placeholder="이메일 (6~30글자)"
-                minLength={6}
-                maxLength={30}
-                onChange={onChange}
-                required
-              />
-              <Input
-                type="password"
-                value={password}
-                name="password"
-                placeholder="비밀번호 (6~10글자)"
-                minLength={6}
-                maxLength={10}
-                onChange={onChange}
-                required
-              />
-              <Input
-                type="text"
-                value={nickName}
-                name="nickname"
-                placeholder="닉네임 (6~10글자)"
-                minLength={6}
-                maxLength={10}
-                onChange={onChange}
-                required
-              />
-              <Button onClick={signUp}>회원가입</Button>
-              <Button onClick={() => toggleonHandler()}>로그인으로 이동</Button>
-              {/* <Button>로그아웃</Button> */}
-              {/* <Button>회원가입</Button> */}
-            {/* </detailWrapper> */}
+            <Title>Signup</Title>
+            <Input
+              type="email"
+              value={email}
+              name="email"
+              placeholder="이메일 (6~30글자)"
+              minLength={6}
+              maxLength={30}
+              onChange={onChange}
+              required
+            />
+            <Input
+              type="password"
+              value={password}
+              name="password"
+              placeholder="비밀번호 (6~10글자)"
+              minLength={6}
+              maxLength={10}
+              onChange={onChange}
+              required
+            />
+            <Input
+              type="text"
+              value={nickName}
+              name="nickname"
+              placeholder="닉네임 (6~10글자)"
+              minLength={6}
+              maxLength={10}
+              onChange={onChange}
+              required
+            />
+            <Button type="submit" onClick={signUp}>회원가입</Button>
+            <Button type="submit" onClick={() => toggleOnHandle()}>
+              로그인으로 이동
+            </Button>
           </>
         </Form>
       )}
     </Container>
-  )
+  );
 }
 
 const Container = styled.div`
-  background-color: #ffffff;
-  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;

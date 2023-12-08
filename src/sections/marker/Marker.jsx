@@ -1,28 +1,34 @@
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { FIRESTORE, STORAGE } from 'myFirebase';
+import { AUTH, FIRESTORE, STORAGE } from 'myFirebase';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useQueryHook, useUpdateQuery } from 'hooks/useQueryHook';
 import { addDoc, collection } from 'firebase/firestore';
-import uuid from 'react-uuid';
 import shortid from 'shortid';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 // import DefaultImg from './default.jpg';
-// TODO: 모든 값 입력시 버튼 활성화 -> img 추가시 image부분 상태 변경
-// TODO: 이미지 프리뷰
 // toastify로 알럿 변경
 
 export default function Marker() {
+  const context = useOutletContext();
+
+  console.log(context);
   const navigate = useNavigate();
-  const { isLoading, isError, data: markers } = useQueryHook({ document: 'markers' });
+  //임시 현재유저정보
+  const user = AUTH.currentUser;
+  const uid = user ? user.uid : null;
+  // const locationId = '11.111.111';
+  // const { isLoading, isError, data: markers } = useQueryHook({ document: 'markers' });
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [formInput, setFormInput] = useState({
-    marker: '',
+    locationName: '',
     option: '',
     comment: '',
     image: ''
   });
-  const { marker, option, comment, image } = formInput;
+  const { locationName, option, comment, image } = formInput;
+  const [selectedImg, setSelectedImg] = useState(null);
+  const [selectedFile, SetselectedFile] = useState(null)
 
   //수정모드, 수정된 데이터
   const [isEditMode, setIsEditMode] = useState(false);
@@ -30,7 +36,7 @@ export default function Marker() {
 
   //등록 버튼 비활성화
   useEffect(() => {
-    if (!marker || !option || !comment) {
+    if (!locationName || !option || !comment) {
       setIsButtonDisabled(true);
     } else {
       setIsButtonDisabled(false);
@@ -42,53 +48,50 @@ export default function Marker() {
     const { name, value } = e.target;
     setFormInput((prev) => ({ ...prev, [name]: value }));
   };
-
-  const locationId = '11.111.111'; // 나중에 임포트
-  const locationImagePath = `location/${locationId}`; // 나중에 currentUser정보도?
-
-  //이미지 프리뷰
-  const imgPreview = () => {
-    // const selectedOne = file[0];
-    //이미지 프리뷰
-    // const reader = new FileReader();
-    //   setFormInput((prev) => ({
-    //     ...prev,
-    //     image: result
-    //   }));
-    // };
-    // reader.readAsDataURL(file);
-  };
+  // 나중에 임포트
+  // const locationImagePath = `location/${locationId}`; // 나중에 currentUser정보도?
+  const locationImagePath = `location`;
 
   //업로드할 이미지 파일 선택
   const handleFileSelect = (event) => {
-    const file = event.target.files;
-    // 파일이 선택되었는지 확인
-    if (file && file.length > 0) {
-      console.log('file', file);
-      setFormInput((prev) => ({ ...prev, [image]: file }));
+    const file = event.target.files[0];
+    console.log('file: ', file);
+    if (file) {
+      console.log('업로드할 이미지 파일이 선택되었음.');
     }
+    SetselectedFile(file)
+    // 이미지 프리뷰
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      console.log('파일 읽기 완료');
+      const readerResult = reader.result; // 파일 내용 여기 들어있음 이상한 문자
+      // console.log('readerResult', readerResult);
+      setSelectedImg(readerResult);
+  
+    };
+    const result = reader.readAsDataURL(file);
+    console.log('result', result);
   };
 
-  // useEffect(() => {
-  //   console.log('FormInput State Updated:', formInput);
-  // }, [formInput]);
-
-  //파일 업로드하기
-  const FileUpload = async () => {
-    if (!image) {
+  // 파일 storage로 업로드
+  const fileUpload = async () => {
+    if (!selectedFile) {
+      console.log("선택파일없음")
+      console.log(selectedFile)
       return;
     } else {
       try {
-        // const imageRef = ref(STORAGE, `${AUTH.currentUser.uid}/${image.name}`);
-        const imageRef = ref(STORAGE, `${locationImagePath}/${image.name}`);
-        await uploadBytes(imageRef, image);
-        const downloadURL = await getDownloadURL(imageRef);
-        // image 상태 업데이트
-        setFormInput((prev) => ({
-          ...prev,
-          [image]: downloadURL
-        }));
-        console.log('downloadURL: ', downloadURL);
+        const imageRef = ref(STORAGE, `${locationImagePath}/${selectedFile.name}`);
+        const uploadSnapshot = await uploadBytes(imageRef, selectedFile);
+        console.log(uploadSnapshot)
+        
+        //저장된 이미지 URL 받아오기
+
+        
+        // const newImageRef =  ref(STORAGE, uploadResult.location.path)
+        const downloadURL = await getDownloadURL(uploadSnapshot.ref);
+        console.log('Storage 저장 완료! downloadURL: ', downloadURL);
+        return downloadURL;
       } catch (err) {
         console.log('파일 업로드실패', err);
       }
@@ -96,32 +99,34 @@ export default function Marker() {
   };
 
   //마커 등록하기
+  
   const handleAddMarkerButton = async (e) => {
     e.preventDefault();
-    try {
+    if (!selectedFile) {
       const userConfirm = window.confirm('선택된 이미지가 없습니다. 이대로 등록할까요?');
       if (!userConfirm) {
         return;
-      } else {
-        FileUpload();
-
-        const newMarker = {
-          // uid: '', 현재 사용자정보 import 해오기/ 전역
-          // location: '', 현재 활성화된 마커 location 정보 import 해오기
-          id: shortid.generate(),
-          image,
-          marker,
-          option,
-          comment,
-          timeStamp: new Date() //포멧팅?
-        };
-        const collectionRef = collection(FIRESTORE, 'markers');
-        await addDoc(collectionRef, newMarker);
-        console.log('등록에 성공하였습니다.');
-        alert('등록되었습니다!');
       }
+    }
+    try {
+      const downloadImage = await fileUpload();
+      const newMarker = {
+        uid,
+        // LAT,
+        // LNG,
+        id: shortid.generate(),
+        image: downloadImage,
+        locationName,
+        option,
+        comment,
+        timeStamp: new Date() //포멧팅?
+      };
+      const collectionRef = collection(FIRESTORE, 'markers');
+      await addDoc(collectionRef, newMarker);
+      console.log('등록에 성공하였습니다.');
+      alert('등록되었습니다!');
     } catch (err) {
-      console.log('등록실패 err: ', err);
+      console.log('마커 등록실패 err: ', err);
       alert('등록에 실패하였습니다. 다시 시도해주세요.');
     }
     //모달 닫는부분 코드
@@ -141,7 +146,6 @@ export default function Marker() {
         image: null
       });
 
-      //모달 닫는 부분 코드
       navigate('/');
     }
   };
@@ -189,21 +193,21 @@ export default function Marker() {
   // };
 
   return (
-    <Container>
+    <>
       <Form>
         <ImgLabel htmlFor="imgInput">
           <figure>
-            <LocationImg name="image" src={image} alt="Image Preview" />
+            <LocationImg src={selectedImg} alt="Image Preview" />
             <p>이미지 선택</p>
           </figure>
-          <ImgInput type="file" accept="image/*" id="imgInput" onChange={handleFileSelect} />
+          <ImgInput name="image" type="file" accept="image/*" id="imgInput" onChange={handleFileSelect} />
         </ImgLabel>
         <User>사용자 닉네임</User>
         <LocationName
-          name="marker"
+          name="locationName"
           placeholder="장소명을 입력해주세요."
-          value={marker}
-          onChange={(e) => changeFormState(e)}
+          value={locationName}
+          onChange={changeFormState}
         />
         <SelectBox name="option" value={option} onChange={changeFormState}>
           <option value="">선택하기</option>
@@ -216,7 +220,7 @@ export default function Marker() {
           name="comment"
           placeholder="장소에 대한 의견을 남겨주세요!"
           value={comment}
-          onChange={(e) => changeFormState(e)}
+          onChange={changeFormState}
         />
         <Buttons>
           <AddButton disabled={isButtonDisabled} onClick={handleAddMarkerButton}>
@@ -225,22 +229,22 @@ export default function Marker() {
           <CancelButton onClick={handleCancelButton}>닫기</CancelButton>
         </Buttons>
       </Form>
-    </Container>
+    </>
   );
 }
 
-const Container = styled.div`
-  position: fixed;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100%;
-  background: rgba(137, 137, 137, 0.5);
-  backdrop-filter: blur(5px);
-  /* margin: 0; */
-`;
+// const Container = styled.div`
+//   position: fixed;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+//   height: 100vh;
+//   width: 100%;
+//   background: rgba(137, 137, 137, 0.5);
+//   backdrop-filter: blur(5px);
+//   /* margin: 0; */
+// `;
 
 const Form = styled.div`
   display: flex;
