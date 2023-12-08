@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import { useEffect } from 'react';
 import Header from './Header';
 import clothes from '../../assets/clothes.png';
-import toilet from '../../assets/toilet.png';
 import marker from '../../assets/marker.png';
+import toilet from '../../assets/toilet.png';
+import gpsIcon from '../../assets/gpsIcon.png';
 import trash from '../../assets/trash.png';
 import battery from '../../assets/battery.png';
 import { useNavigate, Link, Outlet, useParams } from 'react-router-dom';
@@ -146,7 +147,11 @@ function Map() {
             ></MapMarker>
           ))}
         </KakaoMap>
+        <LocatedBtn>
+          <MarkerIcon src={gpsIcon} />
+        </LocatedBtn>
         <MarkerBtn
+          currentUser={currentUser}
           onClick={() => {
             if (currentUser) {
               mapOnOffButton();
@@ -182,12 +187,26 @@ const MarkerBtn = styled.button`
   z-index: 100;
   width: 70px;
   height: 50px;
-  background-color: #ff6000;
+  background-color: ${(props) => {
+    return props.currentUser ? '#79AC78' : '#FF8080';
+  }};
   position: fixed;
   bottom: 50%;
   right: 3%;
-  border-radius: 50px;
-  cursor: grab;
+  border-radius: 60px;
+  cursor: pointer;
+`;
+
+const LocatedBtn = styled.button`
+  z-index: 100;
+  width: 70px;
+  height: 50px;
+  position: fixed;
+  bottom: 60%;
+  right: 3%;
+  border-radius: 60px;
+  background-color: #79ac78;
+  cursor: pointer;
 `;
 
 const WrappingMap = styled.div`
