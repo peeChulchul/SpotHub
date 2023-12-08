@@ -168,7 +168,7 @@ function Login() {
               type="text"
               value={nickName}
               name="nickname"
-              placeholder=" 닉네임 (2~10글자)"
+              placeholder="  닉네임 (2~10글자)"
               minLength={2}
               maxLength={10}
               onChange={onChange}
