@@ -14,6 +14,7 @@ import Map from 'pages/home/Map';
 import { Modal } from 'pages/common/Modal';
 import { currentUserFullfild } from '../redux/modules/currentUserModules';
 import ModifyUser from 'sections/auth/ModifyUser';
+import DetailMarker from 'sections/marker/DetailMarker';
 
 function Router() {
   const { isLoading, massage, error, currentUser } = useSelector((modules) => modules.currentUserModules);
@@ -50,7 +51,7 @@ function Router() {
                   <EditMarker />
                 </Modal>
               }
-              path="/editMarker"
+              path="/editMarker/:markerId"
             ></Route>
             <Route
               element={
@@ -68,6 +69,14 @@ function Router() {
                 </Modal>
               }
             />
+            <Route
+              path="/marker/:markerId"
+              element={
+                <Modal>
+                  <DetailMarker />
+                </Modal>
+              }
+            ></Route>
           </Route>
           <Route path="/test" element={<Index />}></Route>
         </Routes>
