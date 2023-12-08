@@ -100,7 +100,7 @@ function Map() {
 
   return (
     <>
-      <WrappingMap>
+      <WrappingMap markerState={markerState}>
         <KakaoMap // 지도를 표시할 Container
           onClick={onClickMap}
           id="map"
@@ -174,7 +174,7 @@ const MarkerBtn = styled.button`
   bottom: 50%;
   right: 3%;
   border-radius: 50px;
-  cursor: pointer;
+  cursor: grab;
 `;
 
 const WrappingMap = styled.div`
@@ -182,6 +182,10 @@ const WrappingMap = styled.div`
   height: 100vh;
   background-color: black;
   position: relative;
+  svg {
+    cursor: ${(props) => {
+      return props.markerState ? 'crosshair' : 'grab';
+    }};
+  }
 `;
-
 export default Map;
