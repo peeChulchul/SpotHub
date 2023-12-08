@@ -163,7 +163,7 @@ function Login() {
               onChange={(e) => setPasswdCheck(e.target.value)}
               required
             />
-            {password !== passwdCheck && <P>비밀번호가 일치하지 않습니다</P>}
+            {password !== passwdCheck && <P>비밀번호가 일치하지 않습니다.</P>}
             <Input
               type="text"
               value={nickName}
