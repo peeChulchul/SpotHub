@@ -19,16 +19,9 @@ export default function Marker() {
   const navigate = useNavigate();
   // 핀 찍은 위치
   const { lat, lng } = useOutletContext();
-  console.log(`[위치정보] 위도:${lat}, 경도${lng}`)
-
   //현재 유저 정보.
-  const currentUser = useSelector((state) => state.currentUserModules.currentUser);
-  console.log('currentUser', currentUser);
-
-  //임시 현재유저정보
-  const user = AUTH.currentUser;
-  const uid = user ? user.uid : null;
-  // const locationId = '11.111.111';
+  const {uid, avatar, nickname} = useSelector((state) => state.currentUserModules.currentUser);
+  // console.log(uid, avatar, nickname)
   // const { isLoading, isError, data: markers } = useQueryHook({ document: 'markers' });
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [formInput, setFormInput] = useState({
@@ -120,7 +113,9 @@ export default function Marker() {
     try {
       const downloadImage = await fileUpload();
       const newMarker = {
-        uid: currentUser.uid,
+        uid,
+        avatar,
+        nickname,
         lat,
         lng,
         id: shortid.generate(),
@@ -134,6 +129,13 @@ export default function Marker() {
       await addDoc(collectionRef, newMarker);
       console.log('등록에 성공하였습니다.');
       alert('등록되었습니다!');
+      setFormInput({
+        locationName: '',
+        option: '',
+        comment: '',
+        image: null
+      });
+      
     } catch (err) {
       console.log('마커 등록실패 err: ', err);
       alert('등록에 실패하였습니다. 다시 시도해주세요.');
@@ -149,7 +151,7 @@ export default function Marker() {
     } else {
       // 사용자가 입력한 정보 초기화
       setFormInput({
-        marker: '',
+        locationName: '',
         option: '',
         comment: '',
         image: null
@@ -206,12 +208,12 @@ export default function Marker() {
       <Form>
         <ImgLabel htmlFor="imgInput">
           <figure>
-            <LocationImg src={selectedImg} alt="Image Preview" />
-            <p>이미지 선택</p>
+            <LocationImg src={selectedImg}/>
+            <p>{ image || '이미지 선택'}</p>
           </figure>
           <ImgInput name="image" type="file" accept="image/*" id="imgInput" onChange={handleFileSelect} />
         </ImgLabel>
-        <User>{currentUser.nickname}</User>
+        <User>{nickname}</User>
         <LocationName
           name="locationName"
           placeholder="장소명을 입력해주세요."
