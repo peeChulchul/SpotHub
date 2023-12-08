@@ -8,70 +8,31 @@ import marker from '../../assets/marker.png';
 import trash from '../../assets/trash.png';
 import { useNavigate, Link, Outlet } from 'react-router-dom';
 import { useKakaoLoader, Map as KakaoMap, MapMarker } from 'react-kakao-maps-sdk';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { modalOpen, modalClose } from '../../redux/modules/modalModules';
 import Login from 'sections/auth/Login';
 import { Modal } from 'pages/common/Modal';
 import UserMenu from 'pages/common/UserMenu';
+import { useQueryHook } from 'hooks/useQueryHook';
+import { ToastContainer, toast } from 'react-toastify';
 // import { modalopen, modalclose } from 'redux/modules/modalModules';
 
 function Map() {
   const [lat, setLat] = useState(0);
   const [lng, setLng] = useState(0);
-
+  const [point, setPoint] = useState();
+  const [markerState, setMarkerState] = useState(false);
+  const test3 = useSelector((store) => store.currentUserModules);
   const [loading, error] = useKakaoLoader({
     appkey: process.env.REACT_APP_KAKAO_MAP_API_KEY // 발급 받은 APPKEY
     // ...options // 추가 옵션
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const markers = [
-    {
-      position: { lat: 37.478400413698, lng: 127.13538446564 },
-      locationName: '슈퍼쓰레기통',
-      locationid: '임시 아이디',
-      img: trash
-    },
-    {
-      position: { lat: 37.478000413698, lng: 127.13738648584 },
-      locationName: '양철쓰레기통',
-      locationid: '임시 아이디',
-      img: trash
-    },
-    {
-      position: { lat: 37.477800413698, lng: 127.13838849594 },
-      locationName: '구리쓰레기통',
-      locationid: '임시 아이디',
-      img: trash
-    },
-
-    {
-      position: { lat: 37.477619964555, lng: 127.13405884939 },
-      locationName: '슈퍼의류수거함',
-      locationid: '임시 아이디',
-      img: clothes
-    },
-    {
-      position: { lat: 37.477200413698, lng: 127.13438245614 },
-      locationName: '구리양철의류수거함쓰레기통',
-      locationid: '임시 아이디',
-      img: clothes
-    },
-
-    {
-      position: { lat: 37.477000413698, lng: 127.13388245624 },
-      locationName: '슈퍼화장실',
-      locationid: '임시 아이디',
-      img: toilet
-    },
-    {
-      position: { lat: 37.476800413698, lng: 127.13458245634 },
-      locationName: '양철화장실',
-      locationid: '임시 아이디',
-      img: toilet
-    }
-  ];
+  const useQueryHooked = useQueryHook({ document: 'markers' });
+  const markers = useQueryHooked.data;
+  const nofify = () => toast('등록할 장소를 찍어주세요!');
+  console.log(test3);
 
   // const navigate = useNavigate();
 
@@ -115,11 +76,28 @@ function Map() {
   }, []);
 
   function onClickMap(_t, mouseEvent) {
-    setLat(mouseEvent.latLng.La);
-    setLng(mouseEvent.latLng.Ma);
-    console.log(lng);
-    console.log(lat);
+    if (!markerState) return;
+    setPoint({
+      lat: mouseEvent.latLng.getLat(),
+      lng: mouseEvent.latLng.getLng()
+    });
+    navigate('/marker');
+    dispatch(modalOpen());
+    setMarkerState(false);
   }
+
+  function mapOnOffButton() {
+    setMarkerState(true);
+    nofify();
+  }
+
+  const [isLogin, setIsLogin] = useState(false);
+  const options = {
+    쓰레기통: trash,
+    화장실: toilet,
+    의류수거함: clothes,
+    폐건전지: null
+  };
 
   return (
     <WrappingMap>
@@ -137,36 +115,39 @@ function Map() {
         }}
         level={3} // 지도의 확대 레벨
       >
-        {markers.map(({ position, img, locationName, locationid }, index) => (
+        {markers?.map(({ lat, lng, option, img, locationName, id }, index) => (
           <MapMarker
             key={index}
             position={{
-              lat: position.lat,
-              lng: position.lng
+              lat: lat,
+              lng: lng
             }}
             image={{
-              src: img,
+              src: options[option],
               size: { width: 30, height: 30 },
               options: {
                 spriteSize: { width: 30, height: 30 },
                 spriteOrigin: { x: 0, y: 0 }
               }
             }}
+            onClick={() => {
+              navigate(`/marker/${id}`);
+              dispatch(modalOpen());
+            }}
           ></MapMarker>
         ))}
       </KakaoMap>
       <MarkerBtn
         onClick={() => {
-          navigate('/marker');
-          dispatch(modalOpen());
+          mapOnOffButton();
         }}
       >
         <MarkerIcon src={marker} />
       </MarkerBtn>
-
-      <Modal />
-      <Outlet context={{ lat, lng }} />
+      <ToastContainer />
       <UserMenu />
+      <Modal />
+      <Outlet context={{ lat: point?.lat, lng: point?.lng }} />
     </WrappingMap>
   );
 }
