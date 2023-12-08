@@ -34,8 +34,8 @@ export default function Marker() {
   const [selectedFile, SetselectedFile] = useState(null);
 
   //수정모드, 수정된 데이터
-  const [isOnMypage, setIsOnMypage] = useState(true); // 전역관리
-  const [isEditMode, setIsEditMode] = useState(false);
+  const [isOnMypage, setIsOnMypage] = useState(true); // 전역관리?
+  const [isModifyMode, setisModifyMode] = useState(false);
   const [editData, setEditData] = useState(null);
 
   //등록 버튼 비활성화
@@ -161,9 +161,9 @@ export default function Marker() {
   };
 
   // 수정하기 버튼 핸들러
-  const hadleEditButton = () => {
+  const hadleModifyButton = () => {
     alert('수정하기 버튼이 클릭됨!');
-    // setIsEditMode(true);
+    // setisModifyMode(true);
     // setEditData(data); //상세보기 데이터 가져오기
     // setFormInput({
     //   marker: data.marker,
@@ -235,11 +235,11 @@ export default function Marker() {
         />
         <Buttons>
           {isOnMypage ? (
-            <ModifyButton isOnMypage={isOnMypage}>수정하기</ModifyButton>
+            <ModifyButton onClick={hadleModifyButton}>수정하기</ModifyButton>
           ) : (
             <>
-              <AddButton disabled={isButtonDisabled} onClick={isEditMode ? hadleEditButton : handleAddMarkerButton}>
-                {isEditMode ? '수정완료' : '등록하기'}
+              <AddButton disabled={isButtonDisabled} onClick={isModifyMode ? hadleModifyButton : handleAddMarkerButton}>
+                {isModifyMode ? '수정완료' : '등록하기'}
               </AddButton>
               <CancelButton onClick={handleCancelButton}>닫기</CancelButton>
             </>
@@ -365,12 +365,10 @@ const CancelButton = styled.button`
   }
 `;
 
-const ModifyButton = styled.button`
-  display: ${(props) => props.isOnMypage || 'none'};
-  padding: 10px 40px;
-  border: 1px solid #111;
-  border-radius: ${(props) => (props.isEditMode ? 'none' : '5px')};
-  background-color: ${(props) => (props.isEditMode ? 'FF6000' : 'transparent')};
-  color: ${(props) => (props.isEditMode ? '#fff' : '#111')};
-  cursor: ${(props) => (props.isEditMode ? 'pointer' : 'default')};
+const ModifyButton = styled.p`
+  margin-top: 20px;
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
 `;
