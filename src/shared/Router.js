@@ -19,6 +19,7 @@ import UserLocation from 'pages/common/UserLocation';
 import { useSetQuery } from 'hooks/useQueryHook';
 
 function Router() {
+  const [isOnMypage, setIsOnMypage] = useState(false); // 솔, 
   const { isLoading, massage, error, currentUser } = useSelector((modules) => modules.currentUserModules);
 
   const { mutate: setQuery } = useSetQuery({ document: 'user' });
@@ -56,7 +57,7 @@ function Router() {
             <Route
               element={
                 <Modal>
-                  <EditMarker />
+                  <Marker />
                 </Modal>
               }
               path="/editMarker/:markerId"
