@@ -7,7 +7,7 @@ import { addDoc, collection } from 'firebase/firestore';
 import shortid from 'shortid';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-// import DefaultImg from './default.jpg';
+
 
 // TODO: 코드 정리
 // TODO: 필요하면 타임스탬프 포맷팅
@@ -26,7 +26,6 @@ export default function Marker() {
   const { data: markers } = useQueryHook({ document: 'markers' });
   const deleteQuery = useDeleteQuery({ document: 'markers' });
   const updateQuery = useUpdateQuery({ document: 'markers' });
-  console.log(updateQuery);
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [formInput, setFormInput] = useState({
@@ -163,17 +162,14 @@ export default function Marker() {
         comment: '',
         image: null
       });
-
-      navigate('/');
     }
+    setIsModifyMode(false);
   };
 
   // 수정하기 버튼 핸들러
   const hadleModifyButton = () => {
-    // alert('수정하기 버튼이 클릭됨!');
     setIsModifyMode(true);
-    setMarkersData(markers); //상세보기 데이터 가져오기
-    // const selectOne = markersData.find((marker) => {
+    // const selectOne = markers.find((marker) => {
     //   return marker.id === paramId;
     // });
     // setEditData(selectOne);
@@ -188,38 +184,45 @@ export default function Marker() {
   //수정완료 버튼 이벤트 핸들러
 
   const handleCompleteModify = () => {
-    //   const useConfirm = window.confirm('수정하시겠습니까?');
-    //   if (!useConfirm) {
-    //     return;
-    //   } else {
-    //     const updateData = {
-    //       // uid 와 location은 수정하지 않으므로 생략
-    //       image,
-    //       marker,
-    //       option,
-    //       comment,
-    //       timeStamp: new Date() //포멧팅?
-    //     };
-    //     try {
-    //       //파이어스토어 내용 수정 로직
-    //       useUpdateQuery({
-    //         document: 'marker',
-    //         fieldId: '????',
-    //         data: updateData
-    //       });
-    //       // 성공알림.
-    //     } catch (err) {
-    //       console.log('수정 실패 ==> ', err);
-    //       // error 메세지 alert
-    //     }
-    //   }
+    // const useConfirm = window.confirm('수정하시겠습니까?');
+    // if (!useConfirm) return;
+    // const updateData = {
+    //   // uid 와 location은 수정하지 않으므로 생략
+    //   image,
+    //   locationName,
+    //   option,
+    //   comment,
+    //   timeStamp: new Date() //포멧팅?
+    // };
+    // try {
+    //   //파이어스토어 내용 수정 로직
+    //   useUpdateQuery({
+    //     document: 'markers',
+    //     fieldId: paramId,
+    //     data: updateData
+    //   });
+    //   console.log('수정완료');
+    //   alert('수정이 완료되었습니다.');
+    //   setIsModifyMode(false);
+    //   setEditData(null);
+    //   // 모달창 닫기 ????
+    //   navigate('/');
+    // } catch (err) {
+    //   console.log('수정 실패 ==> ', err);
+    //   alert('수정에 실패하였습니다. 다시 시도해주세요.');
+    // }
   };
 
   //삭제하기 이벤트핸들러
   const hadleDeleteButton = () => {
+    alert('삭제버튼 클릭됨!');
     //   const userConfirm = window.confirm('마커를 삭제하시겠습니까?')
     //   if(!userConfirm) return;
-    //   deleteQuery.mutate(paramId); 수정수정해야함
+    try {
+      //   deleteQuery.mutate(paramId);
+    } catch (err) {
+      console.log('삭제 실패', err);
+    }
   };
 
   return (
@@ -255,8 +258,11 @@ export default function Marker() {
         <Buttons>
           {isOnMypage ? (
             <>
-              <ModifyAndDeleteButton onClick={isModifyMode ? handleCompleteModify : hadleModifyButton}>
-                {isModifyMode ? '수정완료' : '수정'}
+              <ModifyAndDeleteButton
+                $isModifyMode={isModifyMode}
+                onClick={isModifyMode ? handleCompleteModify : hadleModifyButton}
+              >
+                {isModifyMode ? '수정완료' : '수정하기'}
               </ModifyAndDeleteButton>
               <ModifyAndDeleteButton onClick={isModifyMode ? handleCancelButton : hadleDeleteButton}>
                 {isModifyMode ? '취소' : '삭제'}
@@ -393,10 +399,8 @@ const CancelButton = styled.button`
 
 const ModifyAndDeleteButton = styled.p`
   padding: 10px 40px;
-  border: 1px solid #111;
+  border: ${(props) => (props.$isModifyMode ? 'none' : '1px solid #111')};
   border-radius: 5px;
-  background-color: transparent;
-  &:hover {
-    background-color: #ffe6c7;
-  }
+  background-color: ${(props) => (props.$isModifyMode ? '#FF6000' : 'transparent')};
+  cursor: pointer;
 `;
