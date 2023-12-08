@@ -4,12 +4,17 @@ import { AUTH } from 'myFirebase';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { useSetQuery } from 'hooks/useQueryHook';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { modalClose } from '../../redux/modules/modalModules';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [nickName, setNickName] = useState('');
   const [isLogin, setIsLogin] = useState(true);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { mutate: setQuery } = useSetQuery({
     document: 'user'
@@ -31,6 +36,8 @@ function Login() {
       console.log(userCredential.user.email);
       setEmail('');
       setPassword('');
+      dispatch(modalClose());
+      navigate('/');
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
@@ -44,10 +51,10 @@ function Login() {
     try {
       const userCredential = await createUserWithEmailAndPassword(AUTH, email, password);
       const uid = userCredential.user.uid;
-      console.log('user', userCredential.user);
-      console.log(uid);
       alert('회원가입이 완료되었습니다.');
-      setQuery({ fieldId: uid, data: { avatar: null, uid, nickName } });
+      setQuery({ fieldId: uid, data: { avatar: userCredential.user.photoURL, uid, nickName } });
+      dispatch(modalClose());
+      navigate('/');
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.errorMessage;
@@ -60,10 +67,17 @@ function Login() {
     e.preventDefault();
 
     const Provider = new GoogleAuthProvider();
+    Provider.setCustomParameters({
+      prompt: 'select_account'
+    });
     try {
       const result = await signInWithPopup(AUTH, Provider);
       console.log(result.user);
       console.log(result);
+      const { uid, photoURL, displayName } = result.user;
+      setQuery({ fieldId: uid, data: { avatar: photoURL, uid, nickName: displayName } });
+      dispatch(modalClose());
+      navigate('/');
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
@@ -96,12 +110,16 @@ function Login() {
             <Input name="password" value={password} onChange={onChange} />
 
             <Button onSubmit={login}>로그인</Button>
-            <Button onSubmit={GoogleLogin}>🆕 Google 로그인</Button>
-            <Button onSubmit={() => togglehandle()}>회원가입</Button>
+            <Button type="button" onClick={GoogleLogin}>
+              🆕 Google 로그인
+            </Button>
+            <Button type="button" onClick={() => togglehandle()}>
+              회원가입
+            </Button>
           </>
         </Form>
       ) : (
-        <Form>
+        <Form onSubmit={signUp}>
           <>
             <Title>Signup</Title>
             <Input
@@ -134,8 +152,8 @@ function Login() {
               onChange={onChange}
               required
             />
-            <Button onSubmit={signUp}>회원가입</Button>
-            <Button type="button" onSubmit={() => toggleonHandler()}>
+            <Button>회원가입</Button>
+            <Button type="button" onClick={() => toggleonHandler()}>
               로그인으로 이동
             </Button>
           </>

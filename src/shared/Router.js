@@ -16,12 +16,10 @@ import { currentUserFullfild, currentUserPendeing } from '../redux/modules/curre
 
 function Router() {
   const { isLoading, massage, error, currentUser } = useSelector((modules) => modules.currentUserModules);
-
   console.log(isLoading);
   console.log(currentUser);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(currentUserPendeing());
     const unsubscribeAUth = onAuthStateChanged(AUTH, async (user) => {
       if (user) {
         dispatch(currentUserFullfild(user.uid));
