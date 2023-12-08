@@ -117,7 +117,15 @@ export default function UserMenu() {
         />
         <div className="info">
           <p className="nickname">{currentUser.nickname}</p>
-          <p className="modifyUser">프로필수정</p>
+          <p
+            onClick={() => {
+              dispatch(modalOpen());
+              navigate(`/user/${currentUser.uid}`);
+            }}
+            className="modifyUser"
+          >
+            프로필수정
+          </p>
         </div>
         <LogOutBtn onClick={onClicklogout}>로그아웃</LogOutBtn>
       </Card>
