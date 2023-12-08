@@ -147,6 +147,7 @@ function Map() {
           ))}
         </KakaoMap>
         <MarkerBtn
+          currentUser={currentUser}
           onClick={() => {
             if (currentUser) {
               mapOnOffButton();
@@ -182,7 +183,9 @@ const MarkerBtn = styled.button`
   z-index: 100;
   width: 70px;
   height: 50px;
-  background-color: #ff6000;
+  background-color: ${(props) => {
+    return props.markerState ? '#D1D1D1' : '#4F6F52';
+  }};
   position: fixed;
   bottom: 50%;
   right: 3%;
