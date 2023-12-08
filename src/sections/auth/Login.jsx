@@ -116,7 +116,7 @@ function Login() {
           <>
             <Title>Login</Title>
             <Input name="email" value={email} onChange={onChange} />
-            <Input name="password" value={password} onChange={onChange} />
+            <Input type="password" name="password" value={password} onChange={onChange} />
 
             <Button>로그인</Button>
             <Button type="button" onClick={GoogleLogin}>
