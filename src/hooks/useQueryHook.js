@@ -20,7 +20,11 @@ export function useQueryHook({ document }) {
 export function useSetQuery({ document }) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ fieldId, data }) => setFirestore({ document, fieldId, data }),
+    mutationFn: ({ fieldId, data }) => {
+      console.log(fieldId);
+      console.log(data);
+      setFirestore({ document, fieldId, data });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [document] });
     },
