@@ -6,6 +6,7 @@ import clothes from '../../assets/clothes.png';
 import toilet from '../../assets/toilet.png';
 import marker from '../../assets/marker.png';
 import trash from '../../assets/trash.png';
+import battery from '../../assets/battery.png';
 import { useNavigate, Link, Outlet, useParams } from 'react-router-dom';
 import { useKakaoLoader, Map as KakaoMap, MapMarker } from 'react-kakao-maps-sdk';
 import { useDispatch, useSelector } from 'react-redux';
@@ -39,8 +40,8 @@ function Map() {
 
   const [userLocation, setUserLocation] = useState({
     center: {
-      lat: 33.450701,
-      lng: 126.570667
+      lat: 37.554837713553,
+      lng: 126.97181200824
     },
     errMsg: null,
     isLoading: true
@@ -102,7 +103,7 @@ function Map() {
     쓰레기통: trash,
     화장실: toilet,
     의류수거함: clothes,
-    폐건전지: null
+    폐건전지: battery
   };
 
   return (
