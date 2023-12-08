@@ -13,6 +13,7 @@ import { AUTH } from 'myFirebase';
 import Map from 'pages/home/Map';
 import { Modal } from 'pages/common/Modal';
 import { currentUserFullfild } from '../redux/modules/currentUserModules';
+import ModifyUser from 'sections/auth/ModifyUser';
 
 function Router() {
   const { isLoading, massage, error, currentUser } = useSelector((modules) => modules.currentUserModules);
@@ -59,6 +60,14 @@ function Router() {
               }
               path="/Auth"
             ></Route>
+            <Route
+              path="/user/:uid"
+              element={
+                <Modal>
+                  <ModifyUser />
+                </Modal>
+              }
+            />
           </Route>
           <Route path="/test" element={<Index />}></Route>
         </Routes>
