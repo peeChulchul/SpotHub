@@ -23,8 +23,9 @@ function Router() {
   useEffect(() => {
     dispatch(currentUserPendeing());
     const unsubscribeAUth = onAuthStateChanged(AUTH, async (user) => {
+      console.log(user);
       if (user) {
-        dispatch(currentUserFullfild(user.uid));
+        dispatch(currentUserFullfild({ uid: user.uid, avatar: user.photoURL, nickname: user.displayName }));
       } else {
         dispatch(currentUserFullfild(null));
       }

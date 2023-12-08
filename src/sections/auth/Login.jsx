@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AUTH } from 'myFirebase';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  GoogleAuthProvider,
+  signInWithPopup
+} from 'firebase/auth';
 import { useSetQuery } from 'hooks/useQueryHook';
 
 function Login() {
@@ -46,6 +51,9 @@ function Login() {
       const uid = userCredential.user.uid;
       console.log('user', userCredential.user);
       console.log(uid);
+      await updateProfile(userCredential.user, {
+        displayName: nickName
+      });
       alert('회원가입이 완료되었습니다.');
       setQuery({ fieldId: uid, data: { avatar: null, uid, nickName } });
     } catch (error) {
