@@ -14,13 +14,14 @@ import Login from 'sections/auth/Login';
 import { Modal } from 'pages/common/Modal';
 import UserMenu from 'pages/common/UserMenu';
 import { useQueryHook } from 'hooks/useQueryHook';
+import { ToastContainer, toast } from 'react-toastify';
 // import { modalopen, modalclose } from 'redux/modules/modalModules';
 
 function Map() {
   const [lat, setLat] = useState(0);
   const [lng, setLng] = useState(0);
   const [point, setPoint] = useState();
-  const [pointState, setPoinState] = useState(false);
+  const [markerState, setMarkerState] = useState(false);
   const test3 = useSelector((store) => store.currentUserModules);
   const [loading, error] = useKakaoLoader({
     appkey: process.env.REACT_APP_KAKAO_MAP_API_KEY // 발급 받은 APPKEY
@@ -30,6 +31,7 @@ function Map() {
   const navigate = useNavigate();
   const useQueryHooked = useQueryHook({ document: 'markers' });
   const markers = useQueryHooked.data;
+  const nofify = () => toast('등록할 장소를 찍어주세요!');
   console.log(test3);
 
   // const navigate = useNavigate();
@@ -74,13 +76,21 @@ function Map() {
   }, []);
 
   function onClickMap(_t, mouseEvent) {
+    if (!markerState) return;
     setPoint({
       lat: mouseEvent.latLng.getLat(),
       lng: mouseEvent.latLng.getLng()
     });
     navigate('/marker');
     dispatch(modalOpen());
+    setMarkerState(false);
   }
+
+  function mapOnOffButton() {
+    setMarkerState(true);
+    nofify();
+  }
+
   const [isLogin, setIsLogin] = useState(false);
   const options = {
     쓰레기통: trash,
@@ -105,7 +115,7 @@ function Map() {
         }}
         level={3} // 지도의 확대 레벨
       >
-        {markers?.map(({ lat, lng, option, img, locationName, locationid }, index) => (
+        {markers?.map(({ lat, lng, option, img, locationName, id }, index) => (
           <MapMarker
             key={index}
             position={{
@@ -120,17 +130,21 @@ function Map() {
                 spriteOrigin: { x: 0, y: 0 }
               }
             }}
+            onClick={() => {
+              navigate(`/marker/${id}`);
+              dispatch(modalOpen());
+            }}
           ></MapMarker>
         ))}
       </KakaoMap>
       <MarkerBtn
         onClick={() => {
-          navigate('/marker');
-          dispatch(modalOpen());
+          mapOnOffButton();
         }}
       >
         <MarkerIcon src={marker} />
       </MarkerBtn>
+      <ToastContainer />
       <UserMenu />
       <Modal />
       <Outlet context={{ lat: point?.lat, lng: point?.lng }} />
