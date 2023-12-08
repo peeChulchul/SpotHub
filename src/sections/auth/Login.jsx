@@ -32,7 +32,6 @@ function Login() {
       const userCredential = await signInWithEmailAndPassword(AUTH, email, password);
       console.log('user with LogIn', userCredential.user);
       console.log(userCredential.user.email);
-
       setEmail('');
       setPassword('');
       dispatch(modalClose());
@@ -53,7 +52,7 @@ function Login() {
       updateProfile(userCredential.user, {
         displayName: nickName
       });
-
+      
       await AUTH.signOut();
       setEmail('');
       setPassword('');
@@ -229,7 +228,9 @@ const Button = styled.button`
   border: none;
   padding: 12px 0;
   font-size: 18px;
-`;
+  cursor: pointer;
+  hover: 8
+  `;
 
 const P = styled.p`
   font-size: 13px;
