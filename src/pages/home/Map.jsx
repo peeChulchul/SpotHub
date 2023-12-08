@@ -123,7 +123,6 @@ function Map() {
           ></MapMarker>
         ))}
       </KakaoMap>
-      {}
       <MarkerBtn
         onClick={() => {
           navigate('/marker');
