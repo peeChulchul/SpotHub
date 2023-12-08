@@ -14,13 +14,12 @@ import { useDispatch, useSelector } from 'react-redux';
 // TODO: toastify로 알럿 변경
 
 export default function Marker() {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // 핀 찍은 위치
   const { lat, lng } = useOutletContext();
   //현재 유저 정보.
-  const {uid, avatar, nickname} = useSelector((state) => state.currentUserModules.currentUser);
+  const { uid, avatar, nickname } = useSelector((state) => state.currentUserModules.currentUser);
   // console.log(uid, avatar, nickname)
   // const { isLoading, isError, data: markers } = useQueryHook({ document: 'markers' });
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -35,6 +34,7 @@ export default function Marker() {
   const [selectedFile, SetselectedFile] = useState(null);
 
   //수정모드, 수정된 데이터
+  const [isOnMypage, setIsOnMypage] = useState(true); // 전역관리
   const [isEditMode, setIsEditMode] = useState(false);
   const [editData, setEditData] = useState(null);
 
@@ -135,7 +135,6 @@ export default function Marker() {
         comment: '',
         image: null
       });
-      
     } catch (err) {
       console.log('마커 등록실패 err: ', err);
       alert('등록에 실패하였습니다. 다시 시도해주세요.');
@@ -162,16 +161,17 @@ export default function Marker() {
   };
 
   // 수정하기 버튼 핸들러
-  // const hadleEditButton = () => {
-  //   setIsEditMode(true);
-  //   setEditData(data); //상세보기 데이터 가져오기
-  //   setFormInput({
-  //     marker: data.marker,
-  //     option: data.option,
-  //     comment: data.comment,
-  //     image: data.image
-  //   });
-  // };
+  const hadleEditButton = () => {
+    alert('수정하기 버튼이 클릭됨!');
+    // setIsEditMode(true);
+    // setEditData(data); //상세보기 데이터 가져오기
+    // setFormInput({
+    //   marker: data.marker,
+    //   option: data.option,
+    //   comment: data.comment,
+    //   image: data.image
+    // });
+  };
 
   //수정완료 버튼 이벤트 핸들러
 
@@ -208,8 +208,8 @@ export default function Marker() {
       <Form>
         <ImgLabel htmlFor="imgInput">
           <figure>
-            <LocationImg src={selectedImg}/>
-            <p>{ image || '이미지 선택'}</p>
+            <LocationImg src={selectedImg} />
+            <p>{image || '이미지 선택'}</p>
           </figure>
           <ImgInput name="image" type="file" accept="image/*" id="imgInput" onChange={handleFileSelect} />
         </ImgLabel>
@@ -234,10 +234,16 @@ export default function Marker() {
           onChange={changeFormState}
         />
         <Buttons>
-          <AddButton disabled={isButtonDisabled} onClick={handleAddMarkerButton}>
-            {isEditMode ? '수정완료' : '등록하기'}
-          </AddButton>
-          <CancelButton onClick={handleCancelButton}>닫기</CancelButton>
+          {isOnMypage ? (
+            <ModifyButton isOnMypage={isOnMypage}>수정하기</ModifyButton>
+          ) : (
+            <>
+              <AddButton disabled={isButtonDisabled} onClick={isEditMode ? hadleEditButton : handleAddMarkerButton}>
+                {isEditMode ? '수정완료' : '등록하기'}
+              </AddButton>
+              <CancelButton onClick={handleCancelButton}>닫기</CancelButton>
+            </>
+          )}
         </Buttons>
       </Form>
     </>
@@ -357,4 +363,14 @@ const CancelButton = styled.button`
   &:hover {
     cursor: pointer;
   }
+`;
+
+const ModifyButton = styled.button`
+  display: ${(props) => props.isOnMypage || 'none'};
+  padding: 10px 40px;
+  border: 1px solid #111;
+  border-radius: ${(props) => (props.isEditMode ? 'none' : '5px')};
+  background-color: ${(props) => (props.isEditMode ? 'FF6000' : 'transparent')};
+  color: ${(props) => (props.isEditMode ? '#fff' : '#111')};
+  cursor: ${(props) => (props.isEditMode ? 'pointer' : 'default')};
 `;
