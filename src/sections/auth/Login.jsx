@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AUTH } from 'myFirebase';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  GoogleAuthProvider,
+  signInWithPopup
+} from 'firebase/auth';
 import { useSetQuery } from 'hooks/useQueryHook';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -11,6 +16,7 @@ import { modalClose } from '../../redux/modules/modalModules';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwdCheck, setPasswdCheck] = useState('');
   const [nickName, setNickName] = useState('');
   const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
@@ -39,14 +45,19 @@ function Login() {
   };
 
   const signUp = async (e) => {
-    e.preventDefault();
     try {
+      // Firebase Authentication을 사용하여 계정 생성
+      e.preventDefault();
       const userCredential = await createUserWithEmailAndPassword(AUTH, email, password);
-      const uid = userCredential.user.uid;
+      updateProfile(userCredential.user, {
+        displayName: nickName
+      });
+      AUTH.signOut();
+      setEmail('');
+      setPassword('');
+      setNickName('');
+      toggleonHandler();
       alert('회원가입이 완료되었습니다.');
-      setQuery({ fieldId: uid, data: { avatar: userCredential.user.photoURL, uid, nickName } });
-      dispatch(modalClose());
-      navigate('/');
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.errorMessage;
@@ -100,20 +111,16 @@ function Login() {
     }
   };
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-  };
-
   return (
     <Container>
       {isLogin ? (
-        <Form onSubmit={onSubmit}>
+        <Form onSubmit={login}>
           <>
             <Title>Login</Title>
             <Input type="email" name="email" value={email} onChange={onChange} />
             <Input type="password" name="password" value={password} onChange={onChange} />
 
-            <Button onSubmit={login}>로그인</Button>
+            <Button>로그인</Button>
             <Button type="button" onClick={GoogleLogin}>
               Google 로그인
             </Button>
@@ -147,11 +154,22 @@ function Login() {
               required
             />
             <Input
+              type="password"
+              value={passwdCheck}
+              name="passwdCheck"
+              placeholder="비밀번호 확인(6~10글자)"
+              minLength={6}
+              maxLength={10}
+              onChange={(e) => setPasswdCheck(e.target.value)}
+              required
+            />
+            {password !== passwdCheck && <P>비밀번호가 일치하지 않습니다</P>}
+            <Input
               type="text"
               value={nickName}
               name="nickname"
-              placeholder="닉네임 (6~10글자)"
-              minLength={6}
+              placeholder="닉네임 (2~10글자)"
+              minLength={2}
               maxLength={10}
               onChange={onChange}
               required
@@ -176,7 +194,6 @@ const Container = styled.div`
 const Form = styled.form`
   background-color: #fcfafa;
   outline-color: #806542;
-
   border-radius: 12px;
   padding: 12px;
   display: flex;
@@ -211,4 +228,8 @@ const Button = styled.button`
   font-size: 18px;
 `;
 
+const P = styled.p`
+  font-size: 13px;
+  color: #FFA559;
+`
 export default Login;
