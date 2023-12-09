@@ -82,7 +82,7 @@ export default function ModifyUser() {
   const [newNickName, setNewNickName] = useState();
   const [currentAvatar, setCurrentAvater] = useState();
   const [privewImg, setPrivewImg] = useState();
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, SetSelectedFile] = useState(null);
   const dispatch = useDispatch();
   const fileUploadRef = useRef();
   const { data: comments, isLoading } = useSelectQueryReference({
@@ -129,7 +129,7 @@ export default function ModifyUser() {
     const extension = file.name.split('.').pop()?.toLowerCase();
 
     if (fileExtension.includes(extension)) {
-      setSelectedFile(file);
+      SetSelectedFile(file);
       const reader = new FileReader();
       reader.readAsDataURL(file);
       return new Promise((resolve) => {
@@ -168,7 +168,7 @@ export default function ModifyUser() {
       })
     );
     setPrivewImg(null);
-    setSelectedFile(null);
+    SetSelectedFile(null);
   }
 
   return (

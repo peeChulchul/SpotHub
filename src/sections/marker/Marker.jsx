@@ -1,11 +1,10 @@
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { AUTH, FIRESTORE, STORAGE } from 'myFirebase';
+import { STORAGE } from 'myFirebase';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useDeleteQuery, useQueryHook, useSetQuery, useUpdateQuery } from 'hooks/useQueryHook';
-import { addDoc, collection } from 'firebase/firestore';
+import { useQueryHook, useSetQuery } from 'hooks/useQueryHook';
 import shortid from 'shortid';
-import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { modalClose } from '../../redux/modules/modalModules';
 
@@ -16,19 +15,14 @@ import { modalClose } from '../../redux/modules/modalModules';
 export default function Marker() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { markerId } = useParams();
-  console.log('markerId', markerId);
-
-  // 핀 찍은 위치
+  // 찍은 마커 위치
   const { lat, lng } = useOutletContext();
   //현재 유저 정보.
   const { uid, avatar, nickname } = useSelector((state) => state.currentUserModules.currentUser);
-  // console.log(uid, avatar, nickname)
+  // get Data
   const { data: markers } = useQueryHook({ document: 'markers' });
+  // set Data
   const queryClient = useSetQuery({ document: 'markers' });
-  console.log('queryClient', queryClient);
-  // const deleteQuery = useDeleteQuery({ document: 'markers' });
-  // const updateQuery = useUpdateQuery({ document: 'markers' });
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [formInput, setFormInput] = useState({
@@ -39,14 +33,7 @@ export default function Marker() {
   });
   const { locationName, option, comment, image } = formInput;
   const [selectedImg, setSelectedImg] = useState(null);
-  const [selectedFile, SetselectedFile] = useState(null);
-
-  //수정모드, 수정된 데이터
-  // const [isOnMypage, setIsOnMypage] = useState(true); // 전역관리?
-  // const [isModifyMode, setIsModifyMode] = useState(true);
-  const [editData, setEditData] = useState(null);
-
-  const [markersData, setMarkersData] = useState(null);
+  const [selectedFile, SetSelectedFile] = useState(null);
 
   //등록 버튼 비활성화
   useEffect(() => {
@@ -62,9 +49,6 @@ export default function Marker() {
     const { name, value } = e.target;
     setFormInput((prev) => ({ ...prev, [name]: value }));
   };
-  // 나중에 임포트
-  // const locationImagePath = `location/${locationId}`; // 나중에 currentUser정보도?
-  const locationImagePath = `location`;
 
   //업로드할 이미지 파일 선택
   const handleFileSelect = (event) => {
@@ -73,7 +57,7 @@ export default function Marker() {
     if (file) {
       console.log('업로드할 이미지 파일이 선택되었음.');
     }
-    SetselectedFile(file);
+    SetSelectedFile(file);
     // 이미지 프리뷰
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -94,13 +78,12 @@ export default function Marker() {
       return;
     } else {
       try {
-        const imageRef = ref(STORAGE, `${locationImagePath}/${selectedFile.name}`);
+        // 1. 업로드
+        const imageRef = ref(STORAGE, `location/${selectedFile.name}`);
         const uploadSnapshot = await uploadBytes(imageRef, selectedFile);
         console.log(uploadSnapshot);
 
-        //저장된 이미지 URL 받아오기
-
-        // const newImageRef =  ref(STORAGE, uploadResult.location.path)
+        // 2. 저장된 이미지 URL 받아오기
         const downloadURL = await getDownloadURL(uploadSnapshot.ref);
         console.log('Storage 저장 완료! downloadURL: ', downloadURL);
         return downloadURL;
@@ -110,8 +93,9 @@ export default function Marker() {
     }
   };
 
-  //마커 등록하기
-
+// const timestamp = new Date().getTime() 
+//   console.log(timestamp)
+  //
   const handleAddMarkerButton = async (e) => {
     e.preventDefault();
     if (!selectedFile) {
@@ -133,7 +117,7 @@ export default function Marker() {
         locationName,
         option,
         comment,
-        timeStamp: new Date() //포멧팅?
+        timeStamp: new Date().getTime() 
       };
       queryClient.mutate({ fieldId: newMarker.id, data: newMarker });
       console.log('등록에 성공하였습니다.');
@@ -144,13 +128,12 @@ export default function Marker() {
         comment: '',
         image: null
       });
-      dispatch(modalClose());
-      navigate('/');
     } catch (err) {
       console.log('마커 등록실패 err: ', err);
       alert('등록에 실패하였습니다. 다시 시도해주세요.');
     }
-    //모달 닫는부분 코드
+    dispatch(modalClose());
+    navigate('/');
   };
 
   // 닫기 버튼 핸들러
@@ -171,118 +154,44 @@ export default function Marker() {
     navigate('/');
   };
 
-  // 수정하기 버튼 핸들러
-  // const hadleModifyButton = () => {
-  //   // setIsModifyMode(true);
-  //   const selectOne = markers.find((marker) => {
-  //     return marker.id === markerId;
-  //   });
-  //   setEditData(selectOne);
-  //   setFormInput({
-  //     locationName: editData.locationName,
-  //     option: editData.option,
-  //     comment: editData.comment,
-  //     image: editData.image
-  //   });
-  // };
-
-  //수정완료 버튼 이벤트 핸들러
-
-  // const handleCompleteModify = () => {
-  // const useConfirm = window.confirm('수정하시겠습니까?');
-  // if (!useConfirm) return;
-  // const updateData = {
-  //   // uid 와 location은 수정하지 않으므로 생략
-  //   image,
-  //   locationName,
-  //   option,
-  //   comment,
-  //   timeStamp: new Date() //포멧팅?
-  // };
-  // try {
-  //   //파이어스토어 내용 수정 로직
-  //   useUpdateQuery({
-  //     document: 'markers',
-  //     fieldId: paramId,
-  //     data: updateData
-  //   });
-  //   console.log('수정완료');
-  //   alert('수정이 완료되었습니다.');
-  //   setIsModifyMode(false);
-  //   setEditData(null);
-  //   // 모달창 닫기 ????
-  //   navigate('/');
-  // } catch (err) {
-  //   console.log('수정 실패 ==> ', err);
-  //   alert('수정에 실패하였습니다. 다시 시도해주세요.');
-  // }
-  // };
-
-  //삭제하기 이벤트핸들러
-  // const hadleDeleteButton = () => {
-  //   alert('삭제버튼 클릭됨!');
-  //   //   const userConfirm = window.confirm('마커를 삭제하시겠습니까?')
-  //   //   if(!userConfirm) return;
-  //   try {
-  //     //   deleteQuery.mutate(paramId);
-  //   } catch (err) {
-  //     console.log('삭제 실패', err);
-  //   }
-  // };
-
   return (
-    <>
-      <Form>
-        <ImgLabel htmlFor="imgInput">
-          <figure>
-            <LocationImg src={selectedImg} />
-            <p>{image || '이미지 선택'}</p>
-          </figure>
-          <ImgInput name="image" type="file" accept="image/*" id="imgInput" onChange={handleFileSelect} />
-        </ImgLabel>
-        <User>{nickname}</User>
-        <LocationName
-          name="locationName"
-          placeholder="장소명을 입력해주세요."
-          value={locationName}
-          onChange={changeFormState}
-        />
-        <SelectBox name="option" value={option} onChange={changeFormState}>
-          <option value="">선택하기</option>
-          <option value="쓰레기통">쓰레기통</option>
-          <option value="화장실">화장실</option>
-          <option value="의류수거함">의류수거함</option>
-          <option value="폐건전지">폐건전지</option>
-        </SelectBox>
-        <TextArea
-          name="comment"
-          placeholder="장소에 대한 의견을 남겨주세요!"
-          value={comment}
-          onChange={changeFormState}
-        />
-        <Buttons>
-          <AddButton disabled={isButtonDisabled} onClick={handleAddMarkerButton}>
-            등록하기
-          </AddButton>
-          <CancelButton onClick={handleCancelButton}>닫기</CancelButton>
-        </Buttons>
-      </Form>
-    </>
+    <Form>
+      <ImgLabel htmlFor="imgInput">
+        <figure>
+          <LocationImg src={selectedImg} />
+          <p>{image || '이미지 선택'}</p>
+        </figure>
+        <ImgInput name="image" type="file" accept="image/*" id="imgInput" onChange={handleFileSelect} />
+      </ImgLabel>
+      <User>{nickname}</User>
+      <LocationName
+        name="locationName"
+        placeholder="장소명을 입력해주세요."
+        value={locationName}
+        onChange={changeFormState}
+      />
+      <SelectBox name="option" value={option} onChange={changeFormState}>
+        <option value="">선택하기</option>
+        <option value="쓰레기통">쓰레기통</option>
+        <option value="화장실">화장실</option>
+        <option value="의류수거함">의류수거함</option>
+        <option value="폐건전지">폐건전지</option>
+      </SelectBox>
+      <TextArea
+        name="comment"
+        placeholder="장소에 대한 의견을 남겨주세요!"
+        value={comment}
+        onChange={changeFormState}
+      />
+      <Buttons>
+        <AddButton disabled={isButtonDisabled} onClick={handleAddMarkerButton}>
+          등록하기
+        </AddButton>
+        <CancelButton onClick={handleCancelButton}>닫기</CancelButton>
+      </Buttons>
+    </Form>
   );
 }
-
-// const Container = styled.div`
-//   position: fixed;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: center;
-//   height: 100vh;
-//   width: 100%;
-//   background: rgba(137, 137, 137, 0.5);
-//   backdrop-filter: blur(5px);
-//   /* margin: 0; */
-// `;
 
 const Form = styled.div`
   display: flex;
@@ -386,10 +295,3 @@ const CancelButton = styled.button`
   }
 `;
 
-const ModifyAndDeleteButton = styled.p`
-  padding: 10px 40px;
-  border: ${(props) => (props.$isModifyMode ? 'none' : '1px solid #111')};
-  border-radius: 5px;
-  background-color: ${(props) => (props.$isModifyMode ? '#FF6000' : 'transparent')};
-  cursor: pointer;
-`;

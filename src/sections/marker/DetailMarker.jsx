@@ -1,4 +1,4 @@
-import { useSelectQuery, useSetQuery, useQueryHook } from 'hooks/useQueryHook';
+import { useSelectQuery, useSetQuery } from 'hooks/useQueryHook';
 import Comment from 'sections/marker/comment';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -10,10 +10,12 @@ export default function DetailMarker() {
   const { markerId } = useParams();
   const { currentUser, isLoading: currentUserLoading } = useSelector((modules) => modules.currentUserModules);
   const { isLoading, data: markerData } = useSelectQuery({ document: 'markers', condition: markerId, fieldId: 'id' });
-  const { isLoading: commentLoading, data: commentData } = useQueryHook({
-    document: 'comment'
+  const { isLoading: commentLoading, data: commentData } = useSelectQuery({
+    document: 'comment',
+    fieldId: 'markerid',
+    condition: markerId
   });
-  const { mutate: setQuery } = useSetQuery({ document: 'comment' });
+  const { mutate: setQuery } = useSetQuery({ document: 'comment', condition: markerId, fieldId: shortid.generate() });
   const [comment, setComment] = useState('');
 
   function onSubmitComment(e) {
@@ -25,7 +27,9 @@ export default function DetailMarker() {
         uid: currentUser.uid,
         avatar: currentUser.avatar,
         nickname: currentUser.nickname,
-        markerid: markerData[0].id
+        markerid: markerData[0].id,
+        commentid: shortid.generate(),
+
       }
     });
     setComment('');
@@ -54,11 +58,9 @@ export default function DetailMarker() {
               <>로딩 </>
             ) : (
               <>
-                {commentData
-                  .filter((comment) => comment.markerid === markerData[0].id)
-                  .map((comment) => (
-                    <Comment comment={comment} />
-                  ))}
+                {commentData.map((comment) => (
+                  <Comment comment={comment} />
+                ))}
               </>
             )}
           </CommentBox>

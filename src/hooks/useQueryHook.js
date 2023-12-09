@@ -77,7 +77,7 @@ export function useDeleteQuery({ document, condition }) {
 
 export function useSelectQuery({ document, fieldId, condition }) {
   const { isLoading, isError, data } = useQuery({
-    queryKey: [document, condition],
+    queryKey: [document, condition], 
     queryFn: async () => await getFirestoreSelect({ document, fieldId, condition })
   });
   return { isLoading, isError, data };

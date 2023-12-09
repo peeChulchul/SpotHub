@@ -262,6 +262,7 @@ const Input = styled.input`
   margin-bottom: 5px;
   padding: 15px 0;
   outline: none;
+  padding: 10px;
 `;
 
 const Title = styled.h1`
