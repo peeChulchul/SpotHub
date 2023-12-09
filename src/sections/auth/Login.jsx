@@ -132,9 +132,18 @@ function Login() {
             </InputContainer>
 
             <ButtonContainer>
-              <Button disabled={email === '' || email.length < 6 || email.length > 30 ||
-                                password === '' || password.length < 6 || password.length > 10}>
-                로그인</Button>
+              <Button
+                disabled={
+                  email === '' ||
+                  email.length < 6 ||
+                  email.length > 30 ||
+                  password === '' ||
+                  password.length < 6 ||
+                  password.length > 10
+                }
+              >
+                로그인
+              </Button>
               <Button type="button" onClick={GoogleLogin}>
                 Google 로그인
               </Button>
@@ -193,11 +202,23 @@ function Login() {
             </InputContainer>
 
             <ButtonContainer>
-              <Button disabled={email === '' || email.length < 6 || email.length > 30 ||
-                                password === '' || password.length < 6 || password.length > 10 ||
-                                passwdCheck === '' || passwdCheck.length < 6 || passwdCheck.length > 10 ||
-                                nickName === '' || nickName.length < 2 || nickName.length > 10 ||
-                                password !== passwdCheck}>
+              <Button
+                disabled={
+                  email === '' ||
+                  email.length < 6 ||
+                  email.length > 30 ||
+                  password === '' ||
+                  password.length < 6 ||
+                  password.length > 10 ||
+                  passwdCheck === '' ||
+                  passwdCheck.length < 6 ||
+                  passwdCheck.length > 10 ||
+                  nickName === '' ||
+                  nickName.length < 2 ||
+                  nickName.length > 10 ||
+                  password !== passwdCheck
+                }
+              >
                 회원가입
               </Button>
               <SubButton>

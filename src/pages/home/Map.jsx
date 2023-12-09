@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { modalOpen, modalClose } from '../../redux/modules/modalModules';
 import Login from 'sections/auth/Login';
 import { Modal } from 'pages/common/Modal';
-import UserMenu from 'pages/common/UserMenu';
+import UserMenu from 'pages/home/UserMenu';
 import { useQueryHook } from 'hooks/useQueryHook';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

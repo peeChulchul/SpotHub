@@ -1,5 +1,5 @@
 import { useSelectQuery, useSetQuery } from 'hooks/useQueryHook';
-import Comment from 'pages/common/comment';
+import Comment from 'sections/marker/comment';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -27,7 +27,9 @@ export default function DetailMarker() {
         uid: currentUser.uid,
         avatar: currentUser.avatar,
         nickname: currentUser.nickname,
-        markerid: markerData[0].id
+        markerid: markerData[0].id,
+        commentid: shortid.generate(),
+
       }
     });
     setComment('');

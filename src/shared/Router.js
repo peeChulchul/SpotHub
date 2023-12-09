@@ -15,11 +15,11 @@ import { Modal } from 'pages/common/Modal';
 import { currentUserFullfild } from '../redux/modules/currentUserModules';
 import ModifyUser from 'sections/auth/ModifyUser';
 import DetailMarker from 'sections/marker/DetailMarker';
-import UserLocation from 'pages/common/UserLocation';
+import UserLocation from 'sections/marker/UserLocation';
 import { useSetQuery } from 'hooks/useQueryHook';
 
 function Router() {
-  const [isOnMypage, setIsOnMypage] = useState(false); // 솔, 
+  const [isOnMypage, setIsOnMypage] = useState(false); // 솔,
   const { isLoading, massage, error, currentUser } = useSelector((modules) => modules.currentUserModules);
 
   const { mutate: setQuery } = useSetQuery({ document: 'user' });

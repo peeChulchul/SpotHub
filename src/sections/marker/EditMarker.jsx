@@ -2,7 +2,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { FIRESTORE, STORAGE } from 'myFirebase';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useDeleteQuery, useQueryHook, useSetQuery, useUpdateQuery,useSelectQuery } from 'hooks/useQueryHook';
+import { useDeleteQuery, useQueryHook, useSetQuery, useUpdateQuery, useSelectQuery } from 'hooks/useQueryHook';
 import { addDoc, collection } from 'firebase/firestore';
 import shortid from 'shortid';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
@@ -17,15 +17,14 @@ export default function Marker() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { markerId } = useParams();
-//   console.log( markerId);
-  const { uid, avatar, nickname } = useSelector((state) => state.currentUserModules.currentUser);
+  //   console.log( markerId);
+  const { nickname } = useSelector((state) => state.currentUserModules.currentUser);
 
-  const { isLoading, data: selectedMarker } = useSelectQuery({ document: 'markers', fieldId:"id" ,condition:markerId });
+  const { data: selectedMarker } = useSelectQuery({ document: 'markers', fieldId: 'id', condition: markerId });
 
-  console.log('25',selectedMarker)
+  console.log('25', selectedMarker);
   const queryClient = useSetQuery({ document: 'markers' });
   //   console.log('queryClient', queryClient);
-  const deleteQuery = useDeleteQuery({ document: 'markers' });
   const updateQuery = useUpdateQuery({ document: 'markers' });
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -36,17 +35,28 @@ export default function Marker() {
     image: ''
   });
   const { locationName, option, comment, image } = formInput;
-  
+
   const [selectedImg, setSelectedImg] = useState(null);
-  const [selectedFile, SetselectedFile] = useState(null);
+  const [selectedFile, SetSelectedFile] = useState(null);
   const [editData, setEditData] = useState(null);
+
+  //  최초 렌더링시 실행 => 기존 작성내용 불러오기
+  useEffect(() => {
+    if (selectedMarker) {
+      setFormInput({
+        locationName: selectedMarker[0].locationName,
+        option: selectedMarker[0].option,
+        comment: selectedMarker[0].comment,
+        image: selectedMarker[0].image
+      });
+    }
+  }, [selectedMarker]);
 
   // Form Input 이벤트 핸들러
   const changeFormState = (e) => {
     const { name, value } = e.target;
     setFormInput((prev) => ({ ...prev, [name]: value }));
   };
-
 
   //등록 버튼 비활성화
   useEffect(() => {
@@ -57,8 +67,6 @@ export default function Marker() {
     }
   });
 
-
-
   //업로드할 이미지 파일 선택
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
@@ -66,7 +74,7 @@ export default function Marker() {
     if (file) {
       console.log('업로드할 이미지 파일이 선택되었음.');
     }
-    SetselectedFile(file);
+    SetSelectedFile(file);
     // 이미지 프리뷰
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -101,18 +109,6 @@ export default function Marker() {
       }
     }
   };
-
-  //  최초 렌더링시 실행
-  useEffect(() => {
-    if (selectedMarker) {
-        setFormInput({
-          locationName: selectedMarker[0].locationName,
-          option: selectedMarker[0].option,
-          comment: selectedMarker[0].comment,
-          image: selectedMarker[0].image
-        });
-      }
-  }, [selectedMarker]);
 
   // 취소 버튼 핸들러
   const handleCancelButton = () => {
@@ -164,8 +160,6 @@ export default function Marker() {
       alert('수정에 실패하였습니다. 다시 시도해주세요.');
     }
   };
-
-
 
   return (
     <>

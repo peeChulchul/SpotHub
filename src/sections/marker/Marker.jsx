@@ -33,7 +33,7 @@ export default function Marker() {
   });
   const { locationName, option, comment, image } = formInput;
   const [selectedImg, setSelectedImg] = useState(null);
-  const [selectedFile, SetselectedFile] = useState(null);
+  const [selectedFile, SetSelectedFile] = useState(null);
 
   //등록 버튼 비활성화
   useEffect(() => {
@@ -57,7 +57,7 @@ export default function Marker() {
     if (file) {
       console.log('업로드할 이미지 파일이 선택되었음.');
     }
-    SetselectedFile(file);
+    SetSelectedFile(file);
     // 이미지 프리뷰
     const reader = new FileReader();
     reader.onloadend = () => {
