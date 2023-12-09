@@ -18,18 +18,19 @@ export default function DetailMarker() {
   const { mutate: setQuery } = useSetQuery({ document: 'comment', condition: markerId, fieldId: shortid.generate() });
   const [comment, setComment] = useState('');
 
+  const id = shortid.generate();
+
   function onSubmitComment(e) {
     e.preventDefault();
     setQuery({
-      fieldId: shortid.generate(),
+      fieldId: id,
       data: {
         comment,
         uid: currentUser.uid,
         avatar: currentUser.avatar,
         nickname: currentUser.nickname,
         markerid: markerData[0].id,
-        commentid: shortid.generate(),
-
+        commentid: id
       }
     });
     setComment('');
@@ -59,7 +60,7 @@ export default function DetailMarker() {
             ) : (
               <>
                 {commentData.map((comment) => (
-                  <Comment comment={comment} />
+                  <Comment key={comment.commentid} comment={comment} />
                 ))}
               </>
             )}

@@ -1,3 +1,5 @@
+import { useDeleteQuery } from 'hooks/useQueryHook';
+import { AUTH } from 'myFirebase';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -10,6 +12,9 @@ const CommentBox = styled.div`
     display: flex;
     justify-content: space-between;
     margin: 10px 0;
+  }
+  .info {
+    flex: 1;
   }
 `;
 
@@ -24,8 +29,11 @@ const Avatar = styled.img`
 
 export default function Comment({ comment }) {
   const createAt = new Date().toLocaleDateString();
-  
+  const { mutate: deleteQuery } = useDeleteQuery({
+    document: 'comment'
+  });
 
+  console.log(comment);
 
   return (
     <CommentBox>
@@ -37,7 +45,7 @@ export default function Comment({ comment }) {
         }
         alt="프로필이미지"
       />
-      <div>
+      <div className="info">
         <div className="textWrapper">
           <p className="nickname">{comment.nickname}</p>
           <p>{createAt}</p>
@@ -46,6 +54,17 @@ export default function Comment({ comment }) {
           <p>{comment.comment}</p>
         </div>
       </div>
+      {AUTH.currentUser.uid === comment.uid && (
+        <div className="btns">
+          <button
+            onClick={() => {
+              deleteQuery({ fieldId: comment.commentid });
+            }}
+          >
+            삭제
+          </button>
+        </div>
+      )}
     </CommentBox>
   );
 }
