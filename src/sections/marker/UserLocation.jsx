@@ -1,6 +1,5 @@
 import { useSelectQuery } from 'hooks/useQueryHook';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -51,7 +50,7 @@ function LocationCard({ location, setIsOnMypage }) {
       </div>
       <button
         onClick={() => {
-          navigate(`/editMarker/:${location.id}`);
+          navigate(`/editMarker/${location.id}`);
         }}
       >
         수정

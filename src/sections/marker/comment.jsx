@@ -13,12 +13,13 @@ const CommentBox = styled.div`
   }
 `;
 
-// 자주씀 컴포넌트로 뺴야함
-const Avatar = styled.div`
-  width: 60px;
-  height: 60px;
+const Avatar = styled.img`
+  overflow: hidden;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  object-fit: cover;
   border-radius: 100%;
-  border: 1px solid black;
 `;
 
 export default function Comment({ comment }) {
@@ -26,10 +27,17 @@ export default function Comment({ comment }) {
 
   return (
     <CommentBox>
-      <Avatar />
+      <Avatar
+        src={
+          comment.avatar
+            ? comment.avatar
+            : 'https://i.namu.wiki/i/Bge3xnYd4kRe_IKbm2uqxlhQJij2SngwNssjpjaOyOqoRhQlNwLrR2ZiK-JWJ2b99RGcSxDaZ2UCI7fiv4IDDQ.webp'
+        }
+        alt="프로필이미지"
+      />
       <div>
         <div className="textWrapper">
-          <p className="nickname">유저 닉네임</p>
+          <p className="nickname">{comment.nickname}</p>
           <p>{createAt}</p>
         </div>
         <div>

@@ -3,8 +3,10 @@ import {
   dleeteFirestore,
   getFirestore,
   getFirestoreSelect,
+  getFirestoreSelectReference,
   setFirestore,
-  updateFirestore
+  updateFirestore,
+  updateFirestoreReference
 } from 'firestore/firestoreFns';
 
 export function useQueryHook({ document }) {
@@ -45,6 +47,18 @@ export function useUpdateQuery({ document, condition }) {
     }
   });
 }
+export function useUpdateQueryReference({ document, condition }) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ ref, data }) => updateFirestoreReference({ ref, data }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: condition ? [document, condition] : [document] });
+    },
+    onError: (error) => {
+      console.log(`updateQuery 실패 ${error}`);
+    }
+  });
+}
 //   문서를 삭제할때
 export function useDeleteQuery({ document, condition }) {
   const queryClient = useQueryClient();
@@ -65,6 +79,14 @@ export function useSelectQuery({ document, fieldId, condition }) {
   const { isLoading, isError, data } = useQuery({
     queryKey: [document, condition],
     queryFn: async () => await getFirestoreSelect({ document, fieldId, condition })
+  });
+  return { isLoading, isError, data };
+}
+
+export function useSelectQueryReference({ document, fieldId, condition }) {
+  const { isLoading, isError, data } = useQuery({
+    queryKey: [document, condition],
+    queryFn: async () => await getFirestoreSelectReference({ document, fieldId, condition })
   });
   return { isLoading, isError, data };
 }
