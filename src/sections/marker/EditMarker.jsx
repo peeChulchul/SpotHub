@@ -23,11 +23,17 @@ export default function Marker() {
   const { lat, lng } = useOutletContext();
   //현재 유저 정보.
   const { uid, avatar, nickname } = useSelector((state) => state.currentUserModules.currentUser);
-  // console.log(uid, avatar, nickname)
+
+  // get Data
   const { data: markers } = useQueryHook({ document: 'markers' });
+
+  // set Data
   const queryClient = useSetQuery({ document: 'markers' });
-  console.log('queryClient', queryClient);
+  //   console.log('queryClient', queryClient);
+
+  // Delete
   const deleteQuery = useDeleteQuery({ document: 'markers' });
+  // upate
   const updateQuery = useUpdateQuery({ document: 'markers' });
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -62,9 +68,6 @@ export default function Marker() {
     const { name, value } = e.target;
     setFormInput((prev) => ({ ...prev, [name]: value }));
   };
-  // 나중에 임포트
-  // const locationImagePath = `location/${locationId}`; // 나중에 currentUser정보도?
-  const locationImagePath = `location`;
 
   //업로드할 이미지 파일 선택
   const handleFileSelect = (event) => {
@@ -94,13 +97,12 @@ export default function Marker() {
       return;
     } else {
       try {
+        const locationImagePath = `location`;
         const imageRef = ref(STORAGE, `${locationImagePath}/${selectedFile.name}`);
         const uploadSnapshot = await uploadBytes(imageRef, selectedFile);
         console.log(uploadSnapshot);
 
         //저장된 이미지 URL 받아오기
-
-        // const newImageRef =  ref(STORAGE, uploadResult.location.path)
         const downloadURL = await getDownloadURL(uploadSnapshot.ref);
         console.log('Storage 저장 완료! downloadURL: ', downloadURL);
         return downloadURL;
@@ -110,49 +112,22 @@ export default function Marker() {
     }
   };
 
-  //마커 등록하기
-  const handleAddMarkerButton = async (e) => {
-    e.preventDefault();
-    if (!selectedFile) {
-      const userConfirm = window.confirm('선택된 이미지가 없습니다. 이대로 등록할까요?');
-      if (!userConfirm) {
-        return;
-      }
-    }
-    try {
-      const downloadImage = await fileUpload();
-      const newMarker = {
-        uid,
-        avatar,
-        nickname,
-        lat,
-        lng,
-        id: shortid.generate(),
-        image: downloadImage,
-        locationName,
-        option,
-        comment,
-        timeStamp: new Date() //포멧팅?
-      };
-      queryClient.mutate({ fieldId: newMarker.id, data: newMarker });
-      console.log('등록에 성공하였습니다.');
-      alert('등록되었습니다!');
-      setFormInput({
-        locationName: '',
-        option: '',
-        comment: '',
-        image: null
+  //  최초 렌더링시 실행
+  useEffect(() => {
+    const selectOne = markers.find((marker) => {
+        return marker.id === markerId;
       });
-      dispatch(modalClose());
-      navigate('/');
-    } catch (err) {
-      console.log('마커 등록실패 err: ', err);
-      alert('등록에 실패하였습니다. 다시 시도해주세요.');
-    }
-    //모달 닫는부분 코드
-  };
+      setEditData(selectOne);
+      setFormInput({
+        locationName: editData.locationName,
+        option: editData.option,
+        comment: editData.comment,
+        image: editData.image
+      });
+  }, [])
 
-  //   // 닫기 버튼 핸들러
+
+  // 취소 버튼 핸들러
   const handleCancelButton = () => {
     const userConfirmed = window.confirm('작성한 내용이 사라집니다. 창을 닫을까요?');
     if (!userConfirmed) {
@@ -170,18 +145,9 @@ export default function Marker() {
     navigate('/');
   };
 
-  //   // 수정하기 버튼 핸들러
+  // 수정하기 버튼 핸들러
   const hadleModifyButton = () => {
-    const selectOne = markers.find((marker) => {
-      return marker.id === markerId;
-    });
-    setEditData(selectOne);
-    setFormInput({
-      locationName: editData.locationName,
-      option: editData.option,
-      comment: editData.comment,
-      image: editData.image
-    });
+
   };
 
   //수정완료 버튼 이벤트 핸들러
@@ -258,9 +224,9 @@ export default function Marker() {
         />
         <Buttons>
           <AddButton disabled={isButtonDisabled} onClick={handleCompleteModify}>
-            수정하기
+            수정완료
           </AddButton>
-          <CancelButton onClick={handleCancelButton}>닫기</CancelButton>
+          <CancelButton onClick={handleCancelButton}>취소</CancelButton>
         </Buttons>
       </Form>
     </>

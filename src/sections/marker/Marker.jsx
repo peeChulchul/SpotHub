@@ -93,6 +93,8 @@ export default function Marker() {
     }
   };
 
+// const timestamp = new Date().getTime() 
+//   console.log(timestamp)
   //
   const handleAddMarkerButton = async (e) => {
     e.preventDefault();
@@ -115,7 +117,7 @@ export default function Marker() {
         locationName,
         option,
         comment,
-        timeStamp: new Date() //포멧팅?
+        timeStamp: new Date().getTime() 
       };
       queryClient.mutate({ fieldId: newMarker.id, data: newMarker });
       console.log('등록에 성공하였습니다.');

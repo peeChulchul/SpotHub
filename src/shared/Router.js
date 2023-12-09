@@ -57,7 +57,7 @@ function Router() {
             <Route
               element={
                 <Modal>
-                  <Marker />
+                  <EditMarker />
                 </Modal>
               }
               path="/editMarker/:markerId"
