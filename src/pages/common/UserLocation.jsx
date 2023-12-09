@@ -23,6 +23,8 @@ export default function UserLocation() {
   console.log(isLoading);
   console.log(data);
 
+  
+
   return (
     <Container>
       {isLoading ? (
@@ -41,6 +43,9 @@ export default function UserLocation() {
 function LocationCard({ location, setIsOnMypage }) {
   console.log(location);
   const navigate = useNavigate();
+
+
+
   return (
     <CardContainer>
       <img className="locationImg" src={location.image} alt="이미지"></img>
@@ -51,7 +56,7 @@ function LocationCard({ location, setIsOnMypage }) {
       </div>
       <button
         onClick={() => {
-          navigate(`/editMarker/:${location.id}`);
+          navigate(`/editMarker/${location.id}`);
         }}
       >
         수정

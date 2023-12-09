@@ -23,6 +23,8 @@ const Avatar = styled.div`
 
 export default function Comment({ comment }) {
   const createAt = new Date().toLocaleDateString();
+  
+
 
   return (
     <CommentBox>

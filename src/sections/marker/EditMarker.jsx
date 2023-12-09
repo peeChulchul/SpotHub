@@ -1,8 +1,8 @@
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { AUTH, FIRESTORE, STORAGE } from 'myFirebase';
+import { FIRESTORE, STORAGE } from 'myFirebase';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useDeleteQuery, useQueryHook, useSetQuery, useUpdateQuery } from 'hooks/useQueryHook';
+import { useDeleteQuery, useQueryHook, useSetQuery, useUpdateQuery,useSelectQuery } from 'hooks/useQueryHook';
 import { addDoc, collection } from 'firebase/firestore';
 import shortid from 'shortid';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
@@ -17,23 +17,15 @@ export default function Marker() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { markerId } = useParams();
-  console.log('markerId', markerId);
-
-  // 핀 찍은 위치
-  const { lat, lng } = useOutletContext();
-  //현재 유저 정보.
+//   console.log( markerId);
   const { uid, avatar, nickname } = useSelector((state) => state.currentUserModules.currentUser);
 
-  // get Data
-  const { data: markers } = useQueryHook({ document: 'markers' });
+  const { isLoading, data: selectedMarker } = useSelectQuery({ document: 'markers', fieldId:"id" ,condition:markerId });
 
-  // set Data
+  console.log('25',selectedMarker)
   const queryClient = useSetQuery({ document: 'markers' });
   //   console.log('queryClient', queryClient);
-
-  // Delete
   const deleteQuery = useDeleteQuery({ document: 'markers' });
-  // upate
   const updateQuery = useUpdateQuery({ document: 'markers' });
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -44,15 +36,17 @@ export default function Marker() {
     image: ''
   });
   const { locationName, option, comment, image } = formInput;
+  
   const [selectedImg, setSelectedImg] = useState(null);
   const [selectedFile, SetselectedFile] = useState(null);
-
-  //수정모드, 수정된 데이터
-  // const [isOnMypage, setIsOnMypage] = useState(true); // 전역관리?
-  // const [isModifyMode, setIsModifyMode] = useState(true);
   const [editData, setEditData] = useState(null);
 
-  const [markersData, setMarkersData] = useState(null);
+  // Form Input 이벤트 핸들러
+  const changeFormState = (e) => {
+    const { name, value } = e.target;
+    setFormInput((prev) => ({ ...prev, [name]: value }));
+  };
+
 
   //등록 버튼 비활성화
   useEffect(() => {
@@ -63,11 +57,7 @@ export default function Marker() {
     }
   });
 
-  // Form Input 이벤트 핸들러
-  const changeFormState = (e) => {
-    const { name, value } = e.target;
-    setFormInput((prev) => ({ ...prev, [name]: value }));
-  };
+
 
   //업로드할 이미지 파일 선택
   const handleFileSelect = (event) => {
@@ -114,18 +104,15 @@ export default function Marker() {
 
   //  최초 렌더링시 실행
   useEffect(() => {
-    const selectOne = markers.find((marker) => {
-        return marker.id === markerId;
-      });
-      setEditData(selectOne);
-      setFormInput({
-        locationName: editData.locationName,
-        option: editData.option,
-        comment: editData.comment,
-        image: editData.image
-      });
-  }, [])
-
+    if (selectedMarker) {
+        setFormInput({
+          locationName: selectedMarker[0].locationName,
+          option: selectedMarker[0].option,
+          comment: selectedMarker[0].comment,
+          image: selectedMarker[0].image
+        });
+      }
+  }, [selectedMarker]);
 
   // 취소 버튼 핸들러
   const handleCancelButton = () => {
@@ -146,9 +133,7 @@ export default function Marker() {
   };
 
   // 수정하기 버튼 핸들러
-  const hadleModifyButton = () => {
-
-  };
+  const hadleModifyButton = () => {};
 
   //수정완료 버튼 이벤트 핸들러
   const handleCompleteModify = () => {
@@ -160,11 +145,11 @@ export default function Marker() {
       locationName,
       option,
       comment,
-      timeStamp: new Date() //포멧팅?
+      timeStamp: new Date().getTime() //포멧팅?
     };
     try {
       //파이어스토어 내용 수정 로직
-      updateQuery({
+      updateQuery.mutate({
         document: 'markers',
         fieldId: markerId,
         data: updateData
@@ -180,17 +165,7 @@ export default function Marker() {
     }
   };
 
-  //삭제하기 이벤트핸들러
-  const hadleDeleteButton = () => {
-    alert('삭제버튼 클릭됨!');
-    const userConfirm = window.confirm('마커를 삭제하시겠습니까?');
-    if (!userConfirm) return;
-    try {
-      deleteQuery.mutate(markerId);
-    } catch (err) {
-      console.log('삭제 실패', err);
-    }
-  };
+
 
   return (
     <>
