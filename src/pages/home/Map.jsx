@@ -109,7 +109,7 @@ function Map() {
 
   return (
     <>
-      <WrappingMap markerState={markerState}>
+      <WrappingMap $markerState={markerState}>
         <KakaoMap // 지도를 표시할 Container
           onClick={onClickMap}
           id="map"
@@ -151,7 +151,7 @@ function Map() {
           <MarkerIcon src={gpsIcon} />
         </LocatedBtn>
         <MarkerBtn
-          currentUser={currentUser}
+          $currentUser={currentUser ? true : false}
           onClick={() => {
             if (currentUser) {
               mapOnOffButton();
@@ -188,7 +188,7 @@ const MarkerBtn = styled.button`
   width: 70px;
   height: 50px;
   background-color: ${(props) => {
-    return props.currentUser ? '#79AC78' : '#FF8080';
+    return props.$currentUser ? '#79AC78' : '#FF8080';
   }};
   position: fixed;
   bottom: 50%;
@@ -216,7 +216,7 @@ const WrappingMap = styled.div`
   position: relative;
   svg {
     cursor: ${(props) => {
-      return props.markerState ? 'crosshair' : 'grab';
+      return props.$markerState ? 'crosshair' : 'grab';
     }};
   }
 `;
