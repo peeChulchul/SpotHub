@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { useSelectQuery, useSelectQueryReference, useUpdateQuery, useUpdateQueryReference } from 'hooks/useQueryHook';
 import { currentUserFullfild } from '../../redux/modules/currentUserModules';
+import swal from 'sweetalert';
 
 const Container = styled.div`
   width: 300px;
@@ -139,7 +140,7 @@ export default function ModifyUser() {
         };
       });
     } else {
-      alert('png, jpg, jpeg, webp 형식만 지원합니다.');
+      swal('파일 업로드 실패', 'png, jpg, jpeg, webp 형식만 지원합니다.', 'error')
     }
   }
 
