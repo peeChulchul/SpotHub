@@ -21,12 +21,25 @@ const Box = styled.div`
     height: 50px;
     cursor: pointer;
   }
+
+  & p {
+    font-size: larger;
+
+  }
 `;
 
 const LogOutBtn = styled.button`
   font-size: 0.7rem;
   min-width: 10ch;
   cursor: pointer;
+  position: absolute;
+  right: 30px;
+  line-height: 20px;
+  text-align: center;
+  background-color: #ffa559;
+  border: none;
+  color: #454545;
+  border-radius: 5px;
 `;
 
 const Avatar = styled.img`

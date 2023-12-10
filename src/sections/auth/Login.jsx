@@ -239,7 +239,7 @@ const Container = styled.div`
 `;
 
 const Form = styled.form`
-  background-color: #ffe6c7;
+  background-color: #ffffff;
   outline-color: #ffffff;
   border-radius: 12px;
   padding: 22px;
@@ -252,15 +252,17 @@ const Form = styled.form`
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 20px 0;
 `;
 
 const Input = styled.input`
   border: none;
+  border-bottom: 1px solid #999;
   width: 100%;
   display: block;
   margin-top: 5px;
   margin-bottom: 5px;
-  padding: 15px 0;
+  padding: 20px 0;
   outline: none;
   padding: 10px;
 `;
@@ -268,7 +270,7 @@ const Input = styled.input`
 const Title = styled.h1`
   color: #454545;
   font-size: 36px;
-  margin-bottom: 24px;
+  margin-bottom: 10px;
   align-items: center;
   justify-content: center;
   display: flex;
@@ -280,7 +282,7 @@ const ButtonContainer = styled.div`
 `;
 
 const Button = styled.button`
-  background-color: ${(props) => (props.disabled ? 'lightgray' : '#454545')};
+  background-color: ${(props) => (props.disabled ? 'lightgray' : '#FFA559')};
   cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
   color: #ffffff;
   border: none;
@@ -311,7 +313,7 @@ const SubButton = styled.div`
 `;
 
 const P = styled.p`
-  font-size: 13px;
+  font-size: 15px;
   color: #ffa559;
 `;
 export default Login;

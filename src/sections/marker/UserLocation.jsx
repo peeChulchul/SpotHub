@@ -81,17 +81,30 @@ const CardContainer = styled.div`
   width: 100%;
   gap: 16px;
   align-items: center;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 5px;
   .locationImg {
     height: 100%;
     width: 45%;
-    object-fit: cover;
   }
   .infobox {
     flex: 1;
   }
-  border: 1px solid lightgray;
-  border-radius: 5px;
-  padding: 5px;
+
+  & button{
+    font-size: 20px;
+    cursor: pointer;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+
+    background-color: ${(props) => (props.disabled ? 'lightgray' : '#FFA559')};
+    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+    &:hover {
+      background-color: ${(props) => (props.disabled ? 'lightgray' : '#454545')};
+    }
+  }
   
 `;
 
