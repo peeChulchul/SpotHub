@@ -1,8 +1,8 @@
 import { useSelectQuery } from 'hooks/useQueryHook';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import {useDeleteQuery} from "hooks/useQueryHook"
 
 const Container = styled.div`
   width: 500px;
@@ -18,12 +18,7 @@ const Container = styled.div`
 export default function UserLocation() {
   const { uid } = useParams();
   const { isLoading, idError, data } = useSelectQuery({ document: 'markers', fieldId: 'uid', condition: uid });
-
-  console.log(uid);
-  console.log(isLoading);
-  console.log(data);
-
-  
+ 
 
   return (
     <Container>
@@ -43,7 +38,18 @@ export default function UserLocation() {
 function LocationCard({ location, setIsOnMypage }) {
   console.log(location);
   const navigate = useNavigate();
+  const deleteQuery = useDeleteQuery({document:"markers"})
 
+
+  const hadleDeleteButton = () => {
+    const userConfirm = window.confirm('마커를 삭제하시겠습니까?');
+    if (!userConfirm) return;
+    try {
+      deleteQuery.mutate({fieldId:location.id});
+    } catch (err) {
+      console.log('삭제 실패', err);
+    }
+  };
 
 
   return (
@@ -61,7 +67,7 @@ function LocationCard({ location, setIsOnMypage }) {
       >
         수정
       </button>
-      <button>삭제</button>
+      <button onClick={hadleDeleteButton}>삭제</button>
     </CardContainer>
   );
 }
@@ -78,5 +84,19 @@ const CardContainer = styled.div`
   }
   .infobox {
     flex: 1;
+  }
+
+  & button{
+    font-size: 20px;
+    cursor: pointer;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+
+    background-color: ${(props) => (props.disabled ? 'lightgray' : '#FF6000')};
+    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+    &:hover {
+      background-color: ${(props) => (props.disabled ? 'lightgray' : '#454545')};
+    }
   }
 `;

@@ -1,5 +1,5 @@
 import { useSelectQuery, useSetQuery } from 'hooks/useQueryHook';
-import Comment from 'pages/common/comment';
+import Comment from 'sections/marker/comment';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -18,16 +18,19 @@ export default function DetailMarker() {
   const { mutate: setQuery } = useSetQuery({ document: 'comment', condition: markerId, fieldId: shortid.generate() });
   const [comment, setComment] = useState('');
 
+  const id = shortid.generate();
+
   function onSubmitComment(e) {
     e.preventDefault();
     setQuery({
-      fieldId: shortid.generate(),
+      fieldId: id,
       data: {
         comment,
         uid: currentUser.uid,
         avatar: currentUser.avatar,
         nickname: currentUser.nickname,
-        markerid: markerData[0].id
+        markerid: markerData[0].id,
+        commentid: id
       }
     });
     setComment('');
@@ -57,7 +60,7 @@ export default function DetailMarker() {
             ) : (
               <>
                 {commentData.map((comment) => (
-                  <Comment comment={comment} />
+                  <Comment key={comment.commentid} comment={comment} />
                 ))}
               </>
             )}
@@ -111,12 +114,23 @@ const CommentBox = styled.div`
 `;
 const CommentForm = styled.form`
   display: flex;
-  textarea {
+  align-items:center; 
+  justify-content: flex-start;
+
+
+  & textarea {
+    height: 90px;
+    width: 350px;
     resize: none;
-    width: 100%;
-    height: 80px;
+
   }
-  button {
-    width: 10%;
+  & button {
+    padding: 20px 30px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ffe6c7;
+    text-align: center;
+    margin: 9px;
+    cursor: pointer;
   }
 `;
