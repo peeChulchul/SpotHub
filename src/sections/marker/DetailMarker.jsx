@@ -114,12 +114,20 @@ const CommentBox = styled.div`
 `;
 const CommentForm = styled.form`
   display: flex;
-  textarea {
-    resize: none;
-    width: 100%;
+  & textarea {
+    /* resize: none; */
+    /* width: 100%; */
     height: 80px;
   }
-  button {
-    width: 10%;
+  & button {
+    padding: 10px 40px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ffe6c7;
+    margin: 9px;
+    cursor: pointer;
+    /* align-items:center;
+    justify-content: flex-start */
+
   }
 `;
