@@ -35,7 +35,7 @@ function Map() {
   const navigate = useNavigate();
   const useQueryHooked = useQueryHook({ document: 'markers' });
   const markers = useQueryHooked.data;
-  // console.log(currentUser);
+  console.log(currentUser);
 
   // const navigate = useNavigate();
 
@@ -89,6 +89,28 @@ function Map() {
     setMarkerState(false);
   }
 
+  function goMyLocation() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setUserLocation((prev) => ({
+          ...prev,
+          center: {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          },
+          isLoading: false
+        }));
+      },
+      (err) => {
+        setUserLocation((prev) => ({
+          ...prev,
+          errMsg: err.message,
+          isLoading: false
+        }));
+      }
+    );
+  }
+
   function mapOnOffButton() {
     toast.success('등록할 장소를 찍어주세요!');
     setMarkerState(true);
@@ -109,7 +131,7 @@ function Map() {
 
   return (
     <>
-      <WrappingMap $markerState={markerState}>
+      <WrappingMap markerState={markerState}>
         <KakaoMap // 지도를 표시할 Container
           onClick={onClickMap}
           id="map"
@@ -147,11 +169,9 @@ function Map() {
             ></MapMarker>
           ))}
         </KakaoMap>
-        <LocatedBtn>
-          <MarkerIcon src={gpsIcon} />
-        </LocatedBtn>
+        <LocatedBtn onClick={goMyLocation}>현재 위치로!</LocatedBtn>
         <MarkerBtn
-          $currentUser={currentUser ? true : false}
+          currentUser={currentUser}
           onClick={() => {
             if (currentUser) {
               mapOnOffButton();
@@ -160,7 +180,7 @@ function Map() {
             }
           }}
         >
-          <MarkerIcon src={marker} />
+          장소 찍기
         </MarkerBtn>
         <UserMenu />
         <Modal />
@@ -171,42 +191,46 @@ function Map() {
   );
 }
 
-const MarkerIcon = styled.img`
-  z-index: 100;
-  width: 70px;
-  height: 50px;
-  position: fixed;
-  bottom: 50%;
-  right: 0;
-  right: 3%;
-  border-radius: 50px;
-  cursor: pointer;
-`;
-
 const MarkerBtn = styled.button`
+  border: 0px;
   z-index: 100;
-  width: 70px;
+  width: 90px;
   height: 50px;
   background-color: ${(props) => {
-    return props.$currentUser ? '#79AC78' : '#FF8080';
+    return props.currentUser ? '#79AC78' : '#FF8080';
   }};
   position: fixed;
   bottom: 50%;
   right: 3%;
   border-radius: 60px;
   cursor: pointer;
+  font-size: 15px;
+  &:hover {
+    background-color: #e97777;
+    width: 100px;
+    height: 60px;
+    transition: 0.5s;
+  }
 `;
 
 const LocatedBtn = styled.button`
+  border: 0px;
   z-index: 100;
-  width: 70px;
+  width: 90px;
   height: 50px;
   position: fixed;
   bottom: 60%;
   right: 3%;
   border-radius: 60px;
-  background-color: gray;
+  background-color: #79ac78;
   cursor: pointer;
+  font-size: 15px;
+  &:hover {
+    background-color: #e97777;
+    width: 100px;
+    height: 60px;
+    transition: 0.5s;
+  }
 `;
 
 const WrappingMap = styled.div`
@@ -216,7 +240,7 @@ const WrappingMap = styled.div`
   position: relative;
   svg {
     cursor: ${(props) => {
-      return props.$markerState ? 'crosshair' : 'grab';
+      return props.markerState ? 'crosshair' : 'grab';
     }};
   }
 `;
