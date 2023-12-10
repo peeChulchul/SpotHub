@@ -16,7 +16,24 @@ const CommentBox = styled.div`
   .info {
     flex: 1;
   }
+
+  & button{
+  padding: 10px 40px;
+  border: none;
+  border-radius: 5px;
+  background-color: #ffe6c7;
+  &:hover {
+    cursor: pointer;
+  }
+  }
 `;
+
+
+
+
+
+
+
 
 const Avatar = styled.img`
   overflow: hidden;

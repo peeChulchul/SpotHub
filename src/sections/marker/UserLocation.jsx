@@ -85,4 +85,18 @@ const CardContainer = styled.div`
   .infobox {
     flex: 1;
   }
+
+  & button{
+    font-size: 20px;
+    cursor: pointer;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+
+    background-color: ${(props) => (props.disabled ? 'lightgray' : '#FFA559')};
+    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+    &:hover {
+      background-color: ${(props) => (props.disabled ? 'lightgray' : '#454545')};
+    }
+  }
 `;
