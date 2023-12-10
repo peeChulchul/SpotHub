@@ -13,6 +13,8 @@ const Container = styled.div`
   padding: 20px;
   overflow-y: scroll;
   gap: 16px;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default function UserLocation() {
@@ -22,21 +24,23 @@ export default function UserLocation() {
 
   return (
     <Container>
-      {isLoading ? (
-        <>로딩중 </>
-      ) : (
-        <>
-          {data.map((location) => (
-            <LocationCard key={location.id} location={location} />
-          ))}
-        </>
-      )}
-    </Container>
+    {isLoading ? (
+      <>로딩중</>
+    ) : data.length === 0 ? (
+      <>등록한 장소가 없습니다.</> //추가: 등록한 장소 없을시.
+    ) : (
+      <>
+        {data.map((location) => (
+          <LocationCard key={location.id} location={location} />
+        ))}
+      </>
+    )}
+  </Container>
   );
 }
 
-function LocationCard({ location, setIsOnMypage }) {
-  console.log(location);
+function LocationCard({ location }) {
+  // console.log(location);
   const navigate = useNavigate();
   const deleteQuery = useDeleteQuery({document:"markers"})
 
@@ -71,6 +75,8 @@ function LocationCard({ location, setIsOnMypage }) {
     </CardContainer>
   );
 }
+
+
 
 const CardContainer = styled.div`
   display: flex;

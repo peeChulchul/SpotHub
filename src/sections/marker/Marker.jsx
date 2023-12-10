@@ -2,7 +2,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { STORAGE } from 'myFirebase';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useQueryHook, useSetQuery } from 'hooks/useQueryHook';
+import { useSetQuery } from 'hooks/useQueryHook';
 import shortid from 'shortid';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,7 +20,7 @@ export default function Marker() {
   //현재 유저 정보.
   const { uid, avatar, nickname } = useSelector((state) => state.currentUserModules.currentUser);
   // get Data
-  const { data: markers } = useQueryHook({ document: 'markers' });
+  // const { data: markers } = useQueryHook({ document: 'markers' });
   // set Data
   const queryClient = useSetQuery({ document: 'markers' });
 
@@ -29,7 +29,7 @@ export default function Marker() {
     locationName: '',
     option: '',
     comment: '',
-    image: ''
+    image: null
   });
   const { locationName, option, comment, image } = formInput;
   const [selectedImg, setSelectedImg] = useState(null);
@@ -42,7 +42,7 @@ export default function Marker() {
     } else {
       setIsButtonDisabled(false);
     }
-  });
+  }, [locationName, option, comment]);
 
   // Form Input 이벤트 핸들러
   const changeFormState = (e) => {
@@ -63,7 +63,6 @@ export default function Marker() {
     reader.onloadend = () => {
       console.log('파일 읽기 완료');
       const readerResult = reader.result; // 파일 내용 여기 들어있음 이상한 문자
-      // console.log('readerResult', readerResult);
       setSelectedImg(readerResult);
     };
     const result = reader.readAsDataURL(file);
@@ -80,11 +79,11 @@ export default function Marker() {
       try {
         // 1. 업로드
         const imageRef = ref(STORAGE, `location/${selectedFile.name}`);
-        const uploadSnapshot = await uploadBytes(imageRef, selectedFile);
-        console.log(uploadSnapshot);
+        const uploadImage = await uploadBytes(imageRef, selectedFile);
+        console.log(uploadImage);
 
         // 2. 저장된 이미지 URL 받아오기
-        const downloadURL = await getDownloadURL(uploadSnapshot.ref);
+        const downloadURL = await getDownloadURL(uploadImage.ref);
         console.log('Storage 저장 완료! downloadURL: ', downloadURL);
         return downloadURL;
       } catch (err) {
@@ -93,9 +92,10 @@ export default function Marker() {
     }
   };
 
-// const timestamp = new Date().getTime() 
-//   console.log(timestamp)
-  //
+  // const timestamp = new Date().getTime()
+  //   console.log(timestamp)
+
+  // 새 마커 추가하기
   const handleAddMarkerButton = async (e) => {
     e.preventDefault();
     if (!selectedFile) {
@@ -113,11 +113,11 @@ export default function Marker() {
         lat,
         lng,
         id: shortid.generate(),
-        image: downloadImage,
+        image: downloadImage || null,
         locationName,
         option,
         comment,
-        timeStamp: new Date().getTime() 
+        timeStamp: new Date().getTime()
       };
       queryClient.mutate({ fieldId: newMarker.id, data: newMarker });
       console.log('등록에 성공하였습니다.');
@@ -125,8 +125,8 @@ export default function Marker() {
       setFormInput({
         locationName: '',
         option: '',
-        comment: '',
-        image: null
+        comment: ''
+        // image: null
       });
     } catch (err) {
       console.log('마커 등록실패 err: ', err);
@@ -161,14 +161,15 @@ export default function Marker() {
           <LocationImg src={selectedImg} />
           <p>{image || '이미지 선택'}</p>
         </figure>
-        <ImgInput name="image" type="file" accept="image/*" id="imgInput" onChange={handleFileSelect} />
+        <ImgInput name="image" type="file" id="imgInput" onChange={handleFileSelect} />
       </ImgLabel>
       <User>{nickname}</User>
       <LocationName
         name="locationName"
-        placeholder="장소명을 입력해주세요."
+        placeholder="장소명을 입력해주세요. (최대 30자)"
         value={locationName}
         onChange={changeFormState}
+        maxLength={30}
       />
       <SelectBox name="option" value={option} onChange={changeFormState}>
         <option value="">선택하기</option>
@@ -179,9 +180,10 @@ export default function Marker() {
       </SelectBox>
       <TextArea
         name="comment"
-        placeholder="장소에 대한 의견을 남겨주세요!"
+        placeholder="장소에 대해 설명해주세요.(최대 150자)"
         value={comment}
         onChange={changeFormState}
+        maxLength={150}
       />
       <Buttons>
         <AddButton disabled={isButtonDisabled} onClick={handleAddMarkerButton}>
@@ -260,7 +262,7 @@ const SelectBox = styled.select`
   font-size: 12px;
 `;
 
-const TextArea = styled.input`
+const TextArea = styled.textarea`
   width: 90%;
   height: 70px;
   font-size: 12px;
@@ -294,4 +296,3 @@ const CancelButton = styled.button`
     cursor: pointer;
   }
 `;
-
