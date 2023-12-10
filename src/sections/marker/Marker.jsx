@@ -118,7 +118,6 @@ export default function Marker() {
     });
 
     if (result) {
-      // 사용자가 입력한 정보 초기화
       setFormInput({
         locationName: '',
         option: '',
