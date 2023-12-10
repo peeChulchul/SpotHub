@@ -113,7 +113,7 @@ export default function Marker() {
         lat,
         lng,
         id: shortid.generate(),
-        image: downloadImage || null,
+        image: downloadImage || '',
         locationName,
         option,
         comment,

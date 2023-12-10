@@ -34,8 +34,8 @@ export default function Marker() {
   });
   const { locationName, option, comment, image } = formInput;
 
-  const [selectedImg, setSelectedImg] = useState(null);
-  const [selectedFile, SetSelectedFile] = useState(null);
+  const [selectedImg, setSelectedImg] = useState('');
+  const [selectedFile, SetSelectedFile] = useState('');
   const [editData, setEditData] = useState(null);
 
   //  최초 렌더링시 실행 => 기존 작성내용 불러오기
@@ -60,6 +60,7 @@ export default function Marker() {
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
     console.log('file: ', file);
+    SetSelectedFile(file);
     if (file) {
       console.log('업로드할 이미지 파일이 선택되었음.');
       // 이미지 프리뷰
@@ -70,7 +71,6 @@ export default function Marker() {
         setSelectedImg(readerResult);
       };
       const result = reader.readAsDataURL(file);
-      SetSelectedFile(file);
       console.log('result', result);
     }
 
@@ -124,7 +124,7 @@ export default function Marker() {
     const downloadImage = await fileUpload();
     const updateData = {
       // uid 와 location은 수정하지 않으므로 생략
-      image: downloadImage,
+      image: downloadImage || '',
       locationName,
       option,
       comment,
