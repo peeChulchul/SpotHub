@@ -9,7 +9,4 @@ function FormattedDate(timestamp) {
   return `${year}.${month}.${day}. ${hours}:${minutes}`;
 }
 
-// const timestamp = 1702221303157; 
-// const formattedDate = formatDate(timestamp);
-// console.log(formattedDate);
 export default FormattedDate;
