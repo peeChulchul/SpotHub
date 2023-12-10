@@ -48,6 +48,12 @@ const Avatar = styled.img`
   cursor: pointer;
   object-fit: cover;
   border-radius: 100%;
+      transition: 0.3s;
+  &:hover {
+    width: 70px;
+    height: 70px;
+    transition: 0.3s;
+  }
 `;
 
 const Card = styled.div`
