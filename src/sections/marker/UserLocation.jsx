@@ -15,7 +15,6 @@ const Container = styled.div`
   padding: 20px;
   overflow-y: scroll;
   gap: 10px;
-  justify-content: center;
   align-items: center;
 `;
 
@@ -96,18 +95,16 @@ const CardContainer = styled.div`
     flex: 1;
   }
 
-  & button{
-  padding: 8px 17px;
-  border: none;
-  margin: 7px;
-  border-radius: 5px;
-  background-color: ${(props) => (props.disabled ? 'lightgray' : '#FFE6C7')};
-  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
-  &:hover {
-    background-color: ${(props) => (props.disabled ? 'lightgray' : '#FF6000')};
+  & button {
+    border: none;
+    margin: 7px;
+    border-radius: 5px;
+    background-color: ${(props) => (props.disabled ? 'lightgray' : '#FFE6C7')};
+    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+    &:hover {
+      background-color: ${(props) => (props.disabled ? 'lightgray' : '#FF6000')};
+    }
   }
-  }
-  
 `;
 
 const TimeStamp= styled.p`

@@ -93,8 +93,6 @@ export default function ModifyUser() {
   });
   const { mutate: updateComment } = useUpdateQueryReference({ document: 'comment' });
 
-  console.log(comments);
-
   useEffect(() => {
     setNewNickName(currentUser.nickname);
     setCurrentAvater(currentUser.avatar);
@@ -140,7 +138,7 @@ export default function ModifyUser() {
         };
       });
     } else {
-      swal('파일 업로드 실패', 'png, jpg, jpeg, webp 형식만 지원합니다.', 'error')
+      swal('파일 업로드 실패', 'png, jpg, jpeg, webp 형식만 지원합니다.', 'error');
     }
   }
 
@@ -148,11 +146,9 @@ export default function ModifyUser() {
     setNewNickName(e.target.value);
   }
 
-  console.log(currentUser);
   async function onClickSave() {
     const downloadImage = await fileUpload();
 
-    console.log(downloadImage);
     updateComment({
       ref: comments,
       data: { avatar: downloadImage ? downloadImage : currentAvatar, nickname: newNickName }

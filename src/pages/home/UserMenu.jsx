@@ -21,7 +21,6 @@ const Box = styled.div`
     height: 50px;
     cursor: pointer;
   }
-
   & p {
     font-size: larger;
   }
@@ -29,14 +28,13 @@ const Box = styled.div`
 
 const LogOutBtn = styled.button`
   font-size: 0.7rem;
-  min-width: 10ch;
+  cursor: pointer;
   background-color: ${(props) => (props.disabled ? 'lightgray' : '#FFA559')};
   cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
-  color: #ffffff;  position: absolute;
+  color: #ffffff;
   right: 30px;
-  line-height: 28px;
+  line-height: 20px;
   padding: 4px;
-  text-align: center;
   border: none;
   color: #454545;
   border-radius: 5px;
@@ -61,7 +59,7 @@ const Avatar = styled.img`
 `;
 
 const Card = styled.div`
-  width: 270px;
+  min-width: 280px;
   height: 90px;
   background-color: white;
   border-radius: 16px;
@@ -70,10 +68,15 @@ const Card = styled.div`
   align-items: center;
   gap: ${({ theme }) => `calc(${theme.spacing.lg} * 1.5)`};
   display: ${({ $display }) => ($display ? '' : 'none')};
+  .info {
+    flex: 1;
+    flex-direction: column;
+    display: flex;
+    gap: 2px;
+  }
   .modifyUser {
     font-size: 0.8rem;
     margin-top: ${({ theme }) => theme.spacing.base};
-    /* color: blue; */
 
     &:hover {
       cursor: pointer;

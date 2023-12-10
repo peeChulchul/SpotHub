@@ -51,12 +51,7 @@ export async function updateFirestoreReference({ data, ref }) {
     const docRef = doc.ref;
     batch.update(docRef, data);
   });
-  try {
-    await batch.commit();
-    console.log('일괄 업데이트가 성공적으로 수행되었습니다.');
-  } catch (error) {
-    console.error('일괄 업데이트 중 오류 발생:', error);
-  }
+  await batch.commit();
 }
 
 //   문서를 삭제할때

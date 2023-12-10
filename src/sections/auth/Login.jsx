@@ -31,8 +31,6 @@ function Login() {
     e.preventDefault();
     try {
       const userCredential = await signInWithEmailAndPassword(AUTH, email, password);
-      console.log('user with LogIn', userCredential.user);
-      console.log(userCredential.user.email);
       setEmail('');
       setPassword('');
       dispatch(modalClose());
@@ -78,8 +76,6 @@ function Login() {
     });
     try {
       const result = await signInWithPopup(AUTH, Provider);
-      console.log(result.user);
-      console.log(result);
       const { uid, photoURL, displayName } = result.user;
       setQuery({ fieldId: uid, data: { avatar: photoURL, uid, nickName: displayName } });
       dispatch(modalClose());
@@ -326,8 +322,7 @@ const GoogleButton = styled.button`
   &:hover {
     background-color: ${(props) => (props.disabled ? 'lightgray' : '#6b6b6b')};
   }
-
-`
+`;
 
 const P = styled.p`
   font-size: 15px;
