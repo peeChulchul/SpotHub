@@ -86,31 +86,29 @@ const CardContainer = styled.div`
   padding: 5px;
   .locationImg {
     height: 100%;
-    width: 45%;
+    width: 35%;
   }
   .infobox {
     flex: 1;
   }
 
   & button{
-    font-size: 20px;
-    cursor: pointer;
-    color: #ffffff;
-    border: none;
-    border-radius: 10px;
-
+  padding: 8px 17px;
+  border: none;
+  margin: 7px;
+  border-radius: 5px;
+  background-color: ${(props) => (props.disabled ? 'lightgray' : '#FFE6C7')};
+  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+  &:hover {
     background-color: ${(props) => (props.disabled ? 'lightgray' : '#FF6000')};
-    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
-    &:hover {
-      background-color: ${(props) => (props.disabled ? 'lightgray' : '#454545')};
-    }
+  }
   }
   
 `;
 
-const contentAndButtons = styled.div`
-  display: flex;
+// const ContentAndButtons = styled.div`
+  /* display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-`
+` */
