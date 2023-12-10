@@ -43,6 +43,8 @@ export default function Marker() {
   //  최초 렌더링시 실행 => 기존 작성내용 불러오기
   useEffect(() => {
     if (selectedMarker) {
+
+    //img
       setFormInput({
         locationName: selectedMarker[0].locationName,
         option: selectedMarker[0].option,
@@ -127,9 +129,6 @@ export default function Marker() {
     dispatch(modalClose());
     navigate('/');
   };
-
-  // 수정하기 버튼 핸들러
-  const hadleModifyButton = () => {};
 
   //수정완료 버튼 이벤트 핸들러
   const handleCompleteModify = () => {
