@@ -91,21 +91,20 @@ const CardContainer = styled.div`
     flex: 1;
   }
 
-
-  & button{
-  border: none;
-  margin: 7px;
-  border-radius: 5px;
-  background-color: ${(props) => (props.disabled ? 'lightgray' : '#FFE6C7')};
-  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
-  &:hover {
-    background-color: ${(props) => (props.disabled ? 'lightgray' : '#FF6000')};
-  }
+  & button {
+    border: none;
+    margin: 7px;
+    border-radius: 5px;
+    background-color: ${(props) => (props.disabled ? 'lightgray' : '#FFE6C7')};
+    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+    &:hover {
+      background-color: ${(props) => (props.disabled ? 'lightgray' : '#FF6000')};
+    }
   }
 `;
 
 // const ContentAndButtons = styled.div`
-  /* display: flex;
+/* display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
