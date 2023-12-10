@@ -50,8 +50,8 @@ const Avatar = styled.img`
   border-radius: 100%;
       transition: 0.3s;
   &:hover {
-    width: 70px;
-    height: 70px;
+    width: 55px;
+    height: 55px;
     transition: 0.3s;
   }
 `;
