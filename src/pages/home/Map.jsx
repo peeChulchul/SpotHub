@@ -205,7 +205,7 @@ const LocatedBtn = styled.button`
   bottom: 60%;
   right: 3%;
   border-radius: 60px;
-  background-color: #79ac78;
+  background-color: gray;
   cursor: pointer;
 `;
 
