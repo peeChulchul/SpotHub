@@ -10,10 +10,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { modalClose } from '../../redux/modules/modalModules';
 import swal from 'sweetalert';
 
-// TODO: 코드 정리
-// TODO: 필요하면 타임스탬프 포맷팅
-// TODO: toastify로 알럿 변경
-
 export default function Marker() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -21,9 +17,7 @@ export default function Marker() {
   const { nickname } = useSelector((state) => state.currentUserModules.currentUser);
 
   const { data: selectedMarker } = useSelectQuery({ document: 'markers', fieldId: 'id', condition: markerId });
-  const queryClient = useSetQuery({ document: 'markers' });
   const updateQuery = useUpdateQuery({ document: 'markers' });
-
   const [formInput, setFormInput] = useState({
     locationName: '',
     option: '',
@@ -31,12 +25,10 @@ export default function Marker() {
     image: ''
   });
   const { locationName, option, comment, image } = formInput;
-
   const [selectedImg, setSelectedImg] = useState('');
   const [selectedFile, SetSelectedFile] = useState('');
   const [editData, setEditData] = useState(null);
 
-  //  최초 렌더링시 실행 => 기존 작성내용 불러오기
   useEffect(() => {
     if (selectedMarker) {
       setFormInput({
@@ -48,54 +40,44 @@ export default function Marker() {
     }
   }, [selectedMarker]);
 
-  // Form Input 이벤트 핸들러
   const changeFormState = (e) => {
     const { name, value } = e.target;
     setFormInput((prev) => ({ ...prev, [name]: value }));
   };
 
-  //업로드할 이미지 파일 선택
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
     SetSelectedFile(file);
     if (file) {
-      console.log('업로드할 이미지 파일이 선택되었음.');
-      // 이미지 프리뷰
       const reader = new FileReader();
       reader.onloadend = () => {
-        const readerResult = reader.result; // 파일 내용 여기 들어있음 이상한 문자
+        const readerResult = reader.result;
         setSelectedImg(readerResult);
       };
       const result = reader.readAsDataURL(file);
     }
   };
 
-  // 파일 storage로 업로드
   const fileUpload = async () => {
     if (!selectedFile) {
       return;
     } else {
       try {
-        // 1. 업로드
         const imageRef = ref(STORAGE, `location/${selectedFile.name}`);
         const uploadImage = await uploadBytes(imageRef, selectedFile);
-
-        // 2. 저장된 이미지 URL 받아오기
         const downloadURL = await getDownloadURL(uploadImage.ref);
-        console.log('Storage 저장 완료! downloadURL: ', downloadURL);
+        return downloadURL;
       } catch (err) {
-        console.log('파일 업로드실패', err);
+        console.log('수정 실패 ==> ', err);
       }
     }
   };
 
-  // 취소 버튼 핸들러
   const handleCancelButton = () => {
     const userConfirmed = window.confirm('작성한 내용이 사라집니다. 창을 닫을까요?');
     if (!userConfirmed) {
       return;
     } else {
-      // 사용자가 입력한 정보 초기화
       setFormInput({
         locationName: '',
         option: '',
@@ -107,7 +89,6 @@ export default function Marker() {
     navigate('/');
   };
 
-  //수정완료 버튼 이벤트 핸들러
   const handleCompleteModify = async () => {
     const userConfirm = await swal({
       title: '수정하시겠습니까?',
@@ -121,7 +102,6 @@ export default function Marker() {
     if (!userConfirm) return;
     const downloadImage = await fileUpload();
     const updateData = {
-      // uid 와 location은 수정하지 않으므로 생략
       image: downloadImage || '',
       locationName,
       option,
@@ -129,13 +109,11 @@ export default function Marker() {
       timeStamp: new Date().getTime()
     };
     try {
-      //파이어스토어 내용 수정 로직
       updateQuery.mutate({
         document: 'markers',
         fieldId: markerId,
         data: updateData
       });
-      console.log('수정완료');
       swal('수정완료!', '정보가 업데이트 되었습니다.', 'success');
       setEditData(null);
     } catch (err) {
@@ -152,7 +130,7 @@ export default function Marker() {
         <ImgLabel htmlFor="imgInput">
           <figure>
             <LocationImg src={selectedImg} />
-            <p>{selectedImg || '이미지 선택'}</p>
+            <p>{selectedImg ? '' : '이미지 선택'}</p>
           </figure>
           <ImgInput name="image" type="file" accept="image/*" id="imgInput" onChange={handleFileSelect} />
         </ImgLabel>

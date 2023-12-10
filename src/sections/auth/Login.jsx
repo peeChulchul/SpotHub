@@ -12,6 +12,7 @@ import { useSetQuery } from 'hooks/useQueryHook';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { modalClose } from '../../redux/modules/modalModules';
+import swal from 'sweetalert';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -57,7 +58,7 @@ function Login() {
       setPasswdCheck('');
       setNickName('');
       toggleonHandler();
-      alert('회원가입이 완료되었습니다.');
+      swal('회원가입 완료!', '아하하', 'success');
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.errorMessage;
