@@ -28,13 +28,6 @@ const CommentBox = styled.div`
   }
 `;
 
-
-
-
-
-
-
-
 const Avatar = styled.img`
   overflow: hidden;
   width: 50px;

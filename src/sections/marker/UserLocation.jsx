@@ -74,29 +74,25 @@ function LocationCard({ location, setIsOnMypage }) {
 
 const CardContainer = styled.div`
   display: flex;
-  height: 80px;
+  height: 100px;
   width: 100%;
   gap: 16px;
   align-items: center;
   .locationImg {
     height: 100%;
-    width: 45%;
+    width: 35%;
   }
   .infobox {
     flex: 1;
   }
 
   & button{
-    font-size: 20px;
-    cursor: pointer;
-    color: #ffffff;
-    border: none;
-    border-radius: 10px;
-
-    background-color: ${(props) => (props.disabled ? 'lightgray' : '#FF6000')};
-    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
-    &:hover {
-      background-color: ${(props) => (props.disabled ? 'lightgray' : '#454545')};
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #ffe6c7;
+  &:hover {
+    cursor: pointer;-color: ${(props) => (props.disabled ? 'lightgray' : '#454545')};
     }
   }
 `;
