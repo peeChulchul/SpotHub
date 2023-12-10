@@ -29,7 +29,7 @@ export default function UserLocation() {
         <>등록한 장소가 없습니다.</> //추가: 등록한 장소 없을시.
       ) : (
         <>
-          {data.map((location) => (
+          {data.sort((a, b) => b.timeStamp - a.timeStamp).map((location) => (
             <LocationCard key={location.id} location={location} />
           ))}
         </>
