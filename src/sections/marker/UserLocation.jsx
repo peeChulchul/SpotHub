@@ -13,7 +13,6 @@ const Container = styled.div`
   padding: 20px;
   overflow-y: scroll;
   gap: 10px;
-  justify-content: center;
   align-items: center;
 `;
 
@@ -92,8 +91,8 @@ const CardContainer = styled.div`
     flex: 1;
   }
 
+
   & button{
-  padding: 8px 17px;
   border: none;
   margin: 7px;
   border-radius: 5px;
@@ -103,7 +102,6 @@ const CardContainer = styled.div`
     background-color: ${(props) => (props.disabled ? 'lightgray' : '#FF6000')};
   }
   }
-  
 `;
 
 // const ContentAndButtons = styled.div`
@@ -111,4 +109,5 @@ const CardContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+`;
 ` */

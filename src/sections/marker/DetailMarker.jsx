@@ -30,7 +30,8 @@ export default function DetailMarker() {
         avatar: currentUser.avatar,
         nickname: currentUser.nickname,
         markerid: markerData[0].id,
-        commentid: id
+        commentid: id,
+        date: Date.now()
       }
     });
     setComment('');
@@ -59,9 +60,11 @@ export default function DetailMarker() {
               <>로딩 </>
             ) : (
               <>
-                {commentData.map((comment) => (
-                  <Comment key={comment.commentid} comment={comment} />
-                ))}
+                {commentData
+                  .sort((a, b) => b.date - a.date)
+                  .map((comment) => (
+                    <Comment key={comment.commentid} comment={comment} />
+                  ))}
               </>
             )}
           </CommentBox>
@@ -114,7 +117,7 @@ const CommentBox = styled.div`
 `;
 const CommentForm = styled.form`
   display: flex;
-  align-items:center; 
+  align-items: center;
   justify-content: flex-start;
   & textarea {
     height: 68px;

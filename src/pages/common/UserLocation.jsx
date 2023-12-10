@@ -19,12 +19,6 @@ export default function UserLocation() {
   const { uid } = useParams();
   const { isLoading, idError, data } = useSelectQuery({ document: 'markers', fieldId: 'uid', condition: uid });
 
-  console.log(uid);
-  console.log(isLoading);
-  console.log(data);
-
-  
-
   return (
     <Container>
       {isLoading ? (
@@ -43,8 +37,6 @@ export default function UserLocation() {
 function LocationCard({ location }) {
   console.log(location);
   const navigate = useNavigate();
-
-
 
   return (
     <CardContainer>

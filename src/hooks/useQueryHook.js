@@ -8,6 +8,7 @@ import {
   updateFirestore,
   updateFirestoreReference
 } from 'firestore/firestoreFns';
+import swal from 'sweetalert';
 
 export function useQueryHook({ document }) {
   const { isLoading, isError, data } = useQuery({
@@ -29,7 +30,8 @@ export function useSetQuery({ document, condition }) {
       queryClient.invalidateQueries({ queryKey: condition ? [document, condition] : [document] });
     },
     onError: (error) => {
-      console.log(`setQuery 실패 ${error}`);
+      console.log(error);
+      swal('데이터 로딩에 실패하였습니다.', '👎');
     }
   });
 }
@@ -41,9 +43,10 @@ export function useUpdateQuery({ document, condition }) {
     mutationFn: ({ fieldId, data }) => updateFirestore({ document, fieldId, data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: condition ? [document, condition] : [document] });
+      swal('업데이트가 완료되었습니다.', '👍');
     },
     onError: (error) => {
-      console.log(`updateQuery 실패 ${error}`);
+      swal('업데이트가 실패하였습니다.', '👎');
     }
   });
 }
@@ -53,9 +56,10 @@ export function useUpdateQueryReference({ document, condition }) {
     mutationFn: ({ ref, data }) => updateFirestoreReference({ ref, data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: condition ? [document, condition] : [document] });
+      swal('업데이트가 완료되었습니다.', '👍');
     },
     onError: (error) => {
-      console.log(`updateQuery 실패 ${error}`);
+      swal('업데이트가 실패하였습니다.', '👎');
     }
   });
 }
@@ -66,9 +70,11 @@ export function useDeleteQuery({ document, condition }) {
     mutationFn: ({ fieldId }) => dleeteFirestore({ document, fieldId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: condition ? [document, condition] : [document] });
+      swal('삭제가 완료되었습니다.', '👍');
     },
     onError: (error) => {
-      console.log(`데이터 삭제 실패 ${error}`);
+      swal('삭제가 실패하였습니다.', '👎');
+      console.log(`${error}`);
     }
   });
 }
@@ -77,7 +83,7 @@ export function useDeleteQuery({ document, condition }) {
 
 export function useSelectQuery({ document, fieldId, condition }) {
   const { isLoading, isError, data } = useQuery({
-    queryKey: [document, condition], 
+    queryKey: [document, condition],
     queryFn: async () => await getFirestoreSelect({ document, fieldId, condition })
   });
   return { isLoading, isError, data };

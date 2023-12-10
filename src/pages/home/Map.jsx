@@ -36,7 +36,6 @@ function Map() {
   const navigate = useNavigate();
   const useQueryHooked = useQueryHook({ document: 'markers' });
   const markers = useQueryHooked.data;
-  console.log(currentUser);
 
   // const navigate = useNavigate();
 
