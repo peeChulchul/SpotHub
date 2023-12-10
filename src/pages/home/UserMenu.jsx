@@ -24,7 +24,6 @@ const Box = styled.div`
 
   & p {
     font-size: larger;
-
   }
 `;
 
@@ -68,9 +67,12 @@ const Card = styled.div`
   .modifyUser {
     font-size: 0.8rem;
     margin-top: ${({ theme }) => theme.spacing.base};
-    color: #FFE6C7;
-    text-decoration: underline;
-    cursor: pointer;
+    /* color: blue; */
+
+    &:hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
   }
 `;
 

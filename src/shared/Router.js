@@ -7,7 +7,7 @@ import { updateProfile } from 'firebase/auth';
 import Index from 'pages/test';
 import Login from 'sections/auth/Login';
 import EditMarker from 'sections/marker/EditMarker';
-import { useEffect, useState } from 'react';
+import { useEffect} from 'react';
 import { onAuthStateChanged } from '@firebase/auth';
 import { AUTH } from 'myFirebase';
 import Map from 'pages/home/Map';
@@ -19,8 +19,7 @@ import UserLocation from 'sections/marker/UserLocation';
 import { useSetQuery } from 'hooks/useQueryHook';
 
 function Router() {
-  const [isOnMypage, setIsOnMypage] = useState(false); // 솔,
-  const { isLoading, massage, error, currentUser } = useSelector((modules) => modules.currentUserModules);
+  // const { isLoading, massage, error, currentUser } = useSelector((modules) => modules.currentUserModules);
 
   const { mutate: setQuery } = useSetQuery({ document: 'user' });
 

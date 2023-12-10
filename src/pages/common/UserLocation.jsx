@@ -40,7 +40,7 @@ export default function UserLocation() {
   );
 }
 
-function LocationCard({ location, setIsOnMypage }) {
+function LocationCard({ location }) {
   console.log(location);
   const navigate = useNavigate();
 
