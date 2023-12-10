@@ -7,6 +7,7 @@ import shortid from 'shortid';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { modalClose } from '../../redux/modules/modalModules';
+import swal from 'sweetalert';
 
 // TODO: 코드 정리
 // TODO: 필요하면 타임스탬프 포맷팅
@@ -120,8 +121,8 @@ export default function Marker() {
         timeStamp: new Date().getTime()
       };
       queryClient.mutate({ fieldId: newMarker.id, data: newMarker });
-      console.log('등록에 성공하였습니다.');
-      alert('등록되었습니다!');
+      console.log('등록완료!');
+      swal('등록완료!', '새로운 장소가 등록되었습니다.', 'success');
       setFormInput({
         locationName: '',
         option: '',
@@ -130,18 +131,22 @@ export default function Marker() {
       });
     } catch (err) {
       console.log('마커 등록실패 err: ', err);
-      alert('등록에 실패하였습니다. 다시 시도해주세요.');
+      swal('등록이 완료되지 않았습니다.!', '다시 시도해주세요.', 'error');
     }
     dispatch(modalClose());
     navigate('/');
   };
 
   // 닫기 버튼 핸들러
-  const handleCancelButton = () => {
-    const userConfirmed = window.confirm('작성한 내용이 사라집니다. 창을 닫을까요?');
-    if (!userConfirmed) {
-      return;
-    } else {
+  const handleCancelButton = async () => {
+    const result = await swal({
+      title: '작성한 내용이 사라집니다. 창을 닫을까요?',
+      icon: 'warning',
+      buttons: ['취소', '확인'],
+      dangerMode: true
+    });
+
+    if (result) {
       // 사용자가 입력한 정보 초기화
       setFormInput({
         locationName: '',
@@ -149,9 +154,10 @@ export default function Marker() {
         comment: '',
         image: null
       });
+
+      dispatch(modalClose());
+      navigate('/');
     }
-    dispatch(modalClose());
-    navigate('/');
   };
 
   return (

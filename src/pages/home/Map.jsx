@@ -18,6 +18,7 @@ import UserMenu from 'pages/home/UserMenu';
 import { useQueryHook } from 'hooks/useQueryHook';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import swal from 'sweetalert';
 // import { modalopen, modalclose } from 'redux/modules/modalModules';
 
 function Map() {
@@ -90,14 +91,15 @@ function Map() {
   }
 
   function mapOnOffButton() {
-    toast.success('등록할 장소를 찍어주세요!');
+    swal('새로운 마커를 등록할 수 있어요!', '등록할 곳을 지도위에 찍어주세요.', 'info');
     setMarkerState(true);
   }
 
   function noUidState() {
-    toast.error('로그인이 필요합니다!');
-    navigate('/Auth');
-    dispatch(modalOpen());
+    swal('마커를 등록할 수 없습니다.', '로그인 후 다시 시도해주세요.', 'error').then(() => {
+      navigate('/Auth');
+      dispatch(modalOpen());
+    });
   }
 
   const options = {

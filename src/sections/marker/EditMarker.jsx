@@ -8,6 +8,7 @@ import shortid from 'shortid';
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { modalClose } from '../../redux/modules/modalModules';
+import swal from 'sweetalert';
 
 // TODO: 코드 정리
 // TODO: 필요하면 타임스탬프 포맷팅
@@ -73,7 +74,6 @@ export default function Marker() {
       const result = reader.readAsDataURL(file);
       console.log('result', result);
     }
-
   };
 
   // 파일 storage로 업로드
@@ -119,8 +119,16 @@ export default function Marker() {
 
   //수정완료 버튼 이벤트 핸들러
   const handleCompleteModify = async () => {
-    const useConfirm = window.confirm('수정하시겠습니까?');
-    if (!useConfirm) return;
+    const userConfirm = await swal({
+      title: '수정하시겠습니까?',
+      type: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '확인',
+      cancelButtonText: '취소'
+    });
+    if (!userConfirm) return;
     const downloadImage = await fileUpload();
     const updateData = {
       // uid 와 location은 수정하지 않으므로 생략
@@ -128,10 +136,9 @@ export default function Marker() {
       locationName,
       option,
       comment,
-      timeStamp: new Date().getTime() //포멧팅?
+      timeStamp: new Date().getTime()
     };
     try {
-
       //파이어스토어 내용 수정 로직
       updateQuery.mutate({
         document: 'markers',
@@ -139,14 +146,14 @@ export default function Marker() {
         data: updateData
       });
       console.log('수정완료');
-      alert('수정이 완료되었습니다.');
+      swal('수정완료!', '정보가 업데이트 되었습니다.', 'success');
       setEditData(null);
-      // 모달창 닫기 ????
-      navigate('/');
     } catch (err) {
       console.log('수정 실패 ==> ', err);
-      alert('수정에 실패하였습니다. 다시 시도해주세요.');
+      swal('업데이트 실패', '다시 시도해주세요.', 'error');
     }
+    dispatch(modalClose());
+    navigate('/');
   };
 
   return (
