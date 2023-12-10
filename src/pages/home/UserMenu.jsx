@@ -21,7 +21,6 @@ const Box = styled.div`
     height: 50px;
     cursor: pointer;
   }
-
   & p {
     font-size: larger;
   }
@@ -30,15 +29,12 @@ const Box = styled.div`
 const LogOutBtn = styled.button`
   font-size: 0.7rem;
   cursor: pointer;
-  line-height: 20px;
-  min-width: 10ch;
   background-color: ${(props) => (props.disabled ? 'lightgray' : '#FFA559')};
   cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
-  color: #ffffff;  position: absolute;
+  color: #ffffff;
   right: 30px;
-  line-height: 28px;
+  line-height: 20px;
   padding: 4px;
-  text-align: center;
   border: none;
   color: #454545;
   border-radius: 5px;
@@ -75,7 +71,6 @@ const Card = styled.div`
   .modifyUser {
     font-size: 0.8rem;
     margin-top: ${({ theme }) => theme.spacing.base};
-    /* color: blue; */
 
     &:hover {
       cursor: pointer;
