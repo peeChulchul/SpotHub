@@ -144,9 +144,9 @@ function Login() {
               >
                 로그인
               </Button>
-              <Button type="button" onClick={GoogleLogin}>
+              <GoogleButton type="button" onClick={GoogleLogin}>
                 Google 로그인
-              </Button>
+              </GoogleButton>
               <SubButton>
                 <span onClick={() => togglehandle()}>회원가입</span>
               </SubButton>
@@ -282,7 +282,7 @@ const ButtonContainer = styled.div`
 `;
 
 const Button = styled.button`
-  background-color: ${(props) => (props.disabled ? 'lightgray' : '#FFA559')};
+  background-color: ${(props) => (props.disabled ? 'lightgray' : '#FF6000')};
   cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
   color: #ffffff;
   border: none;
@@ -311,6 +311,22 @@ const SubButton = styled.div`
     }
   }
 `;
+
+const GoogleButton = styled.button`
+  background-color: ${(props) => (props.disabled ? 'lightgray' : '#FFA559')};
+  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+  color: #ffffff;
+  border: none;
+  margin-top: 4px;
+  margin-bottom: 2px;
+  padding: 12px 0;
+  font-size: 18px;
+
+  &:hover {
+    background-color: ${(props) => (props.disabled ? 'lightgray' : '#6b6b6b')};
+  }
+
+`
 
 const P = styled.p`
   font-size: 15px;
