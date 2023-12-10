@@ -31,11 +31,20 @@ const LogOutBtn = styled.button`
   font-size: 0.7rem;
   cursor: pointer;
   line-height: 20px;
+  min-width: 10ch;
+  background-color: ${(props) => (props.disabled ? 'lightgray' : '#FFA559')};
+  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+  color: #ffffff;  position: absolute;
+  right: 30px;
+  line-height: 28px;
+  padding: 4px;
   text-align: center;
-  background-color: #ffa559;
   border: none;
   color: #454545;
   border-radius: 5px;
+  &:hover {
+    background-color: ${(props) => (props.disabled ? 'lightgray' : '#6b6b6b')};
+  }
 `;
 
 const Avatar = styled.img`
@@ -49,7 +58,7 @@ const Avatar = styled.img`
 
 const Card = styled.div`
   min-width: 280px;
-  height: 100px;
+  height: 90px;
   background-color: white;
   border-radius: 16px;
   padding: ${({ theme }) => `calc(${theme.spacing.lg} * 1)`};
