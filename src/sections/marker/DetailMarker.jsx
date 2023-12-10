@@ -115,8 +115,8 @@ const CommentBox = styled.div`
 const CommentForm = styled.form`
   display: flex;
   & textarea {
-    /* resize: none; */
-    /* width: 100%; */
+    resize: none;
+    width: 100%;
     height: 80px;
   }
   & button {
@@ -126,8 +126,8 @@ const CommentForm = styled.form`
     background-color: #ffe6c7;
     margin: 9px;
     cursor: pointer;
-    /* align-items:center;
-    justify-content: flex-start */
+    align-items:center;
+    justify-content: flex-start
 
   }
 `;
