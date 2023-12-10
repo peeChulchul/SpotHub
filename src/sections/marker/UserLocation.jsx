@@ -13,7 +13,6 @@ const Container = styled.div`
   padding: 20px;
   overflow-y: scroll;
   gap: 10px;
-  justify-content: center;
   align-items: center;
 `;
 
@@ -92,7 +91,7 @@ const CardContainer = styled.div`
     flex: 1;
   }
 
-  & button{
+  & button {
     font-size: 20px;
     cursor: pointer;
     color: #ffffff;
@@ -105,7 +104,6 @@ const CardContainer = styled.div`
       background-color: ${(props) => (props.disabled ? 'lightgray' : '#454545')};
     }
   }
-  
 `;
 
 const contentAndButtons = styled.div`
@@ -113,4 +111,4 @@ const contentAndButtons = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-`
+`;

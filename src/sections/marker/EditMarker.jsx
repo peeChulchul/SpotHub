@@ -18,13 +18,10 @@ export default function Marker() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { markerId } = useParams();
-  //   console.log( markerId);
   const { nickname } = useSelector((state) => state.currentUserModules.currentUser);
 
   const { data: selectedMarker } = useSelectQuery({ document: 'markers', fieldId: 'id', condition: markerId });
-  // console.log('25', selectedMarker);
   const queryClient = useSetQuery({ document: 'markers' });
-  //   console.log('queryClient', queryClient);
   const updateQuery = useUpdateQuery({ document: 'markers' });
 
   const [formInput, setFormInput] = useState({
@@ -60,39 +57,32 @@ export default function Marker() {
   //업로드할 이미지 파일 선택
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
-    console.log('file: ', file);
     SetSelectedFile(file);
     if (file) {
       console.log('업로드할 이미지 파일이 선택되었음.');
       // 이미지 프리뷰
       const reader = new FileReader();
       reader.onloadend = () => {
-        console.log('파일 읽기 완료');
         const readerResult = reader.result; // 파일 내용 여기 들어있음 이상한 문자
         setSelectedImg(readerResult);
       };
       const result = reader.readAsDataURL(file);
-      console.log('result', result);
     }
   };
 
   // 파일 storage로 업로드
   const fileUpload = async () => {
     if (!selectedFile) {
-      console.log('선택파일없음');
       return;
     } else {
-      console.log('selectedFile', selectedFile);
       try {
         // 1. 업로드
         const imageRef = ref(STORAGE, `location/${selectedFile.name}`);
         const uploadImage = await uploadBytes(imageRef, selectedFile);
-        console.log(uploadImage);
 
         // 2. 저장된 이미지 URL 받아오기
         const downloadURL = await getDownloadURL(uploadImage.ref);
         console.log('Storage 저장 완료! downloadURL: ', downloadURL);
-        return downloadURL;
       } catch (err) {
         console.log('파일 업로드실패', err);
       }

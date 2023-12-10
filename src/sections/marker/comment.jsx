@@ -16,25 +16,19 @@ const CommentBox = styled.div`
   .info {
     flex: 1;
   }
-
-  & button{
-  padding: 10px 40px;
-  border: none;
-  border-radius: 5px;
-  background-color: #ffe6c7;
-  &:hover {
-    cursor: pointer;
+  .date {
+    font-size: 0.8rem;
   }
+
+  & button {
+    border: none;
+    border-radius: 5px;
+    background-color: #ffe6c7;
+    &:hover {
+      cursor: pointer;
+    }
   }
 `;
-
-
-
-
-
-
-
-
 const Avatar = styled.img`
   overflow: hidden;
   width: 50px;
@@ -45,12 +39,11 @@ const Avatar = styled.img`
 `;
 
 export default function Comment({ comment }) {
-  const createAt = new Date().toLocaleDateString();
+  const currentDate = new Date(comment.date);
+  const createAt = currentDate.toISOString().slice(0, 16).replace('T', ' ');
   const { mutate: deleteQuery } = useDeleteQuery({
     document: 'comment'
   });
-
-  console.log(comment);
 
   return (
     <CommentBox>
@@ -65,13 +58,13 @@ export default function Comment({ comment }) {
       <div className="info">
         <div className="textWrapper">
           <p className="nickname">{comment.nickname}</p>
-          <p>{createAt}</p>
+          <p className="date">{createAt}</p>
         </div>
         <div>
           <p>{comment.comment}</p>
         </div>
       </div>
-      {AUTH.currentUser.uid === comment.uid && (
+      {AUTH.currentUser?.uid === comment.uid && (
         <div className="btns">
           <button
             onClick={() => {

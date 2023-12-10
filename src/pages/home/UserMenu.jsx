@@ -29,10 +29,7 @@ const Box = styled.div`
 
 const LogOutBtn = styled.button`
   font-size: 0.7rem;
-  min-width: 10ch;
   cursor: pointer;
-  position: absolute;
-  right: 30px;
   line-height: 20px;
   text-align: center;
   background-color: #ffa559;
@@ -51,7 +48,7 @@ const Avatar = styled.img`
 `;
 
 const Card = styled.div`
-  width: 280px;
+  min-width: 280px;
   height: 100px;
   background-color: white;
   border-radius: 16px;
@@ -60,6 +57,12 @@ const Card = styled.div`
   align-items: center;
   gap: ${({ theme }) => `calc(${theme.spacing.lg} * 1.5)`};
   display: ${({ $display }) => ($display ? '' : 'none')};
+  .info {
+    flex: 1;
+    flex-direction: column;
+    display: flex;
+    gap: 2px;
+  }
   .modifyUser {
     font-size: 0.8rem;
     margin-top: ${({ theme }) => theme.spacing.base};
