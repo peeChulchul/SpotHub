@@ -130,7 +130,7 @@ export default function Marker() {
         <ImgLabel htmlFor="imgInput">
           <figure>
             <LocationImg src={selectedImg} />
-            <p>{selectedImg || '이미지 선택'}</p>
+            <p>{selectedImg ? '' : '이미지 선택'}</p>
           </figure>
           <ImgInput name="image" type="file" accept="image/*" id="imgInput" onChange={handleFileSelect} />
         </ImgLabel>
