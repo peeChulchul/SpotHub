@@ -19,6 +19,7 @@ import { useQueryHook } from 'hooks/useQueryHook';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import swal from 'sweetalert';
+import { MapInfoWindow } from 'react-kakao-maps-sdk';
 // import { modalopen, modalclose } from 'redux/modules/modalModules';
 
 function Map() {
@@ -172,6 +173,19 @@ function Map() {
               }}
             ></MapMarker>
           ))}
+          <MapMarker position={userLocation.center}>
+            <div
+              style={{
+                textAlign: 'center',
+                padding: '5px',
+                color: '#000',
+                width: '100%',
+                height: '20px'
+              }}
+            >
+              &nbsp; &nbsp; &nbsp; &nbsp; 현재 내 위치
+            </div>
+          </MapMarker>
         </KakaoMap>
         <LocatedBtn onClick={goMyLocation}>현재 위치로!</LocatedBtn>
         <MarkerBtn
