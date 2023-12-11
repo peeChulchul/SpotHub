@@ -85,31 +85,34 @@ function Map() {
       lat: mouseEvent.latLng.getLat(),
       lng: mouseEvent.latLng.getLng()
     });
+
     navigate('/marker');
     dispatch(modalOpen());
     setMarkerState(false);
   }
 
   function goMyLocation() {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setUserLocation((prev) => ({
-          ...prev,
-          center: {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          },
-          isLoading: false
-        }));
-      },
-      (err) => {
-        setUserLocation((prev) => ({
-          ...prev,
-          errMsg: err.message,
-          isLoading: false
-        }));
-      }
-    );
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation((prev) => ({
+            ...prev,
+            center: {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            },
+            isLoading: false
+          }));
+        },
+        (err) => {
+          setUserLocation((prev) => ({
+            ...prev,
+            errMsg: err.message,
+            isLoading: false
+          }));
+        }
+      );
+    }
   }
 
   function mapOnOffButton() {
