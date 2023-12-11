@@ -21,7 +21,6 @@ const Container = styled.div`
 export default function UserLocation() {
   const { uid } = useParams();
   const { isLoading, idError, data } = useSelectQuery({ document: 'markers', fieldId: 'uid', condition: uid });
-  console.log('data', data)
   return (
     <Container>
       {isLoading ? (
