@@ -22,9 +22,3 @@ SpotHub은 지도서비스를 활용하여 사용자들이 서로 쓰레기통, 
 - 지도 API: 카카오맵
 - 디자인 및 협업 도구: Figma, Notion
 
-## 시작하기
-
-1. **프로젝트 클론:**
-   ```bash
-   git clone https://github.com/your-username/SpotHub.git
-   cd SpotHub
