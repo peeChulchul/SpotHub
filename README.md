@@ -10,8 +10,7 @@
 3. **실시간 업데이트:** 지도에 표시된 정보는 실시간으로 업데이트되어 사용자들에게 최신 정보를 제공합니다.
 
 ### 사이트
-
-
+<img width="1280" alt="image" src="https://github.com/nbc-9gling/news-feed/assets/144536397/1e39950f-6265-4625-8bf2-ebfe8744afca">
 ## 기술 스택 및 사용 라이브러리
 - react
 - rtk
