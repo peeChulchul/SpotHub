@@ -36,7 +36,6 @@ function Map() {
   const navigate = useNavigate();
   const useQueryHooked = useQueryHook({ document: 'markers' });
   const markers = useQueryHooked.data;
-  console.log(currentUser);
 
   // const navigate = useNavigate();
 
@@ -210,6 +209,7 @@ const MarkerBtn = styled.button`
   border-radius: 60px;
   cursor: pointer;
   font-size: 15px;
+  transition: 0.5s;
   &:hover {
     background-color: #ff6000;
     width: 100px;
@@ -230,6 +230,7 @@ const LocatedBtn = styled.button`
   background-color: #79ac78;
   cursor: pointer;
   font-size: 15px;
+  transition: 0.5s;
   &:hover {
     background-color: #ff6000;
     width: 100px;

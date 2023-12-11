@@ -12,6 +12,7 @@ import { useSetQuery } from 'hooks/useQueryHook';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { modalClose } from '../../redux/modules/modalModules';
+import swal from 'sweetalert';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -30,8 +31,6 @@ function Login() {
     e.preventDefault();
     try {
       const userCredential = await signInWithEmailAndPassword(AUTH, email, password);
-      console.log('user with LogIn', userCredential.user);
-      console.log(userCredential.user.email);
       setEmail('');
       setPassword('');
       dispatch(modalClose());
@@ -40,7 +39,7 @@ function Login() {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log('error with LogIn', errorCode, errorMessage);
-      alert('등록되지 않은 회원이거나 유효하지 않은 이메일입니다.');
+      swal('로그인 실패..', '등록되지 않은 회원이거나 유효하지 않은 이메일입니다.', 'error');
     }
   };
 
@@ -59,12 +58,12 @@ function Login() {
       setPasswdCheck('');
       setNickName('');
       toggleonHandler();
-      alert('회원가입이 완료되었습니다.');
+      swal('회원가입 완료!', '아하하', 'success');
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.errorMessage;
       console.log('error with signUp', errorCode, errorMessage);
-      alert('중복이거나 사용할 수 없는 이메일 입니다.');
+      swal('회원가입 실패..', '중복이거나 사용할 수 없는 이메일 입니다.', 'error');
     }
   };
 
@@ -77,8 +76,6 @@ function Login() {
     });
     try {
       const result = await signInWithPopup(AUTH, Provider);
-      console.log(result.user);
-      console.log(result);
       const { uid, photoURL, displayName } = result.user;
       setQuery({ fieldId: uid, data: { avatar: photoURL, uid, nickName: displayName } });
       dispatch(modalClose());
@@ -325,8 +322,7 @@ const GoogleButton = styled.button`
   &:hover {
     background-color: ${(props) => (props.disabled ? 'lightgray' : '#6b6b6b')};
   }
-
-`
+`;
 
 const P = styled.p`
   font-size: 15px;

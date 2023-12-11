@@ -9,20 +9,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { modalClose } from '../../redux/modules/modalModules';
 import swal from 'sweetalert';
 
-// TODO: 코드 정리
-// TODO: 필요하면 타임스탬프 포맷팅
-// TODO: toastify로 알럿 변경
-
 export default function Marker() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // 찍은 마커 위치
+
   const { lat, lng } = useOutletContext();
-  //현재 유저 정보.
   const { uid, avatar, nickname } = useSelector((state) => state.currentUserModules.currentUser);
-  // get Data
-  // const { data: markers } = useQueryHook({ document: 'markers' });
-  // set Data
   const queryClient = useSetQuery({ document: 'markers' });
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -36,7 +28,6 @@ export default function Marker() {
   const [selectedImg, setSelectedImg] = useState(null);
   const [selectedFile, SetSelectedFile] = useState(null);
 
-  //등록 버튼 비활성화
   useEffect(() => {
     if (!locationName || !option || !comment) {
       setIsButtonDisabled(true);
@@ -45,47 +36,33 @@ export default function Marker() {
     }
   }, [locationName, option, comment]);
 
-  // Form Input 이벤트 핸들러
   const changeFormState = (e) => {
     const { name, value } = e.target;
     setFormInput((prev) => ({ ...prev, [name]: value }));
   };
 
-  //업로드할 이미지 파일 선택
+
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
-    console.log('file: ', file);
-    if (file) {
-      console.log('업로드할 이미지 파일이 선택되었음.');
-    }
     SetSelectedFile(file);
-    // 이미지 프리뷰
     const reader = new FileReader();
     reader.onloadend = () => {
-      console.log('파일 읽기 완료');
-      const readerResult = reader.result; // 파일 내용 여기 들어있음 이상한 문자
+      const readerResult = reader.result; 
       setSelectedImg(readerResult);
     };
     const result = reader.readAsDataURL(file);
-    console.log('result', result);
   };
 
-  // 파일 storage로 업로드
   const fileUpload = async () => {
     if (!selectedFile) {
-      console.log('선택파일없음');
-      console.log(selectedFile);
       return;
     } else {
       try {
-        // 1. 업로드
         const imageRef = ref(STORAGE, `location/${selectedFile.name}`);
         const uploadImage = await uploadBytes(imageRef, selectedFile);
-        console.log(uploadImage);
 
-        // 2. 저장된 이미지 URL 받아오기
+
         const downloadURL = await getDownloadURL(uploadImage.ref);
-        console.log('Storage 저장 완료! downloadURL: ', downloadURL);
         return downloadURL;
       } catch (err) {
         console.log('파일 업로드실패', err);
@@ -93,10 +70,6 @@ export default function Marker() {
     }
   };
 
-  // const timestamp = new Date().getTime()
-  //   console.log(timestamp)
-
-  // 새 마커 추가하기
   const handleAddMarkerButton = async (e) => {
     e.preventDefault();
     if (!selectedFile) {
@@ -121,23 +94,21 @@ export default function Marker() {
         timeStamp: new Date().getTime()
       };
       queryClient.mutate({ fieldId: newMarker.id, data: newMarker });
-      console.log('등록완료!');
       swal('등록완료!', '새로운 장소가 등록되었습니다.', 'success');
       setFormInput({
         locationName: '',
         option: '',
-        comment: ''
-        // image: null
+        comment: '',
+        image: null
       });
     } catch (err) {
-      console.log('마커 등록실패 err: ', err);
+      console.log('등록실패 err: ', err);
       swal('등록이 완료되지 않았습니다.!', '다시 시도해주세요.', 'error');
     }
     dispatch(modalClose());
     navigate('/');
   };
 
-  // 닫기 버튼 핸들러
   const handleCancelButton = async () => {
     const result = await swal({
       title: '작성한 내용이 사라집니다. 창을 닫을까요?',
@@ -147,7 +118,6 @@ export default function Marker() {
     });
 
     if (result) {
-      // 사용자가 입력한 정보 초기화
       setFormInput({
         locationName: '',
         option: '',
@@ -165,7 +135,7 @@ export default function Marker() {
       <ImgLabel htmlFor="imgInput">
         <figure>
           <LocationImg src={selectedImg} />
-          <p>{image || '이미지 선택'}</p>
+          <p>{selectedImg ? '' : '이미지 선택'}</p>
         </figure>
         <ImgInput name="image" type="file" id="imgInput" onChange={handleFileSelect} />
       </ImgLabel>
