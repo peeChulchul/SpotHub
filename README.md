@@ -1,4 +1,4 @@
-## 프로젝트
+## 아웃소싱 프로젝트
 
 ### 소개
 -SpotHub은 지도서비스를 활용하여 사용자들이 서로 쓰레기통, 개방화장실, 폐건전지 수거함, 의류수거함 위치를 공유하는 서비스입니다.
@@ -11,7 +11,8 @@
 
 ### 사이트
 <img width="1280" alt="image" src="https://github.com/nbc-9gling/news-feed/assets/144536397/1e39950f-6265-4625-8bf2-ebfe8744afca">
-## 기술 스택 및 사용 라이브러리
+
+### 기술 스택 및 사용 라이브러리
 - react
 - rtk
 - react-router-dom
@@ -20,13 +21,13 @@
 - styled-reset
 - uuid
 
-## 외부 서비스 및 도구
+### 외부 서비스 및 도구
 
 - 데이터베이스: Firebase
 - 지도 API: 카카오맵
 - 디자인 및 협업 도구: Figma, Notion
 
-## 프로젝트 설치
+### 프로젝트 설치
 
 ### clone repository
 
@@ -47,7 +48,7 @@ yarn install
 yarn start
 ```
 
-## 요구사항
+### 요구사항
 
 ### 🔵 필수 구현 사항
 
