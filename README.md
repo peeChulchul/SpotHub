@@ -11,7 +11,6 @@
 
 ### 사이트
 
-[프로젝트로 이동하기](https://news-feed-eta-pied.vercel.app/)
 
 ## 기술 스택 및 사용 라이브러리
 - react
