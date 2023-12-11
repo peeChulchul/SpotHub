@@ -39,7 +39,7 @@ function Login() {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log('error with LogIn', errorCode, errorMessage);
-      alert('등록되지 않은 회원이거나 유효하지 않은 이메일입니다.');
+      swal('로그인 실패..', '등록되지 않은 회원이거나 유효하지 않은 이메일입니다.', 'error');
     }
   };
 
@@ -63,7 +63,7 @@ function Login() {
       const errorCode = error.code;
       const errorMessage = error.errorMessage;
       console.log('error with signUp', errorCode, errorMessage);
-      alert('중복이거나 사용할 수 없는 이메일 입니다.');
+      swal('회원가입 실패..', '중복이거나 사용할 수 없는 이메일 입니다.', 'error');
     }
   };
 
