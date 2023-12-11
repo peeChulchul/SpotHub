@@ -32,7 +32,7 @@
 ### clone repository
 
 ```
-git clone https://github.com/nbc-9gling/news-feed.git
+github.com/Solyi-Park/REACT-Outsourcing-pj.git
 ```
 
 ### Install npm dependencies
