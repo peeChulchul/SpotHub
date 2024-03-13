@@ -62,9 +62,7 @@ export default function Marker() {
 
         const downloadURL = await getDownloadURL(uploadImage.ref);
         return downloadURL;
-      } catch (err) {
-        console.log('파일 업로드실패', err);
-      }
+      } catch (err) {}
     }
   };
 
@@ -100,7 +98,6 @@ export default function Marker() {
         image: null
       });
     } catch (err) {
-      console.log('등록실패 err: ', err);
       swal('등록이 완료되지 않았습니다.!', '다시 시도해주세요.', 'error');
     }
     dispatch(modalClose());

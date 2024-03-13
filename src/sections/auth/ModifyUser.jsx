@@ -108,11 +108,8 @@ export default function ModifyUser() {
 
         //저장된 이미지 URL 받아오기
         const downloadURL = await getDownloadURL(uploadSnapshot.ref);
-        console.log('Storage 저장 완료! downloadURL: ', downloadURL);
         return downloadURL;
-      } catch (err) {
-        console.log('파일 업로드실패', err);
-      }
+      } catch (err) {}
     }
   };
 

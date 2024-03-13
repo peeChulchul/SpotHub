@@ -35,7 +35,6 @@ export default function UserLocation() {
 }
 
 function LocationCard({ location }) {
-  console.log(location);
   const navigate = useNavigate();
 
   return (

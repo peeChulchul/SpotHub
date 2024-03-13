@@ -19,9 +19,6 @@ export default function Index() {
     fieldId: 'test001'
   });
 
-  console.log(testData);
-  console.log(testLoading);
-
   return (
     <div>
       Index
