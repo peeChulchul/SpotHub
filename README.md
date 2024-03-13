@@ -2,8 +2,9 @@
 <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white"> <img src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=white">
 <img src="https://img.shields.io/badge/styledcomponents-DB7093?style=for-the-badge&logo=react&logoColor=white"> <img src="https://img.shields.io/badge/reactquery-3FF4154?style=for-the-badge&logo=react&logoColor=white">
 
-### 소개
-- SpotHub은 지도서비스를 활용하여 사용자들이 서로 쓰레기통, 개방화장실, 폐건전지 수거함, 의류수거함 위치를 공유하는 서비스입니다.
+## 소개
+
+SpotHub은 지도서비스를 활용하여 사용자들이 서로 쓰레기통, 개방화장실, 폐건전지 수거함, 의류수거함 위치를 공유하는 서비스입니다.
 
 ## 📺 화면구성
 
