@@ -88,6 +88,10 @@ const Container = styled.div`
   .title {
     font-size: ${({ theme }) => theme.fontSize.xxxl};
   }
+  @media (max-width: 550px) {
+    width: 360px;
+    padding: 5px;
+  }
 `;
 
 const InfoBox = styled.div`
@@ -133,5 +137,16 @@ const CommentForm = styled.form`
     margin: 5px;
     font-size: 16px;
     cursor: pointer;
+  }
+
+  @media (max-width: 550px) {
+    & textarea {
+      height: 68px;
+      width: 65%;
+      resize: none;
+    }
+    & button {
+      padding: 25px 30px;
+    }
   }
 `;

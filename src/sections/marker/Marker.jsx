@@ -41,13 +41,12 @@ export default function Marker() {
     setFormInput((prev) => ({ ...prev, [name]: value }));
   };
 
-
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
     SetSelectedFile(file);
     const reader = new FileReader();
     reader.onloadend = () => {
-      const readerResult = reader.result; 
+      const readerResult = reader.result;
       setSelectedImg(readerResult);
     };
     const result = reader.readAsDataURL(file);
@@ -60,7 +59,6 @@ export default function Marker() {
       try {
         const imageRef = ref(STORAGE, `location/${selectedFile.name}`);
         const uploadImage = await uploadBytes(imageRef, selectedFile);
-
 
         const downloadURL = await getDownloadURL(uploadImage.ref);
         return downloadURL;
@@ -181,6 +179,10 @@ const Form = styled.div`
   background-color: #fff;
   padding: 20px;
   gap: 20px;
+
+  @media (max-width: 550px) {
+    width: 350px;
+  }
 `;
 
 const ImgLabel = styled.label`

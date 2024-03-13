@@ -14,6 +14,12 @@ const ModalContainer = styled.div`
   .modal__contents {
     z-index: 15;
   }
+
+  @media (max-width: 700px) {
+    .modal__contents {
+      padding: 0 20px;
+    }
+  }
 `;
 const BackDrop = styled.div`
   position: fixed;
@@ -21,7 +27,7 @@ const BackDrop = styled.div`
   height: 100%;
   width: 100%;
   background-color: black;
-  z-index: 10;
+  z-index: 12;
   opacity: 0.6;
   cursor: pointer;
 `;

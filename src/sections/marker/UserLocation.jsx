@@ -13,9 +13,15 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 20px;
+  /* margin: 0 20px; */
   overflow-y: scroll;
   gap: 10px;
   align-items: center;
+
+  @media (max-width: 550px) {
+    width: 350px;
+    padding: 5px;
+  }
 `;
 
 export default function UserLocation() {
@@ -29,10 +35,12 @@ export default function UserLocation() {
         <>등록한 장소가 없습니다.</> //추가: 등록한 장소 없을시.
       ) : (
         <>
-        {/* 데이터 최신순 정렬 */}
-          {data.sort((a, b) => b.timeStamp - a.timeStamp).map((location) => (
-            <LocationCard key={location.id} location={location} />
-          ))}
+          {/* 데이터 최신순 정렬 */}
+          {data
+            .sort((a, b) => b.timeStamp - a.timeStamp)
+            .map((location) => (
+              <LocationCard key={location.id} location={location} />
+            ))}
         </>
       )}
     </Container>
@@ -106,8 +114,8 @@ const CardContainer = styled.div`
   }
 `;
 
-const TimeStamp= styled.p`
+const TimeStamp = styled.p`
   font-size: small;
   margin-bottom: 10px;
   color: gray;
-`
+`;

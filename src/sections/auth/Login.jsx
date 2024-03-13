@@ -244,6 +244,10 @@ const Form = styled.form`
   flex-direction: column;
   gap: 12px;
   width: 400px;
+
+  @media (max-width: 500px) {
+    width: 320px;
+  }
 `;
 
 const InputContainer = styled.div`

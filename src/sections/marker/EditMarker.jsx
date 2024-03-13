@@ -175,6 +175,10 @@ const Form = styled.div`
   background-color: #fff;
   padding: 20px;
   gap: 20px;
+  @media (max-width: 550px) {
+    width: 360px;
+    padding: 5px;
+  }
 `;
 
 const ImgLabel = styled.label`

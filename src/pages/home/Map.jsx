@@ -1,25 +1,20 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useEffect } from 'react';
-import Header from './Header';
 import clothes from '../../assets/clothes.png';
-import marker from '../../assets/marker.png';
 import toilet from '../../assets/toilet.png';
-import gpsIcon from '../../assets/gpsIcon.png';
 import trash from '../../assets/trash.png';
 import battery from '../../assets/battery.png';
-import { useNavigate, Link, Outlet, useParams } from 'react-router-dom';
+import { useNavigate, Outlet, useParams } from 'react-router-dom';
 import { useKakaoLoader, Map as KakaoMap, MapMarker } from 'react-kakao-maps-sdk';
 import { useDispatch, useSelector } from 'react-redux';
-import { modalOpen, modalClose } from '../../redux/modules/modalModules';
-import Login from 'sections/auth/Login';
+import { modalOpen } from '../../redux/modules/modalModules';
 import { Modal } from 'pages/common/Modal';
 import UserMenu from 'pages/home/UserMenu';
 import { useQueryHook } from 'hooks/useQueryHook';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import swal from 'sweetalert';
-import { MapInfoWindow } from 'react-kakao-maps-sdk';
 // import { modalopen, modalclose } from 'redux/modules/modalModules';
 
 function Map() {
@@ -30,8 +25,11 @@ function Map() {
   const { currentUser, isLoading } = useSelector((store) => store.currentUserModules);
   const { uid } = useParams();
   const [loading, error] = useKakaoLoader({
-    appkey: process.env.REACT_APP_KAKAO_MAP_API_KEY // 발급 받은 APPKEY
+    appkey: process.env.REACT_APP_KAKAO_MAP_API_KEY, // 발급 받은 APPKEY
     // ...options // 추가 옵션
+    options: {
+      draggable: true
+    }
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -138,6 +136,8 @@ function Map() {
     <>
       <WrappingMap $markerState={markerState}>
         <KakaoMap // 지도를 표시할 Container
+          draggable={true}
+          scrollwheel={true}
           onClick={onClickMap}
           id="map"
           center={
@@ -176,14 +176,14 @@ function Map() {
           <MapMarker position={userLocation.center}>
             <div
               style={{
-                textAlign: 'center',
-                padding: '5px',
-                color: '#000',
-                width: '100%',
-                height: '20px'
+                width: '150px',
+                height: '23px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
               }}
             >
-              &nbsp; &nbsp; &nbsp; &nbsp; 현재 내 위치
+              현재 위치
             </div>
           </MapMarker>
         </KakaoMap>
@@ -211,53 +211,53 @@ function Map() {
 
 const MarkerBtn = styled.button`
   border: 0px;
-  z-index: 100;
-  width: 90px;
+  z-index: 11;
+  width: 105px;
   height: 50px;
   background-color: ${(props) => {
     return props.$currentUser ? '#79AC78' : '#FF8080';
   }};
   position: fixed;
-  bottom: 50%;
+  bottom: 5%;
   right: 3%;
   border-radius: 60px;
   cursor: pointer;
   font-size: 15px;
-  transition: 0.5s;
+  /* transition: 0.5s;
   &:hover {
     background-color: #ff6000;
     width: 100px;
     height: 60px;
     transition: 0.5s;
-  }
+  } */
 `;
 
 const LocatedBtn = styled.button`
   border: 0px;
-  z-index: 100;
-  width: 90px;
+  z-index: 11;
+  width: 105px;
   height: 50px;
   position: fixed;
-  bottom: 60%;
+  bottom: 15%;
   right: 3%;
   border-radius: 60px;
   background-color: #79ac78;
   cursor: pointer;
   font-size: 15px;
-  transition: 0.5s;
+  /* transition: 0.5s;
   &:hover {
     background-color: #ff6000;
     width: 100px;
     height: 60px;
     transition: 0.5s;
-  }
+  }*/
 `;
 
 const WrappingMap = styled.div`
   width: 100%;
   height: 100vh;
   background-color: black;
-  position: relative;
+  /* position: relative; */
   svg {
     cursor: ${(props) => {
       return props.$markerState ? 'crosshair' : 'grab';
